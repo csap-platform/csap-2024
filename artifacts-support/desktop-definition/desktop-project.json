@@ -1,0 +1,1369 @@
+{
+	"note": "this is a sample project; customize as needed",
+	"project": {
+		"api-version": 2.1,
+		"project-version": 1,
+		"name": "csap-performance-app",
+		"architect": "yourEmail@notConfigured.com",
+		"emailNotifications": "support@notConfigured.com"
+	},
+	"environments": {
+		"defaults": {
+			"settings": {
+				"base-env-only": true,
+				"application": {
+					"name": "csap-performance-app-desktop-1",
+					"sub-projects": [
+					],
+					"definition-repo-url": "https://github.com/xxx/xxx-definition.git",
+					"definition-repo-branch": "master",
+					"maven-url": "http://repo.spring.io/libs-release",
+					"file-manager-shortcuts": [
+						{
+							"label": "Desktop Csap",
+							"value": "$$application-folder"
+						},
+						{
+							"label": "Desktop Csap Logs",
+							"value": "/Users/peter.nightingale/csap/logs"
+						}
+					],
+					"custom-properties": [
+						{
+							"name": "demo-env-key",
+							"value": "demo-env-val"
+						},
+						{
+							"name": "my-demo-1",
+							"value": "my_demo_value"
+						},
+						{
+							"name": "universal-password",
+							"key": "xxx.pass",
+							"file-real": "$$demo-property-folder/$$service-name/demo-catalina.properties",
+							"file": "$$demo-property-folder/csap-agent/demo-catalina.properties"
+						},
+						{
+							"name": "prometheus-port",
+							"key": "xxx.metrics.port",
+							"file": "$$demo-property-folder/csap-agent/demo-catalina.properties"
+						},
+						{
+							"name": "tomcat-http-port",
+							"key": "xxx.connector.port",
+							"file": "$$demo-property-folder/csap-agent/demo-catalina.properties"
+						},
+						{
+							"name": "tomcat-jmx-port",
+							"key": "xxx.jmx.port",
+							"file": "$$demo-property-folder/csap-agent/demo-catalina.properties"
+						}
+					],
+					"help-menu": {
+						"Local Login": "http://csap-dev01.csap.org:8011/login?local=true",
+						"Container Architecture": "https://www.tutorialworks.com/difference-docker-containerd-runc-crio-oci/",
+						"Rocky Linux": "https://rockylinux.org/"
+					},
+					"quick-launches": [
+						{
+							"service": "csap-agent",
+							"message": "The first agent defined on the first host will be launched"
+						},
+						{
+							"service": "csap-agent",
+							"label": "agent missing",
+							"message": "The first agent defined on the first host will be launched, missing host not found",
+							"host": "missing-host"
+						},
+						{
+							"label": "CSAP: installer",
+							"message": "The first agent defined on the first host will be launched",
+							"service": "csap-agent",
+							"path": "/app-browser#agent-tab,script",
+							"url": "$$csap-agent-url"
+						},
+						{
+							"label": "PERF: perf-java-1",
+							"service": "perf-java-1"
+						},
+						{
+							"label": "PERF: perf-java-jmeter",
+							"service": "perf-java-jmeter"
+						}
+					]
+				},
+				"global-jobs": {
+					"java": [
+						{
+							"description": "CPU Profiling",
+							"frequency": "onDemand",
+							"background": true,
+							"script": "$$csap-base/definition/scripts/profiler.sh",
+							"parameters": [
+								"profileType,cpu,cpu|alloc|lock|cache-misses. Use the async list to show all available",
+								"profileMinutes,2,number of minutes to perform profiling"
+							]
+						},
+						{
+							"description": "Heap Profiling",
+							"frequency": "onDemand",
+							"background": true,
+							"script": "$$csap-base/definition/scripts/profiler.sh",
+							"parameters": [
+								"profileType,_default_alloc,cpu|alloc|lock|cache-misses. Use the async list to show all available",
+								"profileMinutes,2,number of minutes to perform profiling"
+							]
+						}
+					]
+				},
+				"operatorNotifications": [
+					"csapsupport@yourcompany.com"
+				],
+				"csap-host-agent": {
+					"collectPssMemory": true,
+					"maxJmxCollectionMs": 3000,
+					"numberWorkerThreads": "10",
+					"adminToAgentTimeoutInMs": 4000,
+					"lsofIntervalMins": 1,
+					"duIntervalMins": 5,
+					"apiLocal": true,
+					"apiUser": "agentUser",
+					"apiPass": "CSAP Developmentdev",
+					"infraTests": {
+						"cpuIntervalMinutes": "30",
+						"diskIntervalMinutes": "30",
+						"cpuLoopsMillions": "1",
+						"diskWriteMb": "600"
+					},
+					"gitSslVerificationDisabledUrls": [
+						"https://updateTHisIfNeeded.com/demo.git"
+					]
+				},
+				"csap-data": {
+					"user": "events-disabled",
+					"user-disabled": "events-disabled",
+					"user-test": "csap-desktop",
+					"credential": "csap-performance-app",
+					"service-url-dev": "http://csap-dev01.csap.org:7021/events-service",
+					"service-url": "http://localhost:7021/events-service"
+				},
+				"monitorDefaults": {
+					"jvm_jmxHeartbeat": true,
+					"maxDiskPercent": 80,
+					"maxDiskPercentIgnorePatterns": "/auto/.*",
+					"maxHostCpuLoad": 4,
+					"maxHostCpu": 50,
+					"maxHostCpuIoWait": 11,
+					"minFreeMemoryMb": "1000",
+					"max_diskUtil": "150",
+					"max_threadCount": "120",
+					"max_fileCount": "350",
+					"max_rssMemory": "500m",
+					"max_tomcatConnections": "40",
+					"max_topCpu": "150"
+				},
+				"configuration-maps": {
+					"global": {
+						"about": "csap-globals-loaded",
+						"allowRemoteJmx": "false",
+						"isJmxAuthentication": "false"
+					},
+					"httpd": {
+						"configureAsToolServer": "false",
+						"httpdDocFolder": "$$csap-base/web-server",
+						"createPort80Tunnel": true
+					},
+					"docker": {
+						"allowRemote": false
+					},
+					"kubelet": {
+						"clusterToken": "584t76.b0b7c7r75rbc0ml0",
+						"kubernetesAllInOne": false
+					},
+					"storage-settings-sample": {
+						"about-type": "vsphere or nfs can be used",
+						"$$storage-type": "nfs",
+						"$$storage-class": "csap-nfs-storage-1",
+						"$$storage-folder": "csap-dev-platform-storage",
+						"$$vsphere-datastore": "YOUR_DS_NAME",
+						"$$nfs-server": "YOUR_NFS_IP",
+						"$$nfs-path": "/YOUR_NFS_EXPORT_PATH",
+						"$$nfs-mount": "/mnt/YOUR_OS_MOUNT_PATH",
+						"$$nfs-provisioner": "kubernetes-pvcs-csap-platform",
+						"httpdDocFolder": "$$nfs-mount/csap-web-server"
+					},
+					"csap-events-defaults": {
+						"desktop": "Note: this is for resolving in console only",
+						"mongoUser": "dataBaseReadWriteUser",
+						"mongoPassword": "csap-performance-app",
+						"mongoHosts": "$$csap-hosts:events-mongo",
+						"mongo-on-nfs": "/perfshared/csap/$$service-name-volume",
+						"mongo-on-local": "/data/csap-storage/events-mongo-volume",
+						"$$mongo-storage": "/data/csap-storage/events-mongo-volume",
+						"restToken": "csap-performance-app",
+						"dataServiceUrl": "http://localhostXX:7021/events-service/api/event",
+						"dataServiceUser": "csap-performance-app",
+						"dataServicePass": "csap-performance-app",
+						"metricDbSizeInGb": 50,
+						"eventDbSizeInGb": 10,
+						"MONGO_UTIL": "docker-dev-artifactory.yourcompany.com/csapplatform/mongo:21.08",
+						"MONGO_INITDB_ROOT_USERNAME": "dataBaseReadWriteUser",
+						"MONGO_INITDB_ROOT_PASSWORD": "csap-performance-app"
+					}
+				},
+				"csap-collection": {
+					"processDumps": {
+						"resouceInterval": 30,
+						"maxInInterval": 3,
+						"lowMemoryInMb": "500"
+					},
+					"host": [
+						30,
+						300,
+						"3600"
+					],
+					"os-process": [
+						30,
+						300,
+						3600
+					],
+					"application": [
+						"30",
+						300,
+						3600
+					]
+				},
+				"reports": {
+					"trending": [
+						{
+							"label": "mysql queries per day (millions)",
+							"report": "application",
+							"metric": "queries",
+							"serviceName": "mysql",
+							"allVmTotal": "true",
+							"divideBy": 1000000
+						},
+						{
+							"label": "Threads (all hosts)",
+							"report": "host",
+							"metric": "threadsTotal",
+							"divideBy": "numberOfSamples",
+							"allVmTotal": "true"
+						},
+						{
+							"label": "Java GC (all jvms,seconds)",
+							"report": "java",
+							"metric": "minorGcInMs",
+							"serviceName": "all",
+							"allVmTotal": true,
+							"divideBy": "1000"
+						},
+						{
+							"label": "csap-agent sockets",
+							"report": "os-process",
+							"metric": "socketCount",
+							"serviceName": "csap-agent",
+							"divideBy": "numberOfSamples"
+						},
+						{
+							"label": "csap-agent os commands",
+							"report": "application",
+							"metric": "OsCommandsCounter",
+							"serviceName": "csap-agent",
+							"divideBy": "numberOfSamples"
+						}
+					],
+					"realTimeMeters": [
+						{
+							"label": "Cpu Cores Active",
+							"id": "host.coresActive",
+							"large": true,
+							"intervals": [
+								7,
+								8,
+								9
+							],
+							"min": 0,
+							"about": "New item",
+							"healthMeter": [
+								false,
+								0,
+								3
+							]
+						},
+						{
+							"label": "Cpu Cores Active Meter",
+							"id": "host.coresActive",
+							"large": true,
+							"intervals": [
+								7,
+								8,
+								9
+							]
+						},
+						{
+							"label": "Cpu Response (s)",
+							"id": "host.cpuTest",
+							"intervals": [
+								6,
+								7,
+								8
+							],
+							"min": 0,
+							"divideBy": "host-count",
+							"healthMeter": [
+								true,
+								0,
+								7
+							]
+						},
+						{
+							"label": "Disk Response (s)",
+							"id": "host.diskTest",
+							"intervals": [
+								4,
+								5,
+								6
+							],
+							"min": 0,
+							"divideBy": "host-count",
+							"healthMeter": [
+								true,
+								1,
+								5
+							]
+						},
+						{
+							"label": "csap-agent Cpu (Total)",
+							"id": "os-process.topCpu_csap-agent",
+							"intervals": [
+								10,
+								30,
+								100
+							]
+						},
+						{
+							"label": "csap-agent Cpu (Total)",
+							"id": "os-process.topCpu_service2",
+							"intervals": [
+								10,
+								30,
+								100
+							]
+						}
+					]
+				},
+				"loadBalanceVmFilter": [
+					"none"
+				],
+				"monitoringUrl": "http://monitoring",
+				"buildCommandGradle": "-B -Dmaven.test.skip=true clean package",
+				"newsItems": [
+					"News items may be added using Application Editor."
+				],
+				"portRange": {
+					"start": 8200,
+					"end": 9300
+				},
+				"secureUrl": "https://csap-secure/admin",
+				"autoRestartHttpdOnClusterReload": "yes",
+				"launchUrls": [
+					{
+						"description": "http(Tomcat Embed)",
+						"url": "default"
+					},
+					{
+						"description": "ajp(LB - Internal)",
+						"url": "http://yourlb.na.demo-xxx.net"
+					}
+				],
+				"metricsPublication": [
+					{
+						"type": "csapCallHome",
+						"intervalInSeconds": 300,
+						"url": "http://csaptools/CsapGlobalAnalytics/rest/vm/health",
+						"token": "notUsed"
+					}
+				],
+				"lastModifiedBy": "pnightingale"
+			},
+			"base-os": {
+				"description": "core services installed on every host",
+				"type": "simple",
+				"template-references": [
+					"csap-package-java",
+					"csap-package-linux",
+					"csap-package-tomcat",
+					"csap-agent",
+					"docker"
+				]
+			}
+		},
+		"desktop-dev-01": {
+			"settings": {
+				"imports": [
+					"defaults"
+				],
+				"loadbalancer-url": "http://yourlb",
+				"configuration-maps": {
+				},
+				"application": {
+					"host-settings": {
+						"commands": {
+							"findt $$my-demo-1: "run_using_root su - $$wd-user -c \"findt.sh $$wd-tenant\""
+						},
+						"tags": {
+							"localhost": "desk",
+							"csap-01": "vm"
+						},
+						"private-to-public": {
+							"csap-01": "ec2-11-22-33-44.us-west-2.compute.amazonaws.com",
+							"localhost-testing": "csap-01.csap.org"
+						},
+						"helperUrl": "https://github.com"
+					}
+				}
+			},
+			"base-os": {
+				"hosts": [
+					"localhost",
+					"csap-01",
+					"csap-02"
+				]
+			},
+			"csap-demo": {
+				"notes": "For ease of management - common services are typically placed in a single  cluster.",
+				"type": "simple",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"csap-demo-mp-monitor",
+					"csap-demo-source",
+					"csap-verify-service",
+					"csap-demo-tomcat",
+					"csap-screen-caster",
+					"sysbench-mysql"
+				]
+			},
+			"perf-java": {
+				"type": "simple",
+				"enabled": true,
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"perf-java-1"
+				]
+			},
+			"perf-pgroup": {
+				"type": "simple",
+				"enabled": true,
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"jref-1",
+					"jref-2",
+					"perf-java-jmeter"
+				]
+			},
+			"csap-management": {
+				"notes": "For ease of management - common services are typically placed in a single  cluster.",
+				"type": "simple",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"httpd",
+					"csap-admin"
+				]
+			},
+			"csap-events": {
+				"type": "modjk",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"events-mongo",
+					"events-service"
+				]
+			},
+			"kubernetes-provider": {
+				"type": "kubernetes-provider",
+				"enabled": "true",
+				"masters": [
+					"localhost"
+				],
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"kubelet"
+				]
+			},
+			"kubernetes-system-services": {
+				"type": "kubernetes",
+				"enabled": "true",
+				"kubernetes-provider": "kubernetes-provider",
+				"kubernetes-namespace": "kube-system",
+				"template-references": [
+					"calico-kube-controllers",
+					"calico-node",
+					"coredns",
+					"etcd",
+					"kube-apiserver",
+					"kube-controller-manager",
+					"kube-proxy",
+					"kube-scheduler",
+					"kubernetes-dashboard",
+					"metrics-server",
+					"ingress-nginx"
+				]
+			},
+			"app-core": {
+				"notes": "For ease of management - common services are typically placed in a single  cluster.",
+				"type": "simple",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"multijvm1",
+					"multijvm2",
+					"mysql"
+				]
+			},
+			"sample-services": {
+				"type": "simple",
+				"template-references": [
+					"test-mysql",
+					"test-docker-nginx",
+					"test-docker-pgadmin",
+					"test-docker-postgres"
+				],
+				"hosts": [
+					"localhost"
+				]
+			}
+		}
+	},
+	"service-templates": {
+
+		"test-mysql": {
+			"server": "docker",
+			"autoStart": "do-not-restart",
+			"port": 3306,
+			"description": "nginx docker demo, runs on 7080 and 7443  peter",
+			"docUrl": "https://hub.docker.com/_/nginx/",
+			"appDirectory": "/",
+			"propDirectory": "/etc/mysql",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name#agent-tab__comma__file-browser",
+
+			"docker": {
+				"autoStart": false,
+				"image-orig": "docker.io/mysql:5.7",
+				"image": "docker-dev-artifactory.yourcompany.com/omsps/oms-db/mysql-v5.7.31:1.0.0",
+				"environmentVariables-orig": [
+					"MYSQL_ROOT_PASSWORD=nyw"
+				]
+			}
+		},
+
+		"test-docker-nginx": {
+			"server": "docker",
+			"autoStart": 98,
+			"port": 7077,
+			"description": "nginx docker demo, runs on 7080 and 7443  peter",
+			"docUrl": "https://hub.docker.com/_/nginx/",
+			"appDirectory": "/usr/share/nginx",
+			"propDirectory": "/etc/nginx",
+			"scheduledJobs": {
+				"scripts": [
+					{
+						"description": "Sample pre deploy",
+						"frequency": "event-pre-deploy",
+						"script": "$$service-resources/common/csap-deploy-events.sh"
+					}
+				]
+			},
+			"docker": {
+				"image-general": "docker.io/nginx:1.15",
+				"image": "docker-public-artifactory.yourcompany.com/nginx:1.15",
+				"command": [
+					"nginx",
+					"-g",
+					"daemon off;"
+				],
+				"versionCommand": "nginx -v 2>&1 | cut -d/ -f2 | cat",
+				"environmentVariables": [
+					"JAVA_HOME=/opt/java",
+					"WORKING_DIR=/working"
+				],
+				"volumes": [
+					{
+						"hostPath": "my-demo-volume",
+						"createPersistent": {
+							"enabled": true,
+							"driver": "local"
+						},
+						"containerMount": "/my-demo-local-mount",
+						"readOnly": false,
+						"sharedUser": true
+					},
+					{
+						"hostPathOrig": "/opt/csapUser/nginx-mount",
+						"hostPath": "/Users/peter.nightingale/peters-google-drive/csap",
+						"createPersistent": {
+							"enabled": true,
+							"driver": "host"
+						},
+						"containerMount": "/my-demo-host-mount",
+						"readOnly": false,
+						"sharedUser": true
+					}
+				],
+				"portMappings": [
+					{
+						"PrivatePort": "443",
+						"PublicPort": "7443"
+					},
+					{
+						"PrivatePort": "80",
+						"PublicPort": "7080"
+					}
+				],
+				"limits": {
+					"cpuCoresMax": 2,
+					"memoryInMb": 512,
+					"ulimits": [
+						{
+							"name": "nofile",
+							"soft": 500,
+							"hard": 500
+						},
+						{
+							"name": "nproc",
+							"soft": 200,
+							"hard": 200
+						}
+					]
+				},
+				"networkMode": "bridge",
+				"network": {
+					"name": "nginx-network",
+					"createPersistent": {
+						"enabled": true,
+						"driver": "bridge"
+					}
+				}
+			},
+			"url": "http://$$service-fqdn-host:$$service-primary-port",
+			"lastModifiedBy": "pnightingale"
+		},
+		"test-docker-pgadmin": {
+			"server": "docker",
+			"autoStart": 85,
+			"port": 80,
+			"description": "postgress admin ui for verify csap test db",
+			"alerts": {
+				"max_socketCount": "55"
+			},
+			"docker": {
+				"environmentVariables": [
+					"PGADMIN_DEFAULT_EMAIL=admin@abc.com",
+					"PGADMIN_DEFAULT_PASSWORD=admin"
+				],
+				"network": {
+					"name": "csap-test-network",
+					"note": "name can be bridge, host, or custom network name",
+					"createPersistent": {
+						"enabled": true,
+						"driver": "bridge"
+					}
+				},
+				"portMappings": [
+					{
+						"about": "postgres admin",
+						"PrivatePort": "$$service-primary-port",
+						"PublicPort": "$$service-primary-port"
+					}
+				],
+				"image": "dpage/pgadmin4:4.15",
+				"volumes": [
+					{
+						"about": "postgres server connections",
+						"containerMount": "/pgadmin4/servers.json",
+						"readOnly": false,
+						"sharedUser": false,
+						"hostPath": "$$service-resources/common/servers.json"
+					}
+				]
+			},
+			"url": "http://$$service-fqdn-host:$$service-primary-port",
+			"docUrl": "https://hub.docker.com/r/dpage/pgadmin4/"
+		},
+		"mysql": {
+			"definitionSource": "default-project.json",
+			"server": "os",
+			"description": "Percona Server for MySQL® is a free, fully compatible, enhanced and open source drop-in replacement for any MySQL database",
+			"docUrl": "https://www.percona.com/software/mysql-database/percona-server",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name",
+			"appDirectory": "/usr/local",
+			"propDirectory": "/data/mysql/etc",
+			"processFilter": ".*/bin/mysqld.*",
+			"alerts": {
+				"max_diskUtil": "20g"
+			},
+			"logDirectory": "/var/log/chef",
+			"defaultLogToShow": "client.log",
+			"logRegEx": ".*\\.log",
+			"scmVersion": "os",
+			"performance": {
+				"config": {
+					"httpCollectionUrl": "classpath:/httpCollect/demo-prometheus.sh",
+					"httpCollectionUrl-lab": "http://localhost:8011/api/agent/db/health",
+					"patternMatch": " ([^\n]*)"
+				},
+				"bytesReceived": {
+					"attribute": "Bytes_received.*",
+					"delta": "delta",
+					"title": "Bytes Received"
+				},
+				"bytesSent": {
+					"attribute": "Bytes_sent.*",
+					"delta": "delta",
+					"title": "Bytes Sent"
+				}
+			}
+		},
+		"multijvm1": {
+			"definitionSource": "default-project.json",
+			"server": "csap-api",
+			"port": "$$tomcat-http-port",
+			"jmxPort": "$$tomcat-jmx-port",
+			"description": "CompanyXXX Object Transaction Service",
+			"docUrl": "https://confluence.yourcompany.com/display/oms/OMS+Organization",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name",
+			"processFilter": ".*instance=$$service-host_$$service-name -classpath.*",
+			"processGroup": "multijvm1",
+			"appDirectory": "$$wd-home/$$service-name",
+			"propDirectory": "$$wd-home/$$service-name/tomcat/conf",
+			"statsDirectory-prod": "$$wd-home/$$service-name/tomcat/log",
+			"statsDirectory": "/Users/peter.nightingale/csap/logs/stats",
+			"versionCommand": "cat $$wd-home/$$service-name/info/temporal-rpm-version.properties | cut -d= -f2",
+			"alerts": {
+				"max_topCpu": 1000,
+				"max_diskUtil": "20g",
+				"max_diskWriteKb": "4000",
+				"max_threadCount": 1000,
+				"max_rssMemory": "20g",
+				"max_socketCount": 400
+			},
+			"isMessaging": "true",
+			"environmentVariables": {
+				"configuration-maps": [
+					"oms-defaults",
+					"oms-settings"
+				]
+			},
+			"deployTimeoutMinutes": 90,
+			"maven": {
+				"dependency": "csap-api.sh"
+			},
+			"logDirectory": "$$wd-home/ots/logs",
+			"defaultLogToShow": "ots.log",
+			"scheduledJobs": {
+				"scripts": [
+					{
+						"description": "wait for ots start message",
+						"frequency": "event-post-start",
+						"script": "wait_for_log 'LOADING_COMPLETED' '$$wd-home/ots/logs/ots.log' 100 10"
+					},
+					{
+						"description": "simple listing",
+						"frequency": "onDemand",
+						"background": false,
+						"script": "su - $$wd-user -c \"ls $$wd-home/ots\"",
+						"parameters": [
+							"userid,not implemented yet,peter should implement if asked"
+						]
+					}
+				]
+			},
+			"performance": {
+				"config": {
+					"httpCollectionUrl": "classpath:/httpCollect/demo-prometheus.sh",
+					"httpCollectionUrl-lab": "http://localhost:12346",
+					"patternMatch": " ([^\n]*)",
+					"jmxDualMode": true
+				},
+				"HostCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad",
+					"max": 40,
+					"title": "Host CPU"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad",
+					"title": "JVM Cpu"
+				},
+				"getAttributeCount": {
+					"attribute": "my_prom_app_id_func1_getattribute_count.*",
+					"delta": "delta",
+					"title": "Get Attribute Method Count"
+				},
+				"getRelationshipCount": {
+					"attribute": "my_prom_app_id_func1_getrelationship_count.*",
+					"delta": "delta",
+					"title": "Get Relationship Method Count"
+				},
+				"getAttributeRate": {
+					"attribute": "my_prom_app_id_func1_getattributerate.*",
+					"title": "Get Attribute Method Rate"
+				},
+				"getRelationshipRate": {
+					"attribute": "my_prom_app_id_func1_getrelationshiprate.*",
+					"title": "Get Relationship Method Rate"
+				},
+				"instanceAccessCount": {
+					"attribute": "my_prom_app_id_instanceaccesstracking_processqueue_submittedcount.*",
+					"delta": "delta",
+					"title": "instance access tracking submitted"
+				},
+				"instanceDecompressionCount": {
+					"attribute": "my_prom_app_id_backconvdatametrics_instances_decompressiontime_count.*",
+					"delta": "delta",
+					"title": "instances_decompressiontime"
+				},
+				"readTasks": {
+					"attribute": "my_prom_app_id_transactionmonitormetrics_read_tasks_executedcount.*",
+					"delta": "delta",
+					"title": "Read Tasks Executed"
+				},
+				"jobReadTasks": {
+					"attribute": "my_prom_app_id_transactionmonitormetrics_deferred_jobread_tasks_executedcount.*",
+					"delta": "delta",
+					"title": "Deferred Job Read Task Executed"
+				},
+				"jobsRun": {
+					"attribute": "my_prom_app_id_jobframework_frameworktaskexeccountvalue.*",
+					"delta": "delta",
+					"title": "Job Tasks Executed"
+				},
+				"jobsKafkaMessages": {
+					"attribute": "my_prom_app_id_jobframework_jobloadkafkaconsumermessagecountvalue.*",
+					"delta": "delta",
+					"title": "Job Kafka Messages"
+				},
+				"txnMessagesCommitted": {
+					"attribute": "my_prom_app_id_txn_messages_txncommitted_successcount.*",
+					"delta": "delta",
+					"title": "Txn Messages Committed Success"
+				},
+				"tasklogInstances": {
+					"attribute": "my_prom_app_id_tasklog_instances_accessed_count.*",
+					"delta": "delta",
+					"title": "Tasklog Instances Accessed"
+				},
+				"transQueueLength": {
+					"attribute": "my_prom_app_id_transactionmonitormetrics_deferred_singlebackground_queue_length_count.*",
+					"delta": "delta",
+					"title": "Transaction Queue Length"
+				},
+				"transQueueMs": {
+					"attribute": "my_prom_app_id_transactionmonitormetrics_deferred_singlebackground_tasks_runningtimemillimedian.*",
+					"title": "Transaction Queue(ms)"
+				},
+				"sqlReadCount": {
+					"attribute": "my_prom_app_id_tasklog_sql_readcount_count.*",
+					"delta": "delta",
+					"title": "Task Log Sql Read Count"
+				},
+				"sqlUpdateCount": {
+					"attribute": "my_prom_app_id_tasklog_sql_updatecount_count.*",
+					"delta": "delta",
+					"title": "Task Log Sql Update Count"
+				},
+				"sqlReadCountMs": {
+					"attribute": "my_prom_app_id_tasklog_sql_readtimemillismedian.*",
+					"title": "Task Log Sql Read (Ms)"
+				},
+				"sqlUpdateCountMs": {
+					"attribute": "my_prom_app_id_tasklog_sql_updatetimemillismedian.*",
+					"title": "Task Log Sql Update (Ms)"
+				},
+				"javaThreads": {
+					"mbean": "java.lang:type=Threading",
+					"attribute": "ThreadCount",
+					"title": "Java Thread Count"
+				},
+				"javaThreadsStarted": {
+					"mbean": "java.lang:type=Threading",
+					"attribute": "TotalStartedThreadCount",
+					"title": "Java Threads Started",
+					"delta": "delta"
+				},
+				"javaHeapUsagePercent": {
+					"title": "Java Heap Usage Percent",
+					"decimals": 2,
+					"mbean": "com.azul.zing:type=Memory",
+					"attribute": "PercentJavaHeapOccupiedAfterCollection"
+				},
+				"javaHeapUsageGb": {
+					"title": "Java Heap Gb",
+					"divideBy": 1073741824,
+					"decimals": 2,
+					"mbean": "com.azul.zing:type=Memory",
+					"attribute": "JavaHeapUse"
+				},
+				"zingNewGcSeconds": {
+					"title": "Zing New GC (s)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "CollectorCumulativeRunningTimeSec",
+					"delta": "delta",
+					"decimals": 2
+				},
+				"zingOldGcSeconds": {
+					"title": "Zing Old GC (s)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "CollectorCumulativeRunningTimeSec",
+					"delta": "delta",
+					"decimals": 2
+				},
+				"zingNewGcThreads": {
+					"title": "Zing New GC Threads",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "GarbageCollectorThreadCount"
+				},
+				"zingNewGcPercentRunning": {
+					"title": "Zing New GC Percentage of Time Collector is Running",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "PercentageOfTimeCollectorIsRunning",
+					"decimals": 2,
+					"max": 10
+				},
+				"zingOldGcThreads": {
+					"title": "Zing Old GC Threads",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "GarbageCollectorThreadCount"
+				},
+				"zingOldGcPercentRunning": {
+					"title": "Zing Old GC Percentage of Time Collector is Running",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "PercentageOfTimeCollectorIsRunning",
+					"decimals": 2,
+					"max": 10
+				},
+				"zingNewGcCollected": {
+					"title": "Zing New GC Collected (Mb)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "LastGCDetails,,garbageCollected",
+					"divideBy": 1048576,
+					"max": 10
+				},
+				"zingNewGcAllocRate": {
+					"title": "Zing New GC Allocation Per Second (Mb)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "LastGCDetails,,allocationRateBetweenEndOfPreviousAndStart",
+					"decimals": 1,
+					"max": 700
+				},
+				"zingNewGcContingency": {
+					"title": "Zing New GC Contingency Memory Used",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "LastGCDetails,,hasContingencyMemoryBeenUsedSinceEndOfPreviousCollection",
+					"max": 0
+				},
+				"zingNewGcPausePrevent": {
+					"title": "Zing New GC PausePrevent Memory Used",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "LastGCDetails,,hasPausePreventionMemoryBeenUsedSinceEndOfPreviousCollection",
+					"max": 0
+				},
+				"zingNewGcThreadDelay": {
+					"title": "Zing New GC Thread Delay (s)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "LastGCDetails,,maximumApplicationThreadDelay",
+					"decimals": 1,
+					"max": 0
+				},
+				"zingNewGcPauseTime": {
+					"title": "Zing New Pause Time Total",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "CollectorCumulativePauseTimeSec",
+					"decimals": 1,
+					"max": 10
+				},
+				"zingNewPauseTimeDelta": {
+					"title": "Zing New Pause Time Change",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC New",
+					"attribute": "CollectorCumulativePauseTimeSec",
+					"decimals": 1,
+					"delta": "delta",
+					"max": 10
+				},
+				"zingOldGcCollected": {
+					"title": "Zing Old GC Collected (Mb)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "LastGCDetails,,garbageCollected",
+					"divideBy": 1048576,
+					"max": 10
+				},
+				"zingOldGcContingency": {
+					"title": "Zing Old GC Contingency Memory Used",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "LastGCDetails,,hasContingencyMemoryBeenUsedSinceEndOfPreviousCollection",
+					"max": 0
+				},
+				"zingOldGcPausePrevent": {
+					"title": "Zing Old GC PausePrevent Memory Used",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "LastGCDetails,,hasPausePreventionMemoryBeenUsedSinceEndOfPreviousCollection",
+					"max": 0
+				},
+				"zingOldGcThreadDelay": {
+					"title": "Zing Old GC Thread Delay (s)",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "LastGCDetails,,maximumApplicationThreadDelay",
+					"decimals": 1,
+					"max": 0
+				},
+				"zingOldGcPauseTime": {
+					"title": "Zing Old Pause Time Total",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "CollectorCumulativePauseTimeSec",
+					"decimals": 1,
+					"max": 10
+				},
+				"zingOldPauseTimeDelta": {
+					"title": "Zing Old Pause Time Change",
+					"mbean": "com.azul.zing:type=GarbageCollector,name=GPGC Old",
+					"attribute": "CollectorCumulativePauseTimeSec",
+					"decimals": 1,
+					"delta": "delta",
+					"max": 10
+				},
+				"JavaHeapUse": {
+					"title": "Zing Heap Usage (Mb)",
+					"mbean": "com.azul.zing:type=Memory",
+					"attribute": "JavaHeapUse",
+					"divideBy": 1048576,
+					"decimals": 0
+				},
+				"ObjectAllocation": {
+					"title": "Zing Object Allocation Count",
+					"mbean": "com.azul.zing:type=Memory",
+					"attribute": "ObjectsWithFinalizerCumulativeAllocationCount",
+					"delta": "delta"
+				}
+			},
+			"processFilterOld": ".*tag=ots.*",
+			"metaData": "collectTomcat",
+			"scmVersion": "os",
+			"files": [
+				{
+					"name": "csap-api.sh",
+					"lifecycle": ".",
+					"external": "true"
+				},
+				{
+					"name": "demo-catalina.properties",
+					"lifecycle": ".",
+					"external": "true"
+				},
+				{
+					"name": "read-me.md",
+					"lifecycle": ".",
+					"external": "true"
+				}
+			]
+		},
+		"multijvm2": {
+			"copySource": "multijvm1",
+			"description": "clone of ots 1"
+		},
+
+		"test-docker-postgres": {
+			"server": "docker",
+			"autoStart": 83,
+			"port": 5432,
+			"description": "test db for csap-reference load tests",
+			"environment-overload": {
+				"demoEnv": {
+					"description": "test db for csap-reference load tests"
+				}
+			},
+			"docUrl": "https://hub.docker.com/_/postgres/",
+			"processFilter": ".*postgres.*",
+			"alerts": {
+				"max_diskUtil": "400m",
+				"max_fileCount": "800",
+				"max_socketCount": "60"
+			},
+			"isDataStore": "true",
+			"parameters": "",
+			"jmxPort": "-1",
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-starter-tester"
+			},
+			"maven": {
+				"dependency": "org.csap:csap-starter-tester:1.0.3:jar"
+			},
+			"scheduledJobs": {
+				"scripts": [
+					{
+						"description": "Delay for postgres and activemq",
+						"frequency": "event-post-start",
+						"script": "wait_for_docker_log test-docker-postgres 'database system is ready'"
+					}
+				]
+			},
+			"docker": {
+				"volumes": [
+					{
+						"containerMount": "/var/lib/postgresql/data",
+						"readOnly": false,
+						"sharedUser": false,
+						"hostPath": "postgres-volume",
+						"createPersistent": {
+							"enabled": true,
+							"driver": "local"
+						}
+					}
+				],
+				"network": {
+					"name": "csap-test-network",
+					"note": "name can be bridge, host, or custom network name",
+					"createPersistent": {
+						"enabled": true,
+						"driver": "bridge"
+					}
+				},
+				"image": "docker.io/postgres:12.1",
+				"portMappings": [
+					{
+						"PrivatePort": "5432",
+						"PublicPort": "5432"
+					}
+				],
+				"versionCommand": "postgres --version | cut -d' ' -f3 | cat"
+			},
+			"performance": {
+				"config": {
+					"httpCollectionUrl": "http://$$service-host:8261/test-docker-csap-reference/csap/metrics/db/postgress",
+					"patternMatch": "JSON",
+					"notes": "db stats are published via test service"
+				},
+				"PerfTableRows": {
+					"attribute": "/indexByTable/demo_event/rowCount",
+					"title": "Row count (Perf Test)"
+				},
+				"PerfTableIndex": {
+					"attribute": "/indexByTable/job_schedule/indexPercentUsed",
+					"title": "Index Used % (Perf Test)"
+				},
+				"Inserts": {
+					"attribute": "/statsByUser/all/inserts",
+					"delta": "delta",
+					"title": "Insert Operations"
+				},
+				"Queries": {
+					"attribute": "/statsByUser/all/querys",
+					"delta": "delta",
+					"title": "Query Operations"
+				},
+				"Updates": {
+					"attribute": "/statsByUser/all/updates",
+					"delta": "delta",
+					"title": "Update Operations"
+				},
+				"Deletes": {
+					"attribute": "/statsByUser/all/deletes",
+					"delta": "delta",
+					"title": "Delete Operations"
+				},
+				"transComm": {
+					"attribute": "/statsByUser/all/transactionsCommitted",
+					"delta": "delta",
+					"title": "Transactions Committed"
+				},
+				"transRolled": {
+					"attribute": "/statsByUser/all/transactionsRolledBack",
+					"delta": "delta",
+					"title": "Transactions RolledBack"
+				},
+				"TableSize": {
+					"attribute": "/tableSizeInKb",
+					"title": "Table Size (kb)"
+				},
+				"IndexSize": {
+					"attribute": "/indexSizeInKb",
+					"title": "Index Size (kb)"
+				},
+				"heapCacheRatio": {
+					"attribute": "/heapCache/ratio",
+					"title": "Heap Cache (%)",
+					"decimals": "1",
+					"multiplyBy": 100
+				},
+				"heapCacheHits2": {
+					"attribute": "/heapCache/hits",
+					"delta": "delta",
+					"title": "Heap Cache (Hits)"
+				},
+				"indexCacheRatio": {
+					"attribute": "/indexCache/ratio",
+					"title": "Index Cache (%)",
+					"decimals": "1",
+					"multiplyBy": 100
+				},
+				"indexCacheHits": {
+					"attribute": "/indexCache/hits",
+					"delta": "delta",
+					"title": "Index Cache (Hits)"
+				}
+			},
+			"url": "https://hub.docker.com/_/postgres/",
+			"lastModifiedBy": "pnightingale"
+		},
+
+		"jref-1": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9219
+		},
+		"jref-2": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9220
+		},
+		"jref-3": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9230
+		},
+		"jref-4": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9240
+		},
+		"jref-5": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9250
+		},
+		"jref-6": {
+			"copySource": "perf-java-1",
+			"processGroup": "jref-1",
+			"port": 9260
+		},
+		"csap-screen-caster": {
+			"server": "docker",
+			"autoStart": 400,
+			"port": 7080,
+			"description": "provide csap screencasts",
+			"alerts": {
+				"max_diskUtil": "2g",
+				"max_threadCount": "200",
+				"max_socketCount": "15"
+			},
+			"environmentVariables": {
+				"configuration-maps": [
+					"storage-settings"
+				]
+			},
+			"scheduledJobs": {
+				"scripts": [
+					{
+						"description": "Copy resource files to working directory for container mounting",
+						"frequency": "event-pre-start",
+						"script": "rm -rf $csapWorkingDir/resources; cp --recursive --verbose $csapResourceFolder $csapWorkingDir/resources"
+					},
+					{
+						"description": "test and reload configuration",
+						"frequency": "on-demand",
+						"script": "docker container exec  csap-screen-caster nginx -t && docker container exec  csap-screen-caster nginx -s reload"
+					},
+					{
+						"description": "Show configuration",
+						"frequency": "on-demand",
+						"script": "docker container exec  csap-screen-caster nginx -V 2>&1"
+					}
+				]
+			},
+			"docker": {
+				"image": "nginx:1.16.1",
+				"volumes": [
+					{
+						"about": "configuration folder",
+						"containerMount": "/etc/nginx/nginx.conf",
+						"readOnly": true,
+						"sharedUser": false,
+						"hostPath-orig": "$$service-working/resources/common/nginx.conf",
+						"hostPath": "/Users/peter.nightingale/IdeaProjects/wcsap/test/desktop-definition/resources/csap-screen-caster/common/nginx.conf"
+					},
+					{
+						"about": "Screencasts",
+						"containerMount": "/usr/share/nginx/html",
+						"readOnly": true,
+						"sharedUser": false,
+						"local-not-usedhostPath": "/opt/csap/screencasts",
+						"hostPath": "/Users/peter.nightingale/csap/csap-web-server",
+						"hostPath-orig": "$$nfs-mount/csap-web-server/screencasts"
+					}
+				],
+				"portMappings": [
+					{
+						"about": "screencast port",
+						"PrivatePort": "80",
+						"PublicPort": "$$service-primary-port"
+					}
+				]
+			},
+			"performance": {
+				"config": {
+					"httpCollectionUrl": "http://localhost:$$service-primary-port/status",
+					"patternMatch": "byWordIndex"
+				},
+				"activeConnections": {
+					"title": "Active Connections",
+					"attribute": 3
+				},
+				"serverAccepts": {
+					"title": "Server Accepts",
+					"attribute": 8,
+					"delta": true
+				},
+				"serverHandled": {
+					"title": "Server Handled",
+					"attribute": 9,
+					"delta": true
+				},
+				"serverRequests": {
+					"title": "Server Requests",
+					"attribute": 10,
+					"delta": true
+				},
+				"Reading": {
+					"title": "Reading",
+					"attribute": 12
+				},
+				"Writing": {
+					"title": "Writing",
+					"attribute": 14
+				},
+				"Waiting": {
+					"title": "Waiting",
+					"attribute": 16
+				}
+			},
+			"url": "http://$$service-fqdn-host:$$service-primary-port,http://$$service-fqdn-host:$$service-primary-port/status",
+			"lastModifiedBy": "pnightingale"
+		}
+	}
+
+}

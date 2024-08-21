@@ -1,0 +1,701 @@
+[versions]
+accessors_smart_version = "1.2"
+annotations_version = "3.0.0"
+ant_junit_version = "1.9.6"
+ant_junit4_version = "1.9.6"
+antlr4_runtime_version = "4.9"
+antlr4_version = "4.9"
+asm_analysis_version = "5.2"
+asm_commons_version = "5.2"
+asm_debug_all_version = "5.2"
+asm_parent_version = "5.2"
+asm_tree_version = "5.2"
+asm_util_version = "5.2"
+asm_version = "5.2"
+asm_xml_version = "5.2"
+assertj_core_version = "3.8.0"
+avro_version = "1.11.0"
+awaitility_version = "3.1.2"
+aws_java_sdk_version = "1.11.247"
+bcmail_jdk15on_version = "1.47"
+bcpg_jdk15on_version = "1.47"
+c3p0_version = "0.9.5.5"
+calcite_wrapper_version = "1.33.0"
+caffeine_version = "2.6.1"
+change_verifier_api_version = "0.1.40"
+commons_cli_version = "1.4"
+commons_codec_version = "1.13"
+commons_configuration_version = "1.8"
+commons_collections_version = "3.2.2"
+commons_collections4_version = "4.4"
+commons_dbcp_version = "1.4"
+commons_io_version = "2.8.0"
+commons_lang_version = "2.5"
+commons_lang3_version = "3.5"
+commons_logging_version = "1.1.3"
+commons_pool_version = "1.5.6"
+commons_math_version = "2.2"
+commons_math3_version = "3.6.1"
+commons_compress_version = "1.21"
+commons_pool2_version = "2.11.1"
+commons_text_version = "1.9"
+com_auth0_version = "3.18.1"
+com_bouncy_castle_version = "1.47"
+com_esotericsoftware_kryo_shaded = "4.0.2"
+com_workday_alpaca_common_consume = "5.0.3"
+com_workday_alpine_consume = "0.1.4"
+com_workday_apache_zookeeper_consume = "31.16.0"
+com_workday_appsolo_consume = "1.0.34"
+com_workday_auth_client_consume = "4.0.35"
+com_workday_auth_common_consume = "11.4.2"
+com_workday_auth_common_saml_consume = "6.0.0"
+com_workday_batchprotocolparser_consume = "2.2.1"
+com_workday_bcwrapper_consume = "2.1.0"
+com_workday_bi_composite_expression = "0.1.2"
+com_workday_bi_conditiontree = "11.0.0"
+com_workday_biqueryparser_consume = "4.1.2"
+com_workday_biservice_api = "11.0.0"
+com_workday_biservice_common = "11.0.0"
+com_workday_common_protobuf_java_consume = "5.1.0"
+com_workday_config_monitor_consume = "11.1.17"
+com_workday_content_package_parse_consume = "1.0.4"
+com_workday_daas_push_version = "3.2.2"
+com_workday_daas_service_version = "1.7.0"
+com_workday_daas_shared_version = "3.1.1"
+com_workday_dcs_client_consume = "10.1.19"
+com_workday_dynamic_data_consume = "2.1.15"
+com_workday_ems_consume = "13.9.3"
+com_workday_ems_mock_environment_consume = "6.0.3"
+com_workday_ems_publisher_consume = "15.0.24"
+com_workday_esb_java_common_consume = "4.50.0"
+com_workday_execsvr_client_consume = "3.2.30"
+com_workday_flo_consume = "0.1.1"
+com_workday_fugu_common_consume = "1.2.25"
+com_workday_indexed_common_version = "0.3.1"
+com_workday_indexed_toggle_version = "3.0.0"
+com_workday_indexer_protobuf_java_consume = "3.2.0"
+com_workday_instance_caching_consume = "0.9.3"
+com_workday_instance_changeset_client_consume = "0.26.5"
+com_workday_instance_data_collections_consume = "1.142.0"
+com_workday_instance_data_core_consume = "1.142.0"
+com_workday_instance_data_persistence_consume = "1.142.0"
+com_workday_instance_data_serialization_consume = "1.142.0"
+com_workday_kafkaclient_2_12_consume = "20.92.0"
+com_workday_kafkaclient_log4j2_2_12_consume = "20.92.0"
+com_workday_kmicommon_consume = "5.0.38"
+com_workday_kotlin_integrations = "0.8.0"
+com_workday_kraken_client_consume = "12.0.10"
+com_workday_kraken_common_consume = "1.3.6"
+com_workday_locator_consume = "0.2.9"
+com_workday_logger_consume = "8.4.1"
+com_workday_logging_consume = "3.0.37"
+com_workday_malt_push_consume = "4.1.1"
+com_workday_mcc_mcc_common = "7.0.4"
+com_workday_mcc_notification_routing_client_java_consume = "3.3.11"
+com_workday_messaging_common_consume = "3.0.51"
+com_workday_messaging_config_monitor_supplier_consume = "4.0.1"
+com_workday_messaging_consume = "11.0.2"
+com_workday_messaging_library_consume = "12.0.1"
+com_workday_messaging_scc_encrypter_consume = "1.1.1"
+com_workday_messaging_shared_consume = "1.0.1"
+com_workday_metrics_publisher_consume = "4.3.0"
+com_workday_monolithic_consume = "14.1.10"
+com_workday_ocr_protobuf_java_consume = "5.1.0"
+com_workday_oms_autoscaler_metrics_consume = "6.0.7"
+com_workday_oms_client_consume = "10.1.5"
+com_workday_oms_do_all_version = "3.1.5"
+# oms_do_deprecated not used.
+com_workday_oms_do_deprecated = "0.20.1"
+com_workday_oms_junit_utils_consume = "7.2.8"
+com_workday_oms_storage_consume = "1.0.1"
+com_workday_oms_themis_grpc_consume = "1.2.3"
+com_workday_oms_utils_consume = "19.5.14"
+com_workday_open_tracing_consume = "0.3.6"
+com_workday_persistence_consume = "22.1.1"
+com_workday_pharos_stats_workdaystats_consume = "2.0.1"
+com_workday_platsec_mocks_consume = "9.2.2"
+com_workday_prism_conversion_consume = "1.2.3"
+com_workday_prometheus_simpleclient_consume = "0.4.0"
+com_workday_protobuf_consume = "5.3.0"
+#2_10 & 2_11 should be removed as should not be used.
+com_workday_proton_oms_common_2_12_consume = "43.0.0"
+com_workday_proton_oms_common_consume = "43.0.0"
+com_workday_quark_consume = "38.0.0"
+com_workday_quark_extensions_consume = "0.6.10"
+com_workday_query_all_version = "234.1.5"
+com_workday_query_avro = "4.1.0"
+com_workday_query_version_adapter_version = "1.0.1"
+com_workday_redis_agent_consume = "[2.0,3.0)"
+com_workday_redis_client_consume = "5.0.0"
+com_workday_repk_client_consume = "1.3.0"
+com_workday_sage_client_consume = "2.0.33"
+com_workday_scheduling_consume = "9.0.2"
+# com_workday_search_dev 2_10 - 2_11 - 2_12 and com_workday_search_dev_consume not used? TODO remove
+com_workday_search_dev_2_12_consume = "4.0.7"
+com_workday_search_dev_consume = "4.0.29"
+com_workday_security_crypto_commons_2_12_consume = "27.0.4"
+com_workday_security_epic_version = "2023.33.42054"
+com_workday_security_ua_parser_consume = "1.5.35"
+com_workday_self_check_consume = "5.0.7"
+com_workday_service_omspi_metrics_version = "2.0.2"
+com_workday_servicediscovery_test_consume = "6.13.0"
+com_workday_shared_session_common_oms_consume = "11.0.0"
+com_workday_thread_analyzer_consume = "2.0.0"
+com_workday_togglecentral_consume = "11.0.50"
+com_workday_util_consume = "11.0.1"
+com_workday_wamm_consume = "2.280.0"
+com_workday_wd_kafka_client_consume= "14.45.2"
+com_workday_wd_kafka_client_dpmauthgwy_bridge_consume= "6.1.0"
+com_workday_wd_servicediscovery_consume = "6.117.0"
+com_workday_wd_tomcat_consume = "3.0.0"
+com_workday_wd_zookeeper_client_consume = "6.117.0"
+com_workday_workdaystats_consume = "20.92.0"
+com_workday_workdaystats_log4j2_consume = "20.92.0"
+com_workday_xo_id_service_consume = "4.0.1"
+com_workday_xobin_consume = "2.0.13"
+com_workday_yp_consume = "8.6.34"
+com_workday_zonda_client_consume = "15.7.0"
+com_workday_zonda_message_consume = "14.6.0"
+com_workday_zonda_schemas_async = "3.2.0"
+com_workday_zonda_schemas_autoscale_metrics = "3.2.0"
+com_workday_zonda_schemas_expenses = "3.2.0"
+com_workday_zonda_schemas_jobframework_status = "3.2.0"
+com_workday_zonda_schemas_luca = "3.2.0"
+com_workday_zonda_schemas_omsrequest_consume = "3.2.0"
+com_workday_zookeeper_curator_consume = "21.19.0"
+concurrent_version="1.3.2"
+core_version = "1.6"
+dpm_sensu_client_impl_version = "3.0.9"
+equalsverifier_version = "3.10.1"
+failsafe_version = "2.4.4"
+fastutil_version = "8.5.8"
+fileupload_version = "1.4"
+flow_enigma_version = "1.351.2"
+graphql_java_version = "20.4"
+groovy_all_version = "2.4.21"
+gson_version = "2.8.9"
+guava_version = "30.1.1-jre"
+hamcrest_core_version = "2.2"
+hamcrest_library_version = "2.2"
+hamcrest_version = "2.2"
+httpasyncclient_version = "4.1.3"
+httpclient_version = "4.5.13"
+httpcore_version = "4.4.5"
+httpcore_nio_version = "4.4.6"
+httpmime_version = "4.5.2"
+h2database_version = "2.2.222"
+icu4j_version = "70.1"
+jackson_annotations_version = "2.14.0"
+jackson_core_version = "2.14.0"
+jackson_core_asl_version = "1.9.7"
+jackson_databind_version = "2.14.0"
+jackson_dataformat_yaml_version = "2.14.0"
+jackson_module_scala_2_12_version = "2.14.0"
+jakarta_el_version = "4.0.0"
+jakarta_inject_version = "2.0.1"
+javase_version = "1.6"
+java_fast_pfor_version = "0.1.12"
+javax_activation_version = "1.1.1"
+javax_cache_api_version = "1.0.0"
+javax_inject_version = "1"
+javax_servlet_api_version = "3.0.1"
+javax_validation_version = "2.0.1.Final"
+javax_ws_rs_api_version = "2.0"
+jaxa_soap_version = "1.4.0"
+jaxb_version = "2.3.1"
+jaxws_version = "2.3.3"
+je_version = "5.0.34"
+jedis_version = "3.9.0"
+jersey_common_version = "2.21"
+jhighlight_version = "1.0.3"
+jna_version = "5.0.0"
+joda_time_version = "2.9.3"
+jsonassert_version = "1.5.0"
+json_path_version = "2.0.0"
+json_smart_version = "2.4.11"
+jsoup_version = "1.15.3"
+jsqlparser_version = "4.3"
+jsr305_version = "3.0.0"
+junit_jupiter_version = "5.9.0"
+junit_mockito_version = "4.10.0"
+junit_platform_launcher_version = "1.7.0"
+junit_platform_runner_version = "1.5.2"
+junit_version = "4.13.1"
+kafka_apache_client_version = "2.8.1"
+kotlin_coroutine_version = "1.6.3"
+lettuce_core_version = "6.2.3.RELEASE"
+libphonenumber_version = "8.13.20"
+lmax_disruptor_version = "3.4.4"
+log4j_version = "1.2.16"
+log4j_api_version = "2.20.0"
+lucene_analyzers_common_version = "4.10.3"
+lucene_core_fedramp_version = "4.10.99"
+lucene_queries_version = "4.10.3"
+lucene_queryparser_version = "4.10.3"
+metadata_extractor_version = "2.15.0.1"
+metrics_core_version = "3.1.2"
+mockito_core_version = "4.10.0"
+mockk_version = "1.12.1"
+opencsv_version = "2.1"
+opensaml_version = "2.3.2"
+opentest4j_version = "1.2.0"
+openws_version = "1.3.1"
+org_json_version = "20220320"
+project_reactor_version = "3.4.7"
+prometheus_simpleclient = "0.4.0"
+protobuf_java_version = "3.21.11"
+quartz_version = "1.8.6"
+reactive_streams_version = "1.0.3"
+reflections_version = "0.9.12"
+rest_assured_version = "1.7.2"
+re2j_version = "1.3"
+rocksdb_version = "5.13.1"
+roaringbitmap_version = "0.7.36"
+rsyntaxtextarea_version = "2.0.1"
+salesforce_reactor_grpc_version = "1.1.0"
+scala_compiler_2_12_version = "2.12.18"
+scala_library_2_12_version = "2.12.18"
+scala_reflect_2_12_version = "2.12.18"
+scala_logging_2_12_version = "3.9.5"
+scalatest_2_12_version = "3.2.16"
+scalacheck_2_12_version = "1.17.0"
+sequence_library = "1.0.2"
+servo_core_version = "0.12.28"
+simple_xml_version = "2.7.1"
+slf4j_api_version = "1.7.15"
+snappy_version = "1.1.7.3"
+soapui_version = "4.5.1"
+soapuixml_beans_version = "4.5.1"
+spark_core_version = "2.9.0"
+spring_beans_version= "5.3.29"
+spring_core_version = "5.3.29"
+spring_web_version = "5.3.29"
+stax2_api_version = "3.0.1"
+svnkit_version = "1.7.5-v1"
+tdigest_version = "3.2"
+tika_core_version = "2.4.0"
+tika_parsers_version = "2.4.0"
+tomcat_catalina_version = "7.0.92"
+tomcat_servlet_api_version = "7.0.92"
+tomcat_util_version = "7.0.92"
+trove4j_version = "3.0.2"
+validation_api_version = "1.0.0.GA"
+wday_common_version = "2.1.0"
+workday_avro_version = "1.10.1-workday-17"
+wsdl4j_version = "1.6.2-fixed"
+xercesImpl_version = "2.12.2"
+xml_apis_version = "2.11.0"
+xmlbeans_version = "3.0.0"
+xmlsec_version = "2.3.0"
+xmltooling_version = "1.2.2"
+xmlunit_version = "1.3"
+xz_version = "1.5"
+
+[libraries]
+managed_ant_junit = { module = "org.apache.ant:ant-junit", version.ref = "ant_junit_version" }
+managed_ant_junit4 = { module = "org.apache.ant:ant-junit4", version.ref = "ant_junit4_version" }
+managed_antlr4_runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr4_runtime_version" }
+managed_antlr4_version = { module = "org.antlr:antlr4", version.ref = "antlr4_version" }
+managed_asm = { module = "org.ow2.asm:asm", version.ref = "asm_version" }
+managed_asm_analysis = { module = "org.ow2.asm:asm-analysis", version.ref = "asm_analysis_version"}
+managed_asm_commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm_commons_version" }
+managed_asm_debug = { module = "org.ow2.asm:asm-debug-all", version.ref = "asm_debug_all_version" }
+managed_asm_parent = { module = "org.ow2.asm:asm-parent", version.ref = "asm_parent_version" }
+managed_asm_tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm_tree_version" }
+managed_asm_util = { module = "org.ow2.asm:asm-util", version.ref = "asm_util_version" }
+managed_asm_xml = { module = "org.ow2.asm:asm-xml", version.ref = "asm_xml_version" }
+assertj_core = { module = "org.assertj:assertj-core", version.ref = "assertj_core_version" }
+auth0 = { module = "com.auth0:java-jwt", version.ref = "com_auth0_version" }
+avro = { module = "org.apache.avro:avro", version.ref = "avro_version" }
+awaitility =  { module = "org.awaitility:awaitility", version.ref = "awaitility_version" }
+aws_java_sdk_core = { module = "com.amazonaws:aws-java-sdk-core", version.ref = "aws_java_sdk_version" }
+aws_java_sdk_s3 = { module = "com.amazonaws:aws-java-sdk-s3", version.ref = "aws_java_sdk_version"}
+managed_bcmail_jdk15on = { module = "org.bouncycastle:bcmail-jdk15on", version.ref = "bcmail_jdk15on_version" }
+managed_bcpg_jdk15on = { module = "org.bouncycastle:bcpg-jdk15on", version.ref = "bcpg_jdk15on_version" }
+c3p0 = { module = "com.mchange:c3p0", version.ref = "c3p0_version" }
+calcite = { module = "query.org.apache.calcite:calcite-wrapper", version.ref = "calcite_wrapper_version" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine_version"}
+managed_commons_cli = { module = "commons-cli:commons-cli", version.ref = "commons_cli_version" }
+managed_commons_codec = { module = "commons-codec:commons-codec", version.ref = "commons_codec_version" }
+managed_commons_compress = { module = "org.apache.commons:commons-compress", version.ref = "commons_compress_version" }
+managed_commons_configuration = { module = "commons-configuration:commons-configuration", version.ref = "commons_configuration_version" }
+managed_commons_collections = { module = "commons-collections:commons-collections", version.ref = "commons_collections_version" }
+commons_collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons_collections4_version" }
+commons_dbcp = { module = "commons-dbcp:commons-dbcp", version.ref = "commons_dbcp_version" }
+managed_commons_io = { module = "commons-io:commons-io", version.ref = "commons_io_version" }
+managed_commons_lang = { module = "commons-lang:commons-lang", version.ref = "commons_lang_version" }
+commons_lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons_lang3_version" }
+managed_commons_logging = { module = "commons-logging:commons-logging", version.ref = "commons_logging_version" }
+commons_math = { module = "org.apache.commons:commons-math", version.ref = "commons_math_version" }
+commons_math3 = { module = "org.apache.commons:commons-math3", version.ref = "commons_math3_version" }
+commons_file_upload = { module = "commons-fileupload:commons-fileupload", version.ref = "fileupload_version" }
+managed_commons_pool = { module = "commons-pool:commons-pool", version.ref = "commons_pool_version" }
+commons_pool2 = { module = "org.apache.commons:commons-pool2", version.ref = "commons_pool2_version" }
+commons_text = { module = "org.apache.commons:commons-text", version.ref = "commons_text_version" }
+concurrent = { module = "concurrent:concurrent", version.ref = "concurrent_version" }
+core = { module = "com.google.zxing:core", version.ref = "core_version" }
+equals_verifier = { module = "nl.jqno.equalsverifier:equalsverifier", version.ref = "equalsverifier_version" }
+esotericsoftware_kryo_shaded = { module="com.esotericsoftware:kryo-shaded", version.ref= "com_esotericsoftware_kryo_shaded" }
+failsafe = { module = "net.jodah:failsafe", version.ref = "failsafe_version"}
+fastutil = { module = "it.unimi.dsi:fastutil", version.ref = "fastutil_version" }
+managed_findbugs_annotations = { module = "com.google.code.findbugs:annotations", version.ref = "annotations_version"}
+flow_enigma = { module = "com.workday.yuca:flow-enigma", version.ref = "flow_enigma_version" }
+graphql_java = { module = "com.graphql-java:graphql-java", version.ref = "graphql_java_version" }
+groovy_all = { module = "org.codehaus.groovy:groovy-all", version.ref = "groovy_all_version" }
+managed_gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
+managed_guava = { module = "com.google.guava:guava", version.ref = "guava_version" }
+hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest_version" }
+managed_hamcrest_core = { module = "org.hamcrest:hamcrest-core", version.ref = "hamcrest_core_version" }
+managed_hamcrest_library = { module = "org.hamcrest:hamcrest-library", version.ref = "hamcrest_library_version"}
+httpasyncclient = { module = "org.apache.httpcomponents:httpasyncclient", version.ref = "httpasyncclient_version" }
+managed_httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "httpclient_version" }
+managed_httpcore = { module = "org.apache.httpcomponents:httpcore", version.ref = "httpcore_version" }
+httpcore_nio = { module = "org.apache.httpcomponents:httpcore-nio", version.ref = "httpcore_nio_version" }
+managed_httpmime = { module = "org.apache.httpcomponents:httpmime", version.ref = "httpmime_version" }
+h2 = { module = "com.h2database:h2", version.ref = "h2database_version"}
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j_version" }
+jackson_annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson_annotations_version" }
+jackson_core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson_core_version" }
+jackson_core_asl = { module = "org.codehaus.jackson:jackson-core-asl", version.ref = "jackson_core_asl_version" }
+managed_jackson_databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson_databind_version" }
+jakarta_el = { module = "jakarta.el:jakarta.el-api", version.ref = "jakarta_el_version" }
+jakarta_inject = { module = "jakarta.inject:jakarta.inject-api", version.ref = "jakarta_inject_version" }
+javase = { module = "com.google.zxing:javase", version.ref = "javase_version" }
+java_fast_pfor = { module = "me.lemire.integercompression:JavaFastPFOR", version.ref = "java_fast_pfor_version" }
+javax_activation = { module = "javax.activation:activation", version.ref = "javax_activation_version" }
+javax_cache_api = { module = "javax.cache:cache-api", version.ref = "javax_cache_api_version" }
+managed_javax_inject = { module = "javax.inject:javax-inject", version.ref = "javax_inject_version" }
+javax_servlet_api = { module = "javax.servlet:javax.servlet-api", version.ref = "javax_servlet_api_version" }
+#come back here see below
+javax_validation = { module = "javax.validation:validation-api", version.ref = "javax_validation_version" }
+#validation_api = { module = "javax.validation:validation-api", version.ref = "validation_api_version"}
+javax_ws_rs_api = { module = "javax.ws.rs:javax.ws.rs-api", version.ref = "javax_ws_rs_api_version" }
+#Should probably change name, typo? jaxa or java?
+jaxa_soap_version = { module = "javax.xml.soap:javax.xml.soap-api", version.ref = "jaxa_soap_version" }
+jaxb = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb_version", force = true }
+jaxws = { module = "javax.xml.ws:jaxws-api", version.ref = "jaxws_version" }
+managed_jna = { module = "net.java.dev.jna:jna", version.ref = "jna_version" }
+je = { module = "com.sleepycat:je", version.ref = "je_version" }
+jersey_common = { module = "org.glassfish.jersey.core:jersey-common", version.ref = "jersey_common_version" }
+jedis = { module = "redis.clients:jedis", version.ref = "jedis_version" }
+jhighlight = { module = "org.codelibs:jhighlight", version.ref = "jhighlight_version" }
+managed_joda_time = { module = "joda-time:joda-time", version.ref = "joda_time_version" }
+jsonassert = { module = "org.skyscreamer:jsonassert", version.ref = "jsonassert_version" }
+json_path = { module = "com.jayway.jsonpath:json-path", version.ref = "json_path_version" }
+managed_json_smart = { module = "net.minidev:json-smart", version.ref = "json_smart_version" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup_version" }
+jsqlparser = { module = "com.github.jsqlparser:jsqlparser", version.ref = "jsqlparser_version" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305_version" }
+managed_junit = { module = "junit:junit", version.ref = "junit_version" }
+junit_jupiter_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit_jupiter_version" }
+junit_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit_jupiter_version" }
+junit_jupiter_params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit_jupiter_version" }
+junit_platform_commons = { module = "org.junit.platform:junit-platform-commons", version.ref = "junit_platform_launcher_version" }
+junit_platform_launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit_platform_launcher_version" }
+junit_platform_runner = { module = "org.junit.platform:junit-platform-runner", version.ref = "junit_platform_runner_version"}
+junit_platform_suite_api = { module = "org.junit.platform:junit-platform-suite-api", version.ref = "junit_platform_runner_version" }
+managed_kafka_clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka_apache_client_version" }
+kotlinx_coroutines_core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin_coroutine_version" }
+lettuce_core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce_core_version" }
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber_version" }
+managed_lmax_disruptor = { module = "com.lmax:disruptor", version.ref = "libphonenumber_version" }
+managed_log4j = { module = "log4j:log4j", version.ref= "log4j_version" }
+log4j_api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j_api_version" }
+log4j_core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j_api_version" }
+log4j_slf4j_impl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j_api_version" }
+managed_lucene_analyzers_common = { module = "org.apache.lucene:lucene-analyzers-common", version.ref = "lucene_analyzers_common_version" }
+managed_lucene_core = { module = "org.apache.lucene:lucene-core", version.ref = "lucene_core_fedramp_version" }
+lucene_queries = { module = "org.apache.lucene:lucene-queries", version.ref = "lucene_queries_version" }
+managed_lucene_queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene_queryparser_version" }
+metadata_extractor = { module = "org.tallison:metadata-extractor", version.ref = "metadata_extractor_version" }
+managed_metrics_core = { module = "io.dropwizard.metrics:metrics-core", version.ref = "metrics_core_version" }
+managed_mockito_core = { module = "org.mockito:mockito-core", version.ref = "mockito_core_version" }
+mockito_inline = { module = "org.mockito:mockito-inline", version.ref = "mockito_core_version" }
+mockito_junit_jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "junit_mockito_version"}
+mockk = { module = "io.mockk:mockk", version.ref = "mockk_version" }
+opencsv = { module = "net.sf.opencsv:opencsv", version.ref = "opencsv_version" }
+managed_opensaml = { module = "org.opensaml:opensaml", version.ref = "opensaml_version" }
+opentest4j = { module = "org.opentest4j:opentest4j", version.ref = "opentest4j_version" }
+managed_openws = { module = "org.opensaml:openws", version.ref = "openws_version" }
+org_json = { module = "org.json:json", version.ref = "org_json_version" }
+prometheus_simpleclient = { module = "io.prometheus:simpleclient", version.ref = "prometheus_simpleclient" }
+project_reactor_core = { module = "io.projectreactor:reactor-core", version.ref = "project_reactor_version" }
+managed_protobuf_java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf_java_version" }
+managed_quartz = { module = "org.quartz-scheduler:quartz", version.ref = "quartz_version" }
+reactive_streams = { module = "org.reactivestreams:reactive-streams", version.ref = "reactive_streams_version" }
+reflections = { module = "org.reflections:reflections", version.ref = "reflections_version" }
+rest_assured = { module = "com.jayway.restassured:rest-assured", version.ref = "rest_assured_version" }
+re2j = { module = "com.google.re2j:re2j", version.ref = "re2j_version" }
+roaringbitmap = { module = "org.roaringbitmap:RoaringBitmap", version.ref = "roaringbitmap_version" }
+rocksdb = { module = "org.rocksdb:rocksdbjni", version.ref = "rocksdb_version" }
+rsyntaxtextarea = { module = "fife:rsyntaxtextarea", version.ref = "rsyntaxtextarea_version" }
+salesforce_reactor_grpc_common = { module = "com.salesforce.servicelibs:reactive-grpc-common", version.ref = "salesforce_reactor_grpc_version" }
+salesforce_reactor_grpc_stub = { module = "com.salesforce.servicelibs:reactive-grpc-stub", version.ref = "salesforce_reactor_grpc_version" }
+managed_scala_compiler_2_12 = { module = "org.scala-lang:scala-compiler", version.ref = "scala_compiler_2_12_version" }
+managed_scala_library_2_12 = { module = "org.scala-lang:scala-library", version.ref = "scala_library_2_12_version" }
+scala_logging_2_12 = { module = "com.typesafe.scala-logging:scala-logging", version.ref = "scala_logging_2_12_version" }
+scala_test_2_12 = { module = "org.scalatest:scalatest_2_12", version.ref = "scalatest_2_12_version"}
+scala_check_2_12 = { module = "org.scalatest:scalacheck_2_12", version.ref = "scalacheck_2_12_version"}
+managed_servo_core = { module = "com.netflix.servo:servo-core", version.ref = "servo_core_version" }
+sequence_library = { module = "de.regnis.q.sequence:sequence-library", version.ref = "sequence_library" }
+simple_xml = { module = "org.simpleframework:simple-xml", version.ref = "simple_xml_version" }
+managed_slf4j_api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j_api_version" }
+snappy = { module = "org.xerial.snappy:snappy-java", version.ref = "snappy_version" }
+soapui = { module = "eviware:soapui", version.ref = "soapui_version" }
+soapui_xmlbeans = { module = "eviware:soapui-xmlbeans", version.ref = "soapuixml_beans_version" }
+managed_spark_core = { module = "com.sparkjava:spark-core", version.ref = "spark_core_version" }
+spring_beans = { module = "org.springframework:spring-beans", version.ref = "spring_beans_version" }
+spring_beans_core = { module = "org.springframework:spring-core", version.ref = "spring_core_version" }
+spring_beans_web = { module = "org.springframework:spring-web", version.ref = "spring_web_version" }
+managed_stax2_api = { module = "org.codehaus.woodstox:stax2-api", version.ref = "stax2_api_version" }
+svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit_version" }
+tdigest = { module = "com.tdunning:t-digest", version.ref = "tdigest_version" }
+tica_core = { module = "org.apache.tika:tika-core", version.ref = "tika_core_version" }
+tika_parser_apple_module = { module = "org.apache.tika:tika-parser-apple-module", version.ref = "tika_parsers_version"}
+tika_parser_html_module = { module = "org.apache.tika:tika-parser-html-module", version.ref = "tika_parsers_version" }
+tika_parser_microsoft_module = { module = "org.apache.tika:tika-parser-microsoft-module", version.ref = "tika_parsers_version"}
+tika_parser_miscoffice_module = { module = "org.apache.tika:tika-parser-miscoffice-module", version.ref = "tika_parsers_version" }
+tika_parser_pdf_module = { module = "org.apache.tika:tika-parser-pdf-module", version.ref = "tika_parsers_version" }
+tika_parser_text_module = { module = "org.apache.tika:tika-parser-text-module", version.ref = "tika_parsers_version" }
+tomcat = { module = "org.apache.tomcat:tomcat-catalina", version.ref = "tomcat_catalina_version" }
+tomcat_servlet_api = { module = "org.apache.tomcat:tomcat-servlet-api", version.ref = "tomcat_servlet_api_version" }
+tomcat_util = { module = "org.apache.tomcat:tomcat-util", version.ref = "tomcat_util_version" }
+trove4j = { module = "net.sf.trove4j:trove4j", version.ref = "trove4j_version" }
+xml_apis = { module = "xerces:xml-apis", version.ref = "xml_apis_version" }
+xmlbeans = { module = "org.apache.xmlbeans:xmlbeans", version.ref = "xmlbeans_version" }
+managed_xmlsec = { module = "org.apache.santuario:xmlsec", version.ref = "xmlsec_version"}
+xmlunit = { module = "xmlunit:xmlunit", version.ref = "xmlunit_version" }
+
+#####################################
+# CompanyXXX Libraries
+#####################################
+managed_workday_alpaca = { module = "com.workday:alpaca-common", version.ref = "com_workday_alpaca_common_consume"}
+workday_alpine = { module = "com.workday.alpine:core", version.ref = "com_workday_alpine_consume" }
+#check the workday_apache_zookeeper as the coordinates are com.workday.zookeeper:zookeeper:${com_workday_apache_zookeeper_consume}:wd-deps
+workday_apache_zookeeper = { module = "com.workday.zookeeper:zookeeper", version.ref = "com_workday_apache_zookeeper_consume" }
+workday_avro = { module = "com.workday.avro:avro", version.ref = "workday_avro_version" }
+workday_change_verifier_api = { module= "com.workday.change.verifier.api:change-verifier-api", version.ref = "change_verifier_api_version" }
+workday_appsolo = { module = "com.workday.appsolo:app-solo-comm", version.ref = "com_workday_appsolo_consume" }
+managed_workday_auth_client = { module = "com.workday:auth-client", version.ref = "com_workday_auth_client_consume" }
+managed_workday_auth_common = { module = "com.workday:auth-common", version.ref = "com_workday_auth_common_consume" }
+workday_auth_common_saml = { module = "com.workday:auth-common-saml", version.ref = "com_workday_auth_common_saml_consume" }
+workday_batchprotocol_parser = { module = "com.workday:batchprotocolparser", version.ref = "com_workday_batchprotocolparser_consume" }
+managed_workday_bcwrapper_api = { module = "com.workday:bcwrapper-api", version.ref = "com_workday_bcwrapper_consume"}
+managed_workday_bcwrapper_impl = { module = "com.workday:bcwrapper-impl", version.ref = "com_workday_bcwrapper_consume"}
+workday_bicomposite_expression = { module = "com.workday.bi.composite.expression:bi-composite-expression", version.ref = "com_workday_bi_composite_expression" }
+workday_bicondition_tree = { module = "com.workday.bi:conditiontree", version.ref = "com_workday_bi_conditiontree" }
+workday_biqueryparser = { module = "com.workday:biqueryparser", version.ref = "com_workday_biqueryparser_consume" }
+workday_biservice-api = { module = "com.workday.bi:biservice-api", version.ref = "com_workday_biservice_api"}
+workday_biservice-common = { module = "com.workday.bi:biservice-common", version.ref = "com_workday_biservice_common"}
+workday_common_protobuf_java = { module = "com.workday:common-protobuf-java", version.ref = "com_workday_common_protobuf_java_consume"}
+workday_common_component = { module = "com.yourcompany.common:component", version.ref = "wday_common_version" }
+workday_common_tenant = { module = "com.yourcompany.common:tenant", version.ref = "wday_common_version" }
+managed_workday_config_monitor = { module = "com.workday:config-monitor", version.ref = "com_workday_config_monitor_consume"}
+workday_content_package_parse = { module = "com.workday:content-package-parse", version.ref = "com_workday_content_package_parse_consume"}
+workday_daas_push_api = { module = "com.workday.daas.push:daas-push-api", version.ref = "com_workday_daas_push_version" }
+workday_daas_push_impl = { module = "com.workday.daas.push:daas-push-impl", version.ref = "com_workday_daas_push_version"}
+workday_daas_service = { module = "com.workday.daas.service:daas-service-api", version.ref = "com_workday_daas_service_version" }
+workday_daas_shared_api = { module = "com.workday.daas.shared:daas-shared-api", version.ref = "com_workday_daas_shared_version" }
+workday_daas_shared_impl = { module = "com.workday.daas.shared:daas-shared-impl", version.ref = "com_workday_daas_shared_version" }
+workday_dcs_client = { module = "com.workday:dcs-client", version.ref = "com_workday_dcs_client_consume" }
+workday_dpm_sensu_client_impl = { module = "com.workday.dpm.sensu.client:dpm-sensu-client-impl", version.ref = "dpm_sensu_client_impl_version" }
+workday_dynamic_data = { module = "com.workday:dynamic-data", version.ref = "com_workday_dynamic_data_consume" }
+managed_workday_ems = { module = "com.workday:ems", version.ref = "com_workday_ems_consume" }
+workday_ems_mock_environment = { module = "com.workday:ems-mock-environment", version.ref = "com_workday_ems_mock_environment_consume" }
+workday_ems_publisher = { module = "com.workday:ems-publisher", version.ref = "com_workday_ems_publisher_consume" }
+managed_workday_esb_java_common = { module = "com.workday:esb-java-common", version.ref = "com_workday_esb_java_common_consume" }
+workday_execsvr_client = { module = "com.workday:execsvr-client", version.ref = "com_workday_execsvr_client_consume" }
+workday_flo = { module = "com.workday.flo:flo", version.ref = "com_workday_flo_consume" }
+managed_workday_fugu_common = { module = "com.workday.security.authn:fugu-common", version.ref = "com_workday_fugu_common_consume" }
+workday_indexed_common = { module = "com.workday.indexed.common:common", version.ref = "com_workday_indexed_common_version" }
+workday_indexed_toggle_core = { module = "com.workday.indexed.toggle:core", version.ref = "com_workday_indexed_toggle_version"}
+workday_indexed_toggle_jmx =  { module = "com.workday.indexed.toggle:jmx", version.ref = "com_workday_indexed_toggle_version"}
+#revise the one below
+workday_indexer_protobuf_java = { module = "com.workday:indexer-protobuf-java", version.ref = "com_workday_indexer_protobuf_java_consume" }
+workday_instance_caching = { module = "com.workday.instance.caching:instance-caching", version.ref = "com_workday_instance_caching_consume" }
+workday_instance_changeset_client = { module = "com.workday.instance:changeset-client", version.ref = "com_workday_instance_changeset_client_consume"}
+workday_instance_data_collections = { module = "com.workday.instance:instance-data-collections", version.ref = "com_workday_instance_data_collections_consume" }
+workday_instance_data_core = { module = "com.workday.instance:instance-data-core", version.ref = "com_workday_instance_data_core_consume" }
+workday_instance_data_persistence = { module = "com.workday.instance:instance-data-persistence", version.ref = "com_workday_instance_data_persistence_consume" }
+workday_instance_data_serialization = { module = "com.workday.instance:instance-data-serialization", version.ref = "com_workday_instance_data_serialization_consume"}
+#Not used
+#workday_kafkaclient_2_10 = { module = ""}
+#workday_kafkaclient_2_11
+#workday_kafkaclient_2_12
+#workday_kafkaclient_log4j2_2_10
+#workday_kafkaclient_log4j2_2_11
+#workday_kafkaclient_log4j2_2_12
+managed_workday_kmicommon = { module = "com.workday:kmicommon", version.ref="com_workday_kmicommon_consume" }
+managed_workday_kotlin_integrations_logger = { module = "com.workday.kotlin.integrations:kotlin-integration-logger", version.ref = "com_workday_kotlin_integrations" }
+managed_workday_kotlin_integrations_oms_types = { module = "com.workday.kotlin.integrations:kotlin-integration-oms-types", version.ref = "com_workday_kotlin_integrations" }
+managed_workday_kotlin_integrations_trove = { module = "com.workday.kotlin.integrations:kotlin-integration-trove", version.ref = "com_workday_kotlin_integrations" }
+managed_workday_kotlin_integrations_util = { module = "com.workday.kotlin.integrations:kotlin-integration-util", version.ref = "com_workday_kotlin_integrations" }
+managed_workday_kraken_client = { module = "com.workday:kraken-client", version.ref = "com_workday_kraken_client_consume" }
+workday_kraken_common = { module = "com.workday:kraken-common", version.ref = "com_workday_kraken_common_consume" }
+workday_oms_locator = { module = "com.workday.oms.locator:oms-locator", version.ref = "com_workday_locator_consume" }
+managed_workday_logger = { module = "com.workday:logger", version.ref = "com_workday_logger_consume" }
+managed_workday_logging = { module = "com.workday:logging", version.ref = "com_workday_logging_consume" }
+#Unused
+# workday_malt_push = { module = ""}
+workday_mcc_common = { module = "com.workday.mcc:mcc-common-java", version.ref = "com_workday_mcc_mcc_common"}
+workday_mcc_notification_routing_client = { module = "com.workday.mcc:notification-routing-client-java", version.ref = "com_workday_mcc_notification_routing_client_java_consume"}
+managed_workday_messaging_common = { module = "com.workday:messaging-common", version.ref = "com_workday_messaging_common_consume" }
+workday_messaging_config_monitor_supplier = { module = "com.workday.messaging-config-monitor-supplier:messaging-config-monitor-supplier", version.ref = "com_workday_messaging_config_monitor_supplier_consume"}
+managed_workday_messaging = { module = "com.workday:messaging", version.ref = "com_workday_messaging_consume" }
+managed_workday_messaging_library = { module = "com.workday:messaging-library", version.ref = "com_workday_messaging_library_consume" }
+workday_messaging_scc_encrypter = { module = "com.workday.messaging-scc-encrypter:messaging-scc-encrypter", version.ref = "com_workday_messaging_scc_encrypter_consume" }
+workday_messaging_shared = { module = "com.workday.messaging-shared:messaging-shared", version.ref = "com_workday_messaging_shared_consume" }
+managed_workday_metrics_publisher = { module = "com.workday:metrics-publisher", version.ref =  "com_workday_metrics_publisher_consume" }
+managed_workday_monolithic = { module = "com.workday:monolithic", version.ref = "com_workday_monolithic_consume" }
+workday_ocr_protobuf_java = { module = "com.workday:ocr-protobuf-java", version.ref = "com_workday_ocr_protobuf_java_consume" }
+workday_oms_autoscaler_metrics = { module = "com.workday.oms.autoscaler.metrics:oms-autoscaler-metrics", version.ref = "com_workday_oms_autoscaler_metrics_consume" }
+workday_oms_client = { module = "com.workday:oms-client", version.ref = "com_workday_oms_client_consume" }
+workday_oms_do_all = { module = "com.workday.oms.distributedoperation:oms-do", version.ref = "com_workday_oms_do_all_version" }
+workday_oms_junit_utils = { module = "com.workday:oms-junit-utils", version.ref = "com_workday_oms_junit_utils_consume" }
+workday_oms_themis_grpc = { module = "com.workday.themis.grpc:themis-grpc-api", version.ref = "com_workday_oms_themis_grpc_consume" }
+managed_workday_oms_utils = { module = "com.workday:oms-utils", version.ref = "com_workday_oms_utils_consume" }
+workday_open_tracing_core = { module = "com.workday.opentracing:open-tracing-core", version.ref = "com_workday_open_tracing_consume" }
+workday_open_tracing_jaeger = { module = "com.workday.opentracing:open-tracing-jaeger", version.ref = "com_workday_open_tracing_consume" }
+workday_oms_persistence_api = { module = "com.workday.oms.persistence:oms-persistence-api", version.ref = "com_workday_persistence_consume" }
+workday_oms_persistence_common = { module = "com.workday.oms.persistence:oms-persistence-common", version.ref = "com_workday_persistence_consume" }
+workday_oms_persistence_core = { module = "com.workday.oms.persistence:oms-persistence-core", version.ref = "com_workday_persistence_consume" }
+
+workday_oms_storage_api_instance = { module = "com.workday.oms.storage:oms-storage-api-instance", version.ref = "com_workday_oms_storage_consume" }
+workday_oms_storage_spi_instance = { module = "com.workday.oms.storage:oms-storage-spi-instance", version.ref = "com_workday_oms_storage_consume" }
+workday_oms_storage_sql_instance = { module = "com.workday.oms.storage:oms-storage-sql-instance", version.ref = "com_workday_persistence_consume" }
+
+managed_workday_pharos_stats_workdaystats = { module = "com.workday.pharos.stats:workdaystats", version.ref = "com_workday_pharos_stats_workdaystats_consume" }
+workday_platsec_mocks = { module = "com.workday:platsec-mocks", version.ref = "com_workday_platsec_mocks_consume" }
+workday_prism_conversion = { module = "com.workday:prism-conversion", version.ref = "com_workday_prism_conversion_consume" }
+managed_workday_protobuf = { module = "com.workday:protobuf", version.ref = "com_workday_protobuf_consume" }
+workday_proton_oms_common_2_12 = { module = "com.workday:proton-oms-common", version.ref = "com_workday_proton_oms_common_2_12_consume"}
+
+####################
+# QUARK
+####################
+managed_workday_quark_accelerator = { module = "com.workday.quark:quark-accelerator", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_assertion = { module = "com.workday.quark:quark-assertion", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_automata = { module = "com.workday.quark:quark-automata", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_collider = { module = "com.workday.quark:quark-collider", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_collider_component_runtime = { module = "com.workday.quark:quark-collider-component-runtime", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_collider_remote = { module = "com.workday.quark:quark-collider-remote", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_collider_zookeeper = { module = "com.workday.quark:quark-collider-zookeeper", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component = { module = "com.workday.quark:quark-component", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_automata = { module = "com.workday.quark:quark-component-automata", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_election = { module = "com.workday.quark:quark-component-election", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_election_curator = { module = "com.workday.quark:quark-component-election-curator", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_election_testing = { module = "com.workday.quark:quark-component-election-testing", version.ref = "com_workday_quark_consume"}
+managed_workday_quark_component_runtime = { module = "com.workday.quark:quark-component-runtime", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_runtime_testing = { module = "com.workday.quark:quark-component-runtime-testing", version.ref= "com_workday_quark_consume"}
+managed_workday_quark_component_runtime_testing_junit = { module = "com.workday.quark:quark-component-runtime-testing-junit", version.ref= "com_workday_quark_consume"}
+managed_workday_quark_component_settings = { module = "com.workday.quark:quark-component-settings", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_stresstesting = { module = "com.workday.quark:quark-component-stresstesting", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_component_testing = { module = "com.workday.quark:quark-component-testing", version.ref = "com_workday_quark_consume"}
+managed_workday_quark_core = { module = "com.workday.quark:quark-core", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_expression = { module = "com.workday.quark:quark-expression", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_injection = { module = "com.workday.quark:quark-injection", version.ref = "com_workday_quark_consume" }
+workday_quark_instrumentation = { module = "com.workday.quark.extensions:instrumentation", version.ref = "com_workday_quark_extensions_consume"}
+managed_workday_quark_junit_extensions = { module = "com.workday.quark:quark-junit-extensions", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_lifecycle_recorder = { module = "com.workday.quark:quark-component-lifecycle-recorder", version.ref = "com_workday_quark_consume"}
+managed_workday_quark_locator = { module = "com.workday.quark:quark-locator", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_network = { module = "com.workday.quark:quark-network", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_remoting_api = { module = "com.workday.quark:quark-remoting-api", version.ref = "com_workday_quark_consume" }
+managed_workady_quark_remoting_grpc_client = { module = "com.workday.quark:quark-remoting-grpc-client", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_remoting_grpc_core = { module = "com.workday.quark:quark-remoting-grpc-core", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_remoting_grpc_rest = { module = "com.workday.quark:quark-remoting-grpc-rest", version.ref = "com_workday_quark_consume" }
+managed_workday_quark_remoting_grpc_service = { module = "com.workday.quark:quark-remoting-grpc-service", version.ref = "com_workday_quark_consume"}
+workday_quark_rollout = { module = "com.workday.quark.extensions:rollout", version.ref = "com_workday_quark_extensions_consume" }
+
+#####################
+# QUERY
+####################
+workday_query_api = { module = "com.workday.query:query-api", version.ref = "com_workday_query_all_version"}
+workday_query_avro = { module = "com.workday.query.avro:query-avro", version.ref = "com_workday_query_avro"}
+workday_query_avro_utils = { module = "com.workday.query.avro:avro-utils", version.ref = "com_workday_query_avro" }
+workday_query_base = { module = "com.workday.query:query-base", version.ref = "com_workday_query_all_version"}
+workday_query_calcite = { module = "com.workday.query:query-calcite", version.ref = "com_workday_query_all_version" }
+workday_query_calcite_common = { module = "com.workday.query:query-calcite-common", version.ref = "com_workday_query_all_version" }
+workday_query_common = { module = "com.workday.query:query-common", version.ref = "com_workday_query_all_version" }
+workday_query_core = { module = "com.workday.query:query-core", version.ref = "com_workday_query_all_version" }
+workday_query_index = { module = "com.workday.query:query-index", version.ref = "com_workday_query_all_version" }
+workday_query_messaging = { module = "com.workday.query:query-messaging", version.ref = "com_workday_query_all_version" }
+workday_query_version_adapter = { module = "com.workday.query:version-adapter", version.ref = "com_workday_query_version_adapter_version" }
+
+managed_workday_redis_agent = { module = "com.workday:redis-agent", version.ref = "com_workday_redis_agent_consume" }
+managed_workday_redis_client = { module = "com.workday:redis-client", version.ref = "com_workday_redis_client_consume" }
+workday_repk_client = { module = "com.workday.remote.ems.decryption.key.retriever:remote-ems-decryption-key-retriever", version.ref = "com_workday_repk_client_consume"}
+workday_sage_client = { module = "com.workday:sage-client", version.ref = "com_workday_sage_client_consume" }
+workday_scheduling_core = { module = "com.workday.scheduling:scheduling-core", version.ref = "com_workday_scheduling_consume" }
+workday_scheduling_quartz = { module = "com.workday.scheduling:scheduling-quartz", version.ref = "com_workday_scheduling_consume" }
+managed_workday_security_crypto_2_12 = { module = "com.workday:security-crypto-commons_2.12", version.ref = "com_workday_security_crypto_commons_2_12_consume"}
+workday_security_epic_core = { module = "com.workday.security.epic:epic-core", version.ref = "com_workday_security_epic_version" }
+workday_security_epic_core_test = { module = "com.workday.security.epic:epic-core-test", version.ref = "com_workday_security_epic_version" }
+workday_security_ua_parser = { module = "com.workday.security.ua-parser:uap-java", version.ref = "com_workday_security_ua_parser_consume" }
+workday_self_check = { module = "com.workday:self-check", version.ref="com_workday_self_check_consume" }
+
+#####################
+# OMSPI
+####################
+workday_service_omspi_telemetry_schema = { module = "com.workday.service:omspi-telemetry-schema", version.ref = "com_workday_service_omspi_metrics_version" }
+workday_service_omspi_service_metrics = { module = "com.workday.service:omspi-service-metrics", version.ref = "com_workday_service_omspi_metrics_version" }
+workday_service_omspi_telemetry_producer = { module = "com.workday.service:omspi-telemetry-producer", version.ref = "com_workday_service_omspi_metrics_version" }
+workday_service_omspi_telemetry_publisher = { module = "com.workday.service:omspi-telemetry-publisher", version.ref = "com_workday_service_omspi_metrics_version" }
+
+workday_service_discovery_test = { module = "com.workday:wd-servicediscovery-test", version.ref = "com_workday_servicediscovery_test_consume" }
+workday_shared_session_common = { module = "com.workday:shared-session-common", version.ref = "com_workday_shared_session_common_oms_consume" }
+workday_thread_analyzer = { module = "com.workday.rho:thread-analyzer", version.ref = "com_workday_thread_analyzer_consume" }
+managed_workday_togglecentral = { module = "com.workday:togglecentral", version.ref = "com_workday_togglecentral_consume" }
+managed_workday_util = { module = "com.workday:util", version.ref = "com_workday_util_consume" }
+workday_wamm = { module = "com.workday:wamm", version.ref = "com_workday_wamm_consume" }
+managed_workday_wd_kafka_client = { module = "com.workday:wd-kafka-client", version.ref = "com_workday_wd_kafka_client_consume" }
+workday_wd_kafka_client_dpmauthgwy_bridge = { module = "com.workday.wd-kafka-client-dpmauthgwy-bridge:wd-kafka-client-dpmauthgwy-bridge", version.ref = "com_workday_wd_kafka_client_dpmauthgwy_bridge_consume" }
+managed_workday_wd_servicediscovery = { module = "com.workday:wd-servicediscovery", version.ref = "com_workday_wd_servicediscovery_consume" }
+workday_wd_tomcat = { module = "com.workday:wd-tomcat", version.ref = "com_workday_wd_tomcat_consume" }
+managed_workday_wd_zookeeper_client = { module = "com.workday:wd-zookeeper-client", version.ref = "com_workday_wd_zookeeper_client_consume" }
+managed_workday_workdaystats = { module = "com.workday:workdaystats", version.ref = "com_workday_workdaystats_consume" }
+managed_workday_workdaystats_log4j2 = { module = "com.workday:workdaystats-log4j2", version.ref = "com_workday_workdaystats_log4j2_consume" }
+workday_xo_id_service = { module = "com.workday:xo-id-service-api", version.ref = "com_workday_xo_id_service_consume" }
+workday_xobin_api = { module = "com.workday:xo-bin-api", version.ref = "com_workday_xobin_consume" }
+workday_xobin_impl = { module = "com.workday:xo-bin-impl", version.ref = "com_workday_xobin_consume" }
+workday_yp = { module = "com.workday:yp", version.ref = "com_workday_yp_consume" }
+workday_yp_test_utils = { module = "com.workday:yp-test-utils", version.ref = "com_workday_yp_consume" }
+workday_yp_wsf = { module = "com.workday:yp-wsf", version.ref = "com_workday_yp_consume" }
+
+####################
+# ZONDA
+####################
+workday_zonda_client = { module = "com.workday.zonda:zonda-client", version.ref = "com_workday_zonda_client_consume" }
+workday_zonda_message = { module = "com.workday.zonda:zonda-message", version.ref = "com_workday_zonda_message_consume" }
+workday_zonda_schemas_async = {  module = "com.workday.zonda.schemas:async", version.ref = "com_workday_zonda_schemas_async" }
+workday_zonda_schemas_autoscale_metrics = {  module = "com.workday.zonda.schemas:omsAutoscaler", version.ref = "com_workday_zonda_schemas_autoscale_metrics" }
+workday_zonda_schemas_expenses = { module = "com.workday.zonda.schemas:expenses", version.ref = "com_workday_zonda_schemas_expenses" }
+workday_zonda_schemas_jobframework_status = { module = "com.workday.zonda.schemas:jobFrameworkStatus", version.ref = "com_workday_zonda_schemas_jobframework_status" }
+workday_zonda_schemas_luca = { module = "com.workday.zonda.schemas:luca", version.ref = "com_workday_zonda_schemas_luca" }
+workday_zonda_schemas_omsrequest = { module = "com.workday.zonda.schemas:omsRequest", version.ref = "com_workday_zonda_schemas_omsrequest_consume" }
+
+####################
+# ZOOKEEPER
+####################
+# check how to denote the library dependency com.workday.zookeeper:curator-client:${com_workday_zookeeper_curator_consume}:wd-deps
+# may need to be used as implementation(omsLibs.workday_zookeeper_curator_client) { artifact { classifier = 'wd-deps'; type = 'jar' } }
+workday_zookeeper_curator_client = { module = "com.workday.zookeeper:curator-client", version.ref = "com_workday_zookeeper_curator_consume"}
+workday_zookeeper_curator_framework = { module = "com.workday.zookeeper:curator-framework", version.ref = "com_workday_zookeeper_curator_consume" }
+workday_zookeeper_curator_recipes = { module = "com.workday.zookeeper:curator-recipes", version.ref = "com_workday_zookeeper_curator_consume" }
+
+wsdl4j = { module = "wsdl4j:wsdl4j", version.ref = "wsdl4j_version" }
+managed_xercesImpl_version = { module = "xerces:xercesImpl", version.ref = "xercesImpl_version" }
+managed_xmltooling = { module = "org.opensaml:xmltooling", version.ref = "xmltooling_version" }
+managed_xz = { module = "org.tukaani:xz", version.ref = "xz_version" }
+
+[bundles]
+tika_parsers = ["tika_parser_apple_module", "tika_parser_microsoft_module", "tika_parser_miscoffice_module", "tika_parser_html_module", "tika_parser_pdf_module", "tika_parser_text_module"]
+
+####################
+# WORKDAY
+####################
+workday_bi_service = ["workday_biservice-api", "workday_biservice-common", "workday_bicondition_tree"]
+workday_instance_data = ["workday_instance_data_collections", "workday_instance_data_core", "workday_instance_data_serialization", "workday_instance_data_persistence"]
+workday_omspi_telemetry = ["workday_service_omspi_telemetry_schema", "workday_service_omspi_telemetry_producer", "workday_service_omspi_telemetry_publisher"]
+workday_query = ["workday_query_api", "workday_query_base", "workday_query_calcite", "workday_query_calcite_common", "workday_query_common", "workday_query_core", "workday_query_index", "workday_query_messaging"]
+workday_persistence = ["workday_oms_persistence_api", "workday_oms_persistence_common", "workday_oms_persistence_core"]
+workday_storage = ["workday_oms_storage_api_instance", "workday_oms_storage_spi_instance", "workday_oms_storage_sql_instance"]

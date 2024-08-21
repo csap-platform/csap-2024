@@ -1,0 +1,449 @@
+{
+	"note": "this is a sample project; customize as needed",
+	"project": {
+		"api-version": 2.1,
+		"project-version": 1,
+		"name": "update-your-project-name",
+		"architect": "yourEmail@notConfigured.com",
+		"emailNotifications": "support@notConfigured.com"
+	},
+	"environments": {
+		"defaults": {
+			"settings": {
+				"base-env-only": true,
+				"application": {
+					"name": "update-your-application-name",
+					"sub-projects": [],
+					"definition-repo-url": "https://github.com/xxx/xxx-definition.git",
+					"definition-repo-branch": "master",
+					"maven-url": "http://repo.spring.io/libs-release",
+			        "help-menu": {
+			      		"Local Login": "http://csap-dev01.csap.org:8011/login?local=true",
+			       	    "Container Architecture": "https://www.tutorialworks.com/difference-docker-containerd-runc-crio-oci/",
+			    		"Rocky Linux": "https://rockylinux.org/"
+			        },
+					"custom-properties": [
+						{
+							"name": "simple-demo",
+							"value": "place-holder-to-enable"
+						}
+					]
+				},
+				"operatorNotifications": [
+					"csapsupport@yourcompany.com"
+				],
+				"csap-host-agent": {
+					"maxJmxCollectionMs": 3000,
+					"numberWorkerThreads": "10",
+					"adminToAgentTimeoutInMs": 4000,
+					"lsofIntervalMins": 1,
+					"duIntervalMins": 5,
+					"apiLocal": true,
+					"apiUser": "agentUser",
+					"apiPass": "CSAP Developmentdev",
+					"infraTests": {
+						"cpuIntervalMinutes": "30",
+						"diskIntervalMinutes": "30",
+						"cpuLoopsMillions": "1",
+						"diskWriteMb": "600"
+					},
+					"gitSslVerificationDisabledUrls": [
+						"https://updateTHisIfNeeded.com/demo.git"
+					]
+				},
+				"csap-data": {
+					"user": "events-disabled",
+					"credential": "pAH+tsfwU/kgW+34WPXQW/8Z0a9SJpXq8dNOirMmUxM=",
+					"service-url": "http://csap-dev01.csap.org:8080/events-service"
+				},
+				"monitorDefaults": {
+					"jvm_jmxHeartbeat": true,
+					"maxDiskPercent": 80,
+					"maxDiskPercentIgnorePatterns": "/auto/.*",
+					"maxHostCpuLoad": 4,
+					"maxHostCpu": 50,
+					"maxHostCpuIoWait": 11,
+					"minFreeMemoryMb": "1000",
+					"max_diskUtil": "150",
+					"max_threadCount": "120",
+					"max_fileCount": "350",
+					"max_rssMemory": "500m",
+					"max_tomcatConnections": "40",
+					"max_topCpu": "150"
+				},
+				"configuration-maps": {
+					"global": {
+						"about": "csap-globals-loaded",
+						"allowRemoteJmx": "false",
+						"isJmxAuthentication": "false"
+					},
+					"httpd": {
+						"configureAsToolServer": "false",
+						"httpdDocFolder": "$$csap-base/web-server",
+						"createPort80Tunnel": true
+					},
+					"docker": {
+						"allowRemote": false
+					},
+					"kubelet": {
+						"clusterToken": "584t76.b0b7c7r75rbc0ml0",
+						"kubernetesAllInOne": false
+					},
+					"storage-settings-sample": {
+						"about-type": "vsphere or nfs can be used",
+						"$$storage-type": "nfs",
+						"$$storage-class": "csap-nfs-storage-1",
+						"$$storage-folder": "csap-dev-platform-storage",
+						"$$vsphere-datastore": "YOUR_DS_NAME",
+						"$$nfs-server": "YOUR_NFS_IP",
+						"$$nfs-path": "/YOUR_NFS_EXPORT_PATH",
+						"$$nfs-mount": "/mnt/YOUR_OS_MOUNT_PATH",
+						"$$nfs-provisioner": "kubernetes-pvcs-csap-platform",
+						"httpdDocFolder": "$$nfs-mount/csap-web-server"
+					}
+				},
+				"csap-collection": {
+					"processDumps": {
+						"resouceInterval": 30,
+						"maxInInterval": 3,
+						"lowMemoryInMb": "500"
+					},
+					"host": [
+						30,
+						300,
+						"3600"
+					],
+					"os-process": [
+						30,
+						300,
+						3600
+					],
+					"application": [
+						"30",
+						300,
+						3600
+					]
+				},
+				"reports": {
+					"trending": [
+						{
+							"label": "Cores Used (all hosts)",
+							"report": "custom/core",
+							"metric": "coresUsed",
+							"about": "New item"
+						},
+						{
+							"label": "Memory (all services,gb)",
+							"report": "os-process",
+							"metric": "rssMemory",
+							"divideBy": "numberOfSamples,1000",
+							"allVmTotal": "true"
+						},
+						{
+							"label": "CPU Test (all hosts,seconds)",
+							"report": "host",
+							"metric": "totalCpuTestTime",
+							"divideBy": "numberOfSamples",
+							"allVmTotal": "false"
+						},
+						{
+							"label": "Disk Test (all hosts,seconds)",
+							"report": "host",
+							"metric": "totalDiskTestTime",
+							"divideBy": "numberOfSamples",
+							"allVmTotal": "false"
+						},
+						{
+							"label": "CPU Load (all hosts)",
+							"report": "host",
+							"metric": "totalLoad",
+							"divideBy": "numberOfSamples",
+							"allVmTotal": "true"
+						},
+						{
+							"label": "Threads (all hosts)",
+							"report": "host",
+							"metric": "threadsTotal",
+							"divideBy": "numberOfSamples",
+							"allVmTotal": "true"
+						},
+
+						{
+							"label": "Java GC (all jvms,seconds)",
+							"report": "java",
+							"metric": "minorGcInMs",
+							"serviceName": "all",
+							"allVmTotal": true,
+							"divideBy": "1000"
+						},
+						{
+							"label": "csap-agent sockets",
+							"report": "os-process",
+							"metric": "socketCount",
+							"serviceName": "csap-agent",
+							"divideBy": "numberOfSamples"
+						},
+						{
+							"label": "csap-agent os commands",
+							"report": "application",
+							"metric": "OsCommandsCounter",
+							"serviceName": "csap-agent",
+							"divideBy": "numberOfSamples"
+						}
+
+					],
+					"realTimeMeters": [
+						{
+							"label": "Cpu Cores Active",
+							"id": "host.coresActive",
+							"intervals": [
+								7,
+								8,
+								9
+							],
+							"min": 0,
+							"about": "New item",
+							"healthMeter": [
+								false,
+								0,
+								4
+							]
+						},
+						{
+							"label": "Cpu Response (s)",
+							"id": "host.cpuTest",
+							"intervals": [
+								6,
+								7,
+								8
+							],
+							"min": 0,
+							"divideBy": "host-count",
+							"healthMeter": [
+								true,
+								1,
+								7
+							]
+						},
+						{
+							"label": "Disk Response (s)",
+							"id": "host.diskTest",
+							"intervals": [
+								4,
+								5,
+								6
+							],
+							"min": 0,
+							"divideBy": "host-count",
+							"healthMeter": [
+								true,
+								1,
+								5
+							]
+						},
+						{
+							"label": "csap-agent Cpu (Total)",
+							"id": "os-process.topCpu_csap-agent",
+							"intervals": [
+								10,
+								30,
+								100
+							]
+						}
+					]
+				},
+				"loadBalanceVmFilter": [
+					"none"
+				],
+				"monitoringUrl": "http://monitoring",
+				"buildCommandGradle": "--exclude-task test",
+				"buildCommandMaven": "-B -Dmaven.test.skip=true clean package",
+				"newsItems": [
+					"News items may be added using Application Editor."
+				],
+				"portRange": {
+					"start": 8200,
+					"end": 9300
+				},
+				"secureUrl": "https://csap-secure/admin",
+				"autoRestartHttpdOnClusterReload": "yes",
+				"launchUrls": [
+					{
+						"description": "http(Tomcat Embed)",
+						"url": "default"
+					},
+					{
+						"description": "ajp(LB - Internal)",
+						"url": "http://yourlb.na.demo-xxx.net"
+					}
+				],
+				"metricsPublication": [
+					{
+						"type": "csapCallHome",
+						"intervalInSeconds": 300,
+						"url": "http://csaptools/CsapGlobalAnalytics/rest/vm/health",
+						"token": "notUsed"
+					}
+				],
+				"lastModifiedBy": "pnightingale"
+			},
+			"base-os": {
+				"description": "core services installed on every host",
+				"type": "simple",
+				"template-references": [
+					"csap-agent",
+					"docker-monitor"
+				]
+			}
+		},
+		"dev": {
+			"settings": {
+				"imports": [
+					"defaults"
+				],
+				"loadbalancer-url": "http://yourlb",
+				"configuration-maps": {
+				},
+				"application": {
+					"name": "csap-performance-app-desktop-1",
+					"file-manager-shortcuts": [
+						{
+							"label": "Application Sample Shortcut",
+							"value": "/etc"
+						}
+					],
+					"host-settings": {
+						"commands": {
+							"start ots": "env "
+						},
+						"private-to-public-sample": {
+							"about": "keys are private dns in csap cluster, values are public dns for accessing via provider dynamic urls. eg. aws,gcp publix change on reboots"
+						},
+						"tags-sample": {
+							"localhost": "sample-tag"
+						},
+						"helperUrl-sample": "https://somehost.com/metrics#_v01(h:HOSTNAME.some.host.pattern)"
+					}
+				}
+			},
+			"base-os": {
+				"hosts": [
+					"csap_def_template_host"
+				]
+			},
+			"csap-demo": {
+				"notes": "For ease of management - common services are typically placed in a single  cluster.",
+				"type": "simple",
+				"enabled": false,
+				"hosts": [
+					"csap_def_template_host"
+				],
+				"template-references": [
+					"csap-demo-mp-monitor",
+					"csap-demo-source",
+					"csap-verify-service",
+					"csap-demo-tomcat"
+				]
+			},
+
+			"simple-services": {
+				"notes": "Third party services.",
+				"type": "simple",
+				"hosts": [
+					"csap_def_template_host"
+				],
+				"template-references": [
+					"zookeeper",
+					"demo-mysql-server",
+					"demo-mysql-ui"
+				]
+			}
+		}
+	},
+	"service-templates": {
+		"docker-monitor": {
+			"definitionSource": "some-project.json",
+			"path-to-template": "default-service-definitions.yaml",
+			"server": "os",
+			"autoStart": 20,
+			"description": "docker monitor that uses chef installed instance",
+			"docUrl": "https://docs.docker.com/engine/reference/commandline/dockerd/",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name#agent-tab",
+			"processFilter": ".*Docker.app.*",
+			"appDirectory": "/var/lib/docker",
+			"propDirectory": "/etc/docker",
+			"alerts": {
+				"max_diskUtil": "20g"
+			},
+			"logDirectory": "/var/log",
+			"defaultLogToShow": "docker",
+			"logRegEx": ".*\\.log",
+			"logJournalServices": "docker,csap,sshd",
+			"scmVersion": "os"
+		},
+		"zookeeper": {
+			"server": "os",
+			"isDataStore": true,
+			"autoStart": 30,
+			"description": "Zookeeper does ...",
+			"docUrl": "https://docs.chef.io/platform_overview/",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name",
+			"processFilter": ".*zookeeper.*",
+			"appDirectory": "/var/chef",
+			"propDirectory": "/etc/chef",
+			"alerts": {
+				"max_diskUtil": "20g",
+				"max_diskWriteKb": 4000
+			},
+			"logDirectory": "/var/log/chef",
+			"defaultLogToShow": "client.log",
+			"logRegEx": ".*\\.log",
+			"scmVersion": "os"
+		},
+
+		"demo-mysql-server": {
+			"server": "docker",
+			"autoStart": 40,
+			"description": "Mysql does",
+			"docUrl": "https://docs.chef.io/platform_overview/",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name",
+			"processFilter": "demo-mysql-server",
+			"processFilterOld": ".*mysqld.*",
+			"appDirectory": "/var/chef",
+			"propDirectory": "/etc/chef",
+			"alerts": {
+				"max_diskUtil": "20g",
+				"max_diskWriteKb": 4000
+			},
+			"logDirectory": "/var/log/chef",
+			"defaultLogToShow": "client.log",
+			"logRegEx": ".*\\.log",
+			"docker": {
+				"image": "docker-dev-artifactory.yourcompany.com/csapplatform/demo-mysql:latest "
+			},
+			"scmVersion": "os"
+		},
+
+		"demo-mysql-ui": {
+			"server": "docker",
+			"autoStart": 45,
+			"description": "Mysql does",
+			"docUrl": "https://docs.chef.io/platform_overview/",
+			"url": "$$csap-agent-url/app-browser?defaultService=$$service-name",
+			"processFilter": "demo-mysql-ui",
+			"appDirectory": "/var/chef",
+			"propDirectory": "/etc/chef",
+			"docker": {
+				"image": "phpmyadmin:latest "
+			},
+			"alerts": {
+				"max_diskUtil": "20g",
+				"max_diskWriteKb": 4000
+			},
+			"logDirectory": "/var/log/chef",
+			"defaultLogToShow": "client.log",
+			"logRegEx": ".*\\.log",
+			"scmVersion": "os"
+		}
+	}
+}

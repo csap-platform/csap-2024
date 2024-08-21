@@ -1,0 +1,33 @@
+{
+  "project": {
+    "api-version": 2.1,
+    "project-version": 1.0,
+    "name": "default"
+  },
+  "environments": {
+
+    "dev": {
+      "settings": {
+        "application": {
+          "name": "basic-definition-application"
+        }
+      },
+      "simple-cluster": {
+        "type": "simple",
+        "hosts": [
+          "localhost"
+        ],
+        "template-references": [
+          "csap-verify-service",
+          "dog"
+        ]
+      }
+    }
+  },
+  "service-templates": {
+    "dog": {
+      "server": "SpringBoot",
+      "port": 7011
+    }
+  }
+}

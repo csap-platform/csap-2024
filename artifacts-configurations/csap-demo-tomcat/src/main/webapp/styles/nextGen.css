@@ -1,0 +1,186 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/****   ****/
+body {
+	font-family: helvetica, arial, sans-serif;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color:#BFFBFF;
+}
+
+nav,section,article,aside,footer {
+	display: block;
+	border: 1px solid #bbb;
+	padding: 1em;
+	border-radius: 10px;
+	background-color:#FFFFFF;
+	box-shadow: 5px 5px 2px #888;
+}
+
+header {
+	display: block;
+	padding: 1em;
+	font-weight: bold;
+	background-color:#EFFBFF;
+}
+
+article,aside,form {
+	margin-left: 1em;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	margin-top: 2em;
+	padding: 1em;
+}
+
+footer {
+	clear: both;
+}
+
+.identifier {
+	background-color: #FFF79F;
+	font-style: italic;
+}
+
+input {
+	margin-left: 0.5em;
+}
+form {
+	margin: 0; 
+}
+div.title {
+	margin-top: -2em;
+	float:left;
+	font-weight: bold ;
+	font-size: 80%;
+	font-style: italic;
+	top: -2em;
+	width: auto;
+	border: 1px solid #bbb;
+	padding: 0.2em;
+	padding-left: 2em;
+	padding-right: 2em;
+	border-radius: 4px;
+	background-color:#FFFFFF;
+}
+
+/*  --- buttons ---- */
+a.formButton, a.formButton:visited, a.formButton:active,
+a.formSmallButton, a.formSmallButton:visited, a.formSmallButton:active,
+a.formSmallButtonIn, a.formSmallButtonIn:visited, a.formSmallButtonIn:active,
+a.formLargeButton, a.formLargeButton:visited, a.formLargeButton:active
+{
+	background-color: #003399;
+	color: #ffcc00;
+	font-weight: bold;
+	text-decoration: none;
+	border-width: 2px;
+	border-style: inset;
+	border-color: grey;
+	text-align: center;
+	white-space: nowrap;
+	padding-top: .25em;
+	padding-bottom: 0.25em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	line-height: 2em;
+}
+
+a.formButton:hover, a.formSmallButtonIn:hover,
+a.formSmallButton:hover, a.formLargeButton:hover{
+	background-color: #3366cc;
+	color: #ffcc00;
+	border-style: outset;
+}
+
+a.formSmallButton {
+	font-size: 0.8em;
+}
+
+a.formSmallButtonIn {
+	font-size: 0.8em;
+	position: relative;
+	left: -3em;
+}
+a.formLargeButton {
+	font-size: 1.5em;
+	line-height: 2.0em;
+}
+
+a.simple, a.simple:visited, a.simple:active {
+	color: blue;
+	font-weight: bold;
+	font-family: arial, helvetica, sans-serif;
+	text-decoration: none;
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+}
+
+a.simple:hover {
+	color: red;
+	font-weight: bold;
+	font-family: arial, helvetica, sans-serif;
+	text-decoration: underline;
+}
+
+a.up, a.up:visited {
+	background-image: url("../images/upArrow.gif");
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 1.6em;
+}
+
+a.down, a.down:visited {
+	background-image: url("../images/downArrow.gif");
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 1.6em;
+}

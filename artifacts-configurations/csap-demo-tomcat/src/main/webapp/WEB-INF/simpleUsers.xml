@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  Suitable for simple token exchange. -->
+<tomcat-users>
+	<role rolename="sampleRole"/>
+	<user username="sampleUser" password="samplePass" roles="sampleRole"/>
+	<role rolename="manager-gui"/>
+	<user username="admin" password="admin" roles="manager-gui"/>
+</tomcat-users>

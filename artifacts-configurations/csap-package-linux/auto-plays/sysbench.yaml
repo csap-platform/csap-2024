@@ -1,0 +1,478 @@
+#
+#  NOTES:
+#
+#  -- resource files related to default-service-definitions/oss-mysql-sysbench
+---
+
+operator: modify
+target: default
+
+
+environments:
+  base: dev # update with your integration lifecycle
+  remove-inactive: false
+
+  default-settings:  # defaults for ALL envs
+    configuration-maps:
+      mysql-settings:
+        $$db-host: oss-mysql-db
+        $$db-pass: nyw
+        about-test: Settings for sysbench
+        xminutesToRun: 1
+        xtestProfile: default
+        xtestProfile-options: default, oltp, csapOltp
+        found-in:
+          - oss-mysql-admin
+          - oss-mysql-db
+          - sysbench-mysql
+
+  clusters:
+
+    oss-mysql:
+
+      type: simple
+
+      hosts:
+        - xxx-dev01
+
+      template-references:
+        - oss-mysql-admin
+        - oss-mysql-db
+        - oss-mysql-sysbench
+
+---
+
+
+operator: create
+target: resources/sysbench-mysql/common/db-perf-tester.sh
+
+content: |
+  #!/bin/bash
+  
+  
+  
+  print_section "CSAP API: $csapName csapJob: '$csapJob'"
+  
+  # print_command "environment variables" "$(env)"
+  
+  
+  
+  function do_configuration() {
+  
+    print_two_columns "db_host" "$db_host"
+  
+    #
+    # Force a "short" run for demos and testing
+    #
+  
+  	export testProfile=${testProfile:-default} ;
+    print_two_columns "testProfile" "$testProfile"
+  
+  	export minutesToRun=${minutesToRun:-1} ;
+    print_two_columns "minutesToRun" "$minutesToRun"
+  
+  	export reportInterval=${reportInterval:-5} ;
+    print_two_columns "reportInterval" "$reportInterval seconds"
+  
+  
+  }
+  
+  do_configuration
+  
+  #
+  # Use this for any software "build" operations. Typically used for building c/c++ code
+  # -  eg. apache httpd, redis
+  # -  This method should also upload into a repository (usually maven)
+  # - Note: most software packages are available as prebuilt distributions, in which case no implementation is required
+  #
+  function api_package_build() { print_if_debug "api_package_build not used" ; }
+  
+  #
+  # Use this for getting binary packages - either prebuilt by distributions (tomcat, mongodb, cassandra,etc.)
+  #   or built using buildAdditionalPackages() above
+  #   Note that CSAP deploy will invoke this on the primary host selected during deployment, and then automatically
+  #   - synchronize the csapPackageDependencies to all the other hosts (via local network copy) for much faster distribution
+  #
+  function api_package_get() {
+    print_if_debug "api_package_build not used" ;
+  }
+  
+  #
+  # CSAP agent will always kill -9 after this command
+  #
+  #
+  function api_service_kill() { print_if_debug "api_service_kill not used" ; }
+  
+  #
+  # CSAP agent will always kill -9 after this command. For data sources - it is recommended to use the
+  # shutdown command provided by the stack to ensure caches, etc. are flushed to disk.
+  #
+  function api_service_stop() { print_if_debug "STOP not used" ; }
+  
+  
+  #
+  # Note: commands should be launched in the background
+  #
+  function api_service_start() {
+  
+  
+    if ! test -d "$csapLogDir" ; then
+    		print_two_columns "creating logs" "in $csapLogDir, and linking /var/log/messages"
+    		mkdir --parents $csapLogDir
+  	fi ;
+  
+  	local testScript="$csapResourceFolder/common/db-perf-tester.sh"
+  	chmod 755 $testScript
+  	launch_background "$testScript" "" "$csapLogDir/_$csapName-output.log"
+  
+  	print_two_columns "Note" "Test will end automatically: creating csap stop file to prevent alerts: '$csapStopFile'";
+    touch $csapStopFile
+  }
+
+
+
+---
+
+
+operator: create
+target: resources//oss-mysql-sysbench/common/db-perf-tester.sh
+
+content: |
+  #!/bin/bash
+  
+  source $CSAP_FOLDER/bin/csap-environment.sh
+  
+  #
+  #   References:
+  #   - docker options: https://hub.docker.com/r/severalnines/sysbench/
+  #   - sysbench scenarios: https://github.com/centminmod/centminmod-sysbench
+  #
+  #   Invokation NOtes
+  #   if invoked from csap-job-run.sh will source csap-environment.sh, which includes all the helper functions and service variables
+  #   - ref: $CSAP_FOLDER/bin/csap-environment.sh
+  #   - ref: https://github.com/csap-platform/csap-core/wiki/Service-Definition#runtime-variables
+  #
+  
+  print_section "Service Runner: $csapName"
+  
+  
+  
+  function setup() {
+  
+  
+    # print_command "environment variables" "$(env)"
+  
+  
+    print_two_columns "db_host" "$db_host"
+  
+  	testProfile=${testProfile:-default} ;
+    print_two_columns "testProfile" "$testProfile"
+  
+  	minutesToRun=${minutesToRun:-60} ;
+    print_two_columns "minutesToRun" "$minutesToRun"
+  
+  	threads=${threads:-64} ;
+    print_two_columns "threads" "$threads"
+  
+  	tableCount=${tableCount:-24} ; # 24
+    print_two_columns "tableCount" "$tableCount"
+  
+  	tableSize=${tableSize:-100000} ;
+    print_two_columns "tableSize" "$tableSize"
+  
+  
+    sysBenchImage="docker-public-artifactory.yourcompany.com/severalnines/sysbench"
+    print_two_columns "sysBenchImage" "$sysBenchImage"
+  
+    sysBenchConnection="--mysql-host=$db_host --mysql-port=3306 --mysql-user=sbtest --mysql-password=password"
+    print_two_columns "sysBenchConnection" "$sysBenchConnection"
+  
+    sysBenchCommand="sysbench --db-driver=mysql"
+    print_two_columns "sysBenchCommand" "$sysBenchCommand"
+  
+  
+    reportsFolder="$csapLogDir/reports" ;
+    if ! test -d reportsFolder ; then
+      print_two_columns "reportsFolder" "$(mkdir --verbose --parents $reportsFolder)"
+    fi ;
+    latestLogFile="$reportsFolder/sysbench-latest.log" ;
+    print_two_columns "latestLogFile" "$latestLogFile"
+  
+  
+  
+  }
+  
+  setup ;
+  
+  
+  
+  #
+  # creates tables for runs
+  #
+  function setup_db_for_tests() {
+  
+    print_command "databases" "$(sql_runner "show databases;" false| column --table)"
+  
+  
+  	print_command "Cleanup DBs" \
+  	  "$(sql_runner "DROP SCHEMA sbtest;")"
+  	 # "$(sql_runner "DROP SCHEMA sbtest; CREATE SCHEMA sbtest; GRANT ALL PRIVILEGES ON sbtest.* to sbtest@'%'")"
+  
+  	print_command "Creating test db and user" \
+  	  "$(sql_runner "CREATE SCHEMA sbtest;CREATE USER sbtest@'%' IDENTIFIED BY 'password';GRANT ALL PRIVILEGES ON sbtest.* to sbtest@'%'")"
+  
+  	# DROP SCHEMA sbtest; CREATE SCHEMA sbtest; GRANT ALL PRIVILEGES ON sbtest.* to sbtest@'%';
+  	# CREATE SCHEMA sbtest;CREATE USER sbtest@'%' IDENTIFIED BY 'password';GRANT ALL PRIVILEGES ON sbtest.* to sbtest@'%';
+  
+  
+    local sysBenchPrepare="/usr/share/sysbench/tests/include/oltp_legacy/parallel_prepare.lua run" ;
+  
+  	run_sysbench "sb-prepare" --threads=1 $sysBenchPrepare
+  
+  
+  }
+  
+  function sql_runner() {
+  
+    local sqlCommand=${1:-show databases;};
+    local showErrors=${2:-true} ;
+  
+    # local sqlImage=$csapArtifact ;
+    local sqlImage=${sqlImage:-docker-public-artifactory.yourcompany.com/mysql:5.7} ;
+  
+    # print_separator "$sqlImage sql: '$sqlCommand'"
+  
+  
+    if [ "$showErrors" == "true" ] ; then
+      docker run --name=$csapName-Runner --rm=true --network=$db_host-network \
+        $sqlImage mysql --host=$db_host --user=root --password=$db_pass --execute="$sqlCommand" \
+        2>&1
+    else 
+      docker run --name=$csapName-Runner --rm=true --network=$db_host-network \
+        $sqlImage mysql --host=$db_host --user=root --password=$db_pass --execute="$sqlCommand" \
+        2>/dev/null
+    fi ;
+  }
+  
+  function run_sysbench() {
+  
+    local containerName="$1"
+    shift 1
+    local args="--oltp-table-size=$tableSize --oltp-tables-count=$tableCount $*"
+    local dockerParameters="run --name=$containerName --rm=true --network=$db_host-network" ;
+    dockerParameters="$dockerParameters --volume=$csapWorkingDir/csap-lua:/usr/share/sysbench/tests/include/oltp_legacy/csap-lua"
+    # 
+  
+    print_command "docker parameters" "$(echo $dockerParameters; echo $sysBenchImage; echo $sysBenchCommand $sysBenchConnection; echo $args )"
+  
+    backup_file $latestLogFile
+    # if test -f $latestLogFile ; then
+    #   print_two_columns "latestLogFile" "$(rm --verbose --force $latestLogFile)"
+    # fi ;
+  
+    print_separator "START: sysbench $containerName output"
+    docker $dockerParameters  \
+      $sysBenchImage $sysBenchCommand $sysBenchConnection \
+      $args | tee $latestLogFile
+  
+    print_separator "COMPLETED: sysbench $containerName output"
+  
+  }
+  #
+  # oltp scenario
+  #
+  function oltpTests() {
+  
+  	print_section "scenario: default, running on host: $db_host"
+  
+    setup_db_for_tests
+  
+  	testContainerName="oss-mysql-sysbench" ;
+  
+  	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  
+  	run_sysbench "$testContainerName" --mysql-table-engine=innodb \
+  	  --report-interval=30  --threads=$threads --time=$(( $minutesToRun * 60 )) \
+  	  $sysBenchOltp
+  }
+  
+  #
+  # oltp scenario
+  #
+  function csapOltpCsvTests() {
+  
+  	print_section "csapOltpCsvTests on db $db_host"
+  
+    setup_db_for_tests
+  
+  	testContainerName="oss-mysql-sysbench" ;
+  
+  # 	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/csap-lua/csap-oltp.lua run" ;
+  
+  	run_sysbench "$testContainerName" --mysql-table-engine=innodb \
+  	  --report-interval=30  --threads=$threads --time=$(( $minutesToRun * 60 )) \
+  	  $sysBenchOltp
+  }
+  
+  # /usr/share/sysbench/tests/include/oltp_legacy/csap-oltp.lua
+  
+  function perform_operation() {
+  
+  	case "$testProfile" in
+  
+  		"default" | "oltp")
+  			oltpTests
+  			;;
+  
+  		"csapOltp")
+  			csapOltpCsvTests
+  			;;
+  
+  		 *)
+  	            echo "Command Not found"
+  	            exit 1
+  	esac
+  
+  }
+  
+  perform_operation  
+
+
+
+
+---
+
+operator: create
+target: resources/oss-mysql-sysbench/common/csap-lua/csap-oltp.lua
+
+content: |
+  pathtest = string.match(test, "(.*/)")
+  
+  if pathtest then
+     dofile(pathtest .. "../common.lua")
+  else
+     require("common")
+  end
+  
+  function report_noop()
+    -- do nothing
+  end
+  
+  sysbench.hooks.report_intermediate = sysbench.report_csv
+  sysbench.hooks.report_cumulative = report_noop
+  
+  function thread_init()
+     set_vars()
+  
+     if (((db_driver == "mysql") or (db_driver == "attachsql")) and mysql_table_engine == "myisam") then
+        local i
+        local tables = {}
+        for i=1, oltp_tables_count do
+           tables[i] = string.format("sbtest%i WRITE", i)
+        end
+        begin_query = "LOCK TABLES " .. table.concat(tables, " ,")
+        commit_query = "UNLOCK TABLES"
+     else
+        begin_query = "BEGIN"
+        commit_query = "COMMIT"
+     end
+  
+  end
+  
+  function get_range_str()
+     local start = sb_rand(1, oltp_table_size)
+     return string.format(" WHERE id BETWEEN %u AND %u",
+                          start, start + oltp_range_size - 1)
+  end
+  
+  function event()
+     local rs
+     local i
+     local table_name
+     local c_val
+     local pad_val
+     local query
+  
+     table_name = "sbtest".. sb_rand_uniform(1, oltp_tables_count)
+     if not oltp_skip_trx then
+        db_query(begin_query)
+     end
+  
+     if not oltp_write_only then
+  
+     for i=1, oltp_point_selects do
+        rs = db_query("SELECT c FROM ".. table_name .." WHERE id=" ..
+                         sb_rand(1, oltp_table_size))
+     end
+  
+     if oltp_range_selects then
+  
+     for i=1, oltp_simple_ranges do
+        rs = db_query("SELECT c FROM ".. table_name .. get_range_str())
+     end
+  
+     for i=1, oltp_sum_ranges do
+        rs = db_query("SELECT SUM(K) FROM ".. table_name .. get_range_str())
+     end
+  
+     for i=1, oltp_order_ranges do
+        rs = db_query("SELECT c FROM ".. table_name .. get_range_str() ..
+                      " ORDER BY c")
+     end
+  
+     for i=1, oltp_distinct_ranges do
+        rs = db_query("SELECT DISTINCT c FROM ".. table_name .. get_range_str() ..
+                      " ORDER BY c")
+     end
+  
+     end
+  
+     end
+  
+     if not oltp_read_only then
+  
+     for i=1, oltp_index_updates do
+        rs = db_query("UPDATE " .. table_name .. " SET k=k+1 WHERE id=" .. sb_rand(1, oltp_table_size))
+     end
+  
+     for i=1, oltp_non_index_updates do
+        c_val = sb_rand_str("###########-###########-###########-###########-###########-###########-###########-###########-###########-###########")
+        query = "UPDATE " .. table_name .. " SET c='" .. c_val .. "' WHERE id=" .. sb_rand(1, oltp_table_size)
+        rs = db_query(query)
+        if rs then
+          print(query)
+        end
+     end
+  
+     for i=1, oltp_delete_inserts do
+  
+     i = sb_rand(1, oltp_table_size)
+  
+     rs = db_query("DELETE FROM " .. table_name .. " WHERE id=" .. i)
+  
+     c_val = sb_rand_str([[
+  ###########-###########-###########-###########-###########-###########-###########-###########-###########-###########]])
+     pad_val = sb_rand_str([[
+  ###########-###########-###########-###########-###########]])
+  
+     rs = db_query("INSERT INTO " .. table_name ..  " (id, k, c, pad) VALUES " .. string.format("(%d, %d, '%s', '%s')",i, sb_rand(1, oltp_table_size) , c_val, pad_val))
+  
+     end
+  
+     end -- oltp_read_only
+  
+     if not oltp_skip_trx then
+        db_query(commit_query)
+     end
+  
+  end
+  
+
+
+
+
+
+
+
+

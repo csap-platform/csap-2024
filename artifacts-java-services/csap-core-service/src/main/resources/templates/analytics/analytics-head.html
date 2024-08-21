@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:fragment="pageContent"
+	  th:remove="tag">
+
+	<title th:inline="text">CSAP Analytics</title>
+	<link rel="icon" type="image/png" href="images/csap-icon.png">
+
+
+	<script th:replace="~{ csap/fragments/csap-module-includes :: pageContent }"></script>
+
+
+	<script th:replace="~{ csap-constants-include :: includeSection }"></script>
+
+	<script th:inline="javascript">
+
+		window.uiSettings = {
+			baseUrl: BASE_URL,
+			reportRequest:  /*[[ ${ analyticRequest.getParameter('report') } ]]*/ || "null",
+			appGraphParam: /*[[ ${ analyticRequest.getParameter('appGraph') } ]]*/ || "null",
+			appIdParam: /*[[ ${ analyticRequest.getParameter('appId') } ]]*/ || "null",
+			projectParam: /*[[ ${ analyticRequest.getParameter('project') } ]]*/ || "null",
+			lifeParam: /*[[ ${ analyticRequest.getParameter('life') } ]]*/ || "null",
+			eventApiUrl: /*[[ ${ eventApiUrl } ]]*/ || "null",
+			analyticsUiUrl: /*[[ ${ analyticsUrl } ]]*/ || "null",
+			metricsDataUrl: /*[[ ${ eventMetricsUrl } ]]*/ || "null",
+			appId: /*[[ ${ analyticRequest.getParameter('appId') } ]]*/ || "null",
+			hostParam: /*[[ ${ analyticRequest.getParameter('host') } ]]*/ || "null",
+			serviceParam: /*[[ ${ analyticRequest.getParameter('service') } ]]*/ || "null",
+			customParam: /*[[ ${ analyticRequest.getParameter('custom') } ]]*/ || "null"
+		}
+
+		// handle source param /*[[ ${ param.source } ]]*/
+		window.toolsServer = /*[[ ${ toolsServer } ]]*/ || null;
+		window.sourceParam = /*[[ ${ param.source } ]]*/ || null;
+		if ( sourceParam != null && sourceParam[ 0 ] != "dev" ) {
+			uiSettings.eventApiUrl = toolsServer + "/data/eventApi"
+			uiSettings.metricsDataUrl = toolsServer + "/analytics/api/metrics/"
+		}
+
+
+		if (/*[[ ${ param.test != null } ]]*/) {
+			uiSettings.eventApiUrl = toolsServer + "/data/eventApi"
+			// analyticsUiUrl=toolsServer + "/analytics/api/" 
+			uiSettings.lifeParam = /*[[ ${param.test} ]]*/;
+			uiSettings.metricsDataUrl = toolsServer + "/analytics/api/metrics/"
+			uiSettings.appIdParam = "DesktopCsap";
+			uiSettings.projectParam = "Csap Platform";
+		}
+
+
+		if (/*[[ ${ analyticRequest.getParameter('report') } ]]*/ != null ) {
+			uiSettings.reportRequest = /*[[ ${ analyticRequest.getParameter('report') } ]]*/;
+		}
+
+		window._metricLabels = /*[[${ metricLabels }]]*/;
+
+	</script>
+
+	<link th:href="@{/webjars/jqplot/1.0.8r1250/jquery.jqplot.min.css}"
+		  rel="stylesheet"
+		  type="text/css"
+		  media="screen" />
+
+	<link th:href="@{ ${csapApp.versionedUrl('/css/analytics.css')} }"
+		  rel="stylesheet"
+		  type="text/css"
+		  media="screen" />
+
+
+	<script type="module"
+			th:src=" @{ ${ @mvcResourceUrlProvider.getForLookupPath('/js/modules/analytics/_analytics-main.js')} }"></script>
+
+</head>
+
+
+</html>

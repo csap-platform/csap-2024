@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>explorer fragment</title>
+</head>
+
+<body
+        th:fragment="pageContent"
+        th:remove="tag">
+
+
+<div id="containerControls">
+
+    <button
+            id="container-inspect"
+            title="Container Inspect"
+            class="csap-icon"
+            data-command="info">
+        <img th:src="@{ /images/16x16/preferences-system.png }"/>
+    </button>
+
+    <button
+            id="containerStart"
+            title="Start Container"
+            class="csap-icon"
+            data-command="start">
+        <img th:src="@{/images/16x16/play.svg}"/>
+    </button>
+
+    <button
+            id="containerStop"
+            title="Stop Container"
+            class="csap-icon"
+            data-command="stop">
+        <img th:src="@{/images/16x16/process-stop.png}"/>
+    </button>
+
+
+    <button
+            id="containerFileBrowser"
+            title="Browse/View/Edit files"
+            class="csap-icon"
+            data-command="fileBrowser">
+        <img th:src="@{ /images/16x16/logs.png }"/>
+    </button>
+
+    <button
+            id="containerLogs"
+            title="Show logs"
+            class="csap-icon"
+            data-command="tail">
+        <img th:src="@{/images/format-justify-center.png}"/>
+    </button>
+
+    <button
+            id="containerBatch"
+            title="Run shell commands"
+            class="csap-icon"
+            data-command="batch">
+        <img th:src="@{ /images/16x16/shell.png }"/>
+    </button>
+
+    <button
+            id="containerRemove"
+            title="Delete Container"
+            class="csap-icon csap-trash"
+            data-command="remove"></button>
+
+
+    <select>
+        <option>Operations...</option>
+        <option value="sockets">Network Connections</option>
+        <option value="processTree">Process Tree</option>
+        <option value="cpuQuota">Configure Cpu Quota</option>
+        <option value="batch">OS Shell...</option>
+        <option value="info">View Configuration</option>
+        <option value="start">Start Container</option>
+        <option value="stop">Stop Container</option>
+        <option value="tail">Tail Logs</option>
+        <option value="remove">Remove Container</option>
+    </select>
+</div>
+
+<div id="imageControls">
+
+    <button
+            id="containerCreate"
+            title="Create Container"
+            class="csap-icon">
+        <img th:src="@{/images/16x16/play.svg}"/>
+    </button>
+
+    <button
+            id="imageBatch"
+            title="Run shell commands"
+            class="csap-icon"
+            data-command="batch">
+        <img th:src="@{ /images/16x16/shell.png }"/>
+    </button>
+
+    <button
+            id="imageRemove"
+            title="Remove Image"
+            class="csap-icon csap-trash"
+            data-command="remove"></button>
+
+    <select>
+        <option>Operations...</option>
+        <option value="info">View Configuration</option>
+        <option value="create">Create Container</option>
+        <option value="remove">Remove Image from Host</option>
+        <option value="pull">Pull from repository</option>
+        <option value="batch">OS Shell...</option>
+    </select>
+</div>
+
+<div id="dockerPortsTemplate">
+    <table class="csap">
+        <thead>
+        <tr>
+            <th>IP</th>
+            <th>Public</th>
+            <th>Private</th>
+            <th>Type</th>
+        </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+</div>
+
+<div id="cpuQuotaDialog">
+
+    <div class="csap-grey">CPU quota can be used to ensure docker containers do not hog cpu. quota / period = max cores
+        consumed
+    </div>
+
+
+    <label class="csap-form-inline">
+        <span>Cpu Quota (ms): </span>
+        <input
+                id="promptCpuQuota"
+                value="400"
+                style="width: 3em"/>
+        <span class="comment"> How much CPU time can be consumed</span>
+    </label>
+    <br/>
+    <label class="csap-form-inline">
+        <span>Cpu Period (ms):</span>
+        <input
+                id="promptCpuPeriod"
+                value="100"
+                style="width: 3em"/>
+        <span class="comment">Sampling interval</span>
+    </label>
+    <br/>
+    <label class="csap-form-inline">
+        <span>Maximum Cores that will be used:</span>
+        <span id="promptCpuCoresUsed" class="comment">4</span>
+    </label>
+
+
+</div>
+
+
+<div id="removeImageDialog">
+
+    <div class="csap-grey">Image will be removed from host if not reference by a container. Use force to override.</div>
+
+
+
+        <label class="csap-form">
+            <span>Image Id: </span>
+            <div
+                    id="imageRemoveId"
+                    class="noteAlt">loading
+            </div>
+        </label>
+        <label  class="csap-form">
+            <span>Tags: </span>
+            <div
+                    id="imageRemoveTags"
+                    class="noteAlt">loading
+            </div>
+        </label>
+
+        <br/>
+        <label  class="csap-form"
+                title="Force removal of image - even if there are still references">
+            <span>Force:</span>
+            <input
+                    id="imageRemoveForce"
+                    type="checkbox"/>
+
+        </label>
+
+
+
+</div>
+
+<div id="removeContainerDialog">
+
+        <div class="csap-grey">Remove the container. There is no undo - all data will be deleted</div>
+
+        <label class="csap-form-inline" title="Force removal of container - even if it is still running">
+
+            <span>Force:</span>
+            <input
+                    id="containerRemoveForce"
+                    style=""
+                    type="checkbox"
+                    checked="checked"/>
+
+        </label>
+        <label class="csap-form-inline" title="Remove volumes">
+            <span>Remove Volumes:</span>
+            <input
+                    id="containerRemoveVolumes"
+                    style=""
+                    type="checkbox"
+                    checked="checked"/>
+
+        </label>
+
+
+</div>
+
+<div id="stopContainerDialog">
+
+    <div class="csap-grey">Stop the container.</div>
+
+    <label class="csap-form-inline" title="container will be killed after time out">
+        <span>Stop Time out (seconds):</span>
+        <input
+                id="containerStopSeconds"
+                style="width: 1em; margin-left: 4px; margin-right: 3em;"
+                value="3"/>
+    </label>
+    or
+    <label  class="csap-form-inline" title="Remove volumes">
+
+        <span>kill immediately</span>
+        <input
+                id="containerKill"
+                style=""
+                type="checkbox"/>
+    </label>
+
+
+</div>
+
+
+<div id="image-clean-dialog">
+
+    <div class="csap-grey">Remove images older then specified time period that are not being used.</div>
+
+
+    <label class="csap-form-inline" title="Older then...">
+        <span>Days:</span>
+        <input
+                id="clean-days"
+                value="0"/>
+    </label>
+    <label class="csap-form-inline" title="Older then...">
+        <span>Minutes:</span>
+        <input
+                id="clean-minutes"
+                value="0"/>
+    </label>
+
+</div>
+
+<div id="image-pull-dialog">
+
+    <div class="csap-grey">Include the repository and tag: eg. repo/image:tag . :latest will be used if no tag is
+        specified
+    </div>
+
+    <label class="csap-form iselect" title="Unique name to manage container operations">
+			<span class="label" title="<repo>/<name>:<version>">
+				Image:
+
+				<select id="referenceImagesSelect">
+					<option value="none">...</option>
+					<option
+                            th:each="image : ${referenceImages}"
+                            th:value="${image}"
+                            th:text="${image}">package names updated here</option>
+				</select>
+			</span>
+        <input id="pullName"/>
+    </label>
+
+    <label class="csap-form"
+           title="Optional: specify BOTH user and password if docker repository authentication is required">
+        <span>Repo User:</span>
+        <input id="pull-repo-user" placeholder="Optional: if repo required">
+    </label>
+
+    <label class="csap-form"
+           title="Optional: specify BOTH user and password if docker repository authentication is required">
+        <span>Repo Password:</span>
+        <input id="pull-repo-pass" type="password" placeholder="Optional: typically encrypted token, not password">
+    </label>
+
+</div>
+
+</body>
+</html>

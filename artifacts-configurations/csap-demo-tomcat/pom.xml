@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>csap-java-servlet</artifactId>
+	<version>2-SNAPSHOT</version>
+	<groupId>org.csap</groupId>
+	<packaging>war</packaging>
+
+
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>docker package for csap</description>
+	<url>https://github.com/csap-platform/csap-core/wiki</url>
+
+
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<version>8.0.14</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- <dependency> <groupId>com.oracle.ojdbc</groupId> <artifactId>ojdbc</artifactId> 
+			<version>14</version> <type>jar</type> <scope>compile</scope> </dependency> -->
+	</dependencies>
+
+	<build>
+
+		<!-- resources needs to be pushed into war plugin in order to avoid m2e 
+			gen config problem <resources> <resource><directory>resources/WEB-INF/classes/eclipse</directory></resource> 
+			<resource><directory>resources/WEB-INF/classes/common</directory></resource> 
+			</resources> -->
+		<!-- -->
+		<testResources>
+			<testResource>
+				<directory>resources/WEB-INF/classes/eclipse</directory>
+			</testResource>
+			<testResource>
+				<directory>resources/WEB-INF/classes/common</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+
+
+			<!-- http://tomcat.apache.org/maven-plugin-2.2/run-mojo-features.html -->
+			<!-- mvn tomcat7:run will launch an embedded tomcat, no eclipse or netbean 
+				hooks needed. -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration> <!-- using 1.7 only for back testing of legacy docker -->
+					<source>11</source>
+					<target>11</target>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+			<!-- https://dmp.fabric8.io/ -->
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.20.1</version>
+				<extensions>true</extensions>
+				<configuration>
+					<dockerHost>http://127.0.0.1:2375</dockerHost>
+					<verbose>true</verbose>
+					<images>
+						<image>
+							<name>pnightin/csap-tester</name>
+							<build>
+								<dockerFile>Dockerfile</dockerFile>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>csap-release-repo</id>
+			<url>${csapReleaseUrl}</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>csap-snapshot-repo</id>
+			<url>${csapSnapUrl}</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>

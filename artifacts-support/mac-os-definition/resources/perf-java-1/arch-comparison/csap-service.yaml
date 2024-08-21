@@ -1,0 +1,118 @@
+#
+#
+#    about-csap-service.yaml: \
+#      Any field in service definition can be selectively overridden
+#      Copy desired item(s) from the specification tab
+#      Alternately - the csap-auto-play can be used selectively to customize environments
+#
+
+#
+#  perf-java service supports both SpringBoot and docker profiles
+#  after switching server profiles, ensure browser is refreshed
+#
+
+# server: docker
+# processFilter: CONTAINER_PIDS
+
+#
+# Report settings: make in csap application environment settings
+#
+#    reportName-open-40: open-java17-40gHeap-2Users-0ms-1Burn-60min
+#    reportName-zing-10: zing22-java8-10gHeap=4users-1ms-1burn-60min
+#    reportName-open-10: open-java17-10gHeap-4users-0ms-1burn-60min
+#
+#
+##
+##  LIVE Settings
+##
+#
+parameters: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=3
+  -DcsapTestInitAllocGb=25 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -Xms40G -Xmx40G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+
+
+#
+##
+##  SAMPLE: openjdk 17 G1 8GB
+##
+#
+parameters-open17-8G: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=3
+  -DcsapTestInitAllocGb=3 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -Xms8G -Xmx8G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+
+#
+##
+##  SAMPLE: openjdk 17 G1 40GB
+##
+#
+parameters-open17-40G: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=3
+  -DcsapTestInitAllocGb=25 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -Xms40G -Xmx40G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+
+#
+#  SAMPLE: ZING 8  NOTE: extremely SLOW on aws al2 hosts
+#   reportName: zing22-java8-4users-1ms-60min
+parameters-zing8-10g: >-
+  -DzingJava8  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=3
+  -DcsapTestInitAllocGb=3 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms10G -Xmx10G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#
+#
+##
+##  openjdk 17  -  Z Garbage Collector
+## - ref https://wiki.openjdk.org/display/zgc/Main, https://blog.jayan.kandathil.ca/zgc.html
+##  recommend: Raise the system limit on number of memory mappings per process. Edit /etc/sysctl.conf and add the following line (Heap in MB x 1.8):
+##     vm.max_map_count=360000  for 200Gb heap
+## - enable large page support
+##
+#parameters-open-z-20g: >-
+#  -XX:+UseZGC -Xms20G -Xmx20G -XX:MaxMetaspaceSize=192M
+#  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+#  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#parameters-open-z-190g: >-
+#  -XX:+UseZGC -Xms190G -Xmx190G -XX:MaxMetaspaceSize=192M
+#  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=100 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+#  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#
+##
+##  openjdk 17  -  G1 Garbage Collector
+##
+#parameters-open-g1-8g: >-
+#  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+#  -Xms8G -Xmx8G -XX:MaxMetaspaceSize=192M
+#  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#parameters-open-g1-170g: >-
+#  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=130 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+#  -Xms170G -Xmx170G -XX:MaxMetaspaceSize=192M
+#  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+##
+##  ZING 17
+##
+#parameters-zing17-5g: >-
+#  -DzingJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms10G -Xmx10G
+#  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+#  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#parameters-zing-17-200gb: >-
+#  -DzingJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+#  -DcsapTestInitAllocGb=120 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms200G -Xmx200G
+#  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+#  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#

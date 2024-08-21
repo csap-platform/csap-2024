@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/dummy">
+	<Loader delegate="true"/> <!--  support for oracle oci loaded in tomcat folder -->
+  <!--  netbeans ide requires the path element, but seems to be ignored on eclipse and linux  -->
+  <!-- https://tomcat.apache.org/tomcat-8.0-doc/config/context.html  -->
+  <!-- Hook for Spring AOP, including JPA			
+		
+	<Loader
+		loaderClass="org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader" />
+ -->
+</Context>

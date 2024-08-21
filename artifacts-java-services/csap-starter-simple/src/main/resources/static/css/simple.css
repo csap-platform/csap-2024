@@ -1,0 +1,7 @@
+/*
+demo of css override
+*/
+
+article.content div#index {
+    border: 5px solid navajowhite;
+}

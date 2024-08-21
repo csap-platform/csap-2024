@@ -1,0 +1,940 @@
+
+#
+# Host Graph Reports
+#
+host:
+
+  Cpu:
+    graphs:
+      - OS_MpStat
+      - OS_Load
+      - VmThreads
+
+
+    graphSize:
+      OS_MpStat:
+        width: 100%
+        height: 50%
+
+      OS_Load:
+        width: 50%
+        height: 49%
+
+      VmThreads:
+        width: 49%
+        height: 49%
+
+  Memory:
+    graphs:
+      - OS_MpStat
+      - Memory_Remaining
+
+
+    graphSize:
+      OS_MpStat:
+        width: 100%
+        height: 35%
+
+      Memory_Remaining:
+        width: 100%
+        height: 64%
+
+  Network:
+    graphs:
+      - OS_MpStat
+      - Network
+
+
+    graphSize:
+      OS_MpStat:
+        width: 100%
+        height: 35%
+
+      Network:
+        width: 100%
+        height: 64%
+
+  IO:
+    graphs:
+      - OS_MpStat
+      - iostat
+      - ioPercentUsed
+
+
+    graphSize:
+      OS_MpStat:
+        width: 100%
+        height: 33%
+
+      iostat:
+        width: 100%
+        height: 33%
+
+      ioPercentUsed:
+        width: 100%
+        height: 33%
+
+#
+# os-process graphs
+#
+
+os-process:
+
+  Cpu:
+    stack: true
+    graphs:
+      - topCpu
+      - threadCount
+
+
+    graphSize:
+      topCpu:
+        width: 100%
+        height: 60%
+
+      threadCount:
+        width: 100%
+        height: 39%
+
+  Memory:
+    stack: true
+    graphs:
+      - topCpu
+      - rssMemory
+      - pssMemory
+
+    graphSize:
+      topCpu:
+        width: 100%
+        height: 39%
+
+      rssMemory:
+        width: 100%
+        height: 60%
+
+      pssMemory:
+        width: 100%
+        height: 60%
+
+  Disk:
+    graphs:
+      - diskReadKb
+      - diskUtil
+
+    graphMerged:
+      diskReadKb:
+        - diskWriteKb
+
+
+    graphSize:
+      diskReadKb:
+        width: 100%
+        height: 60%
+
+      diskUtil:
+        width: 100%
+        height: 39%
+
+#
+# Java Graphs
+#
+
+java:
+
+  Java Heap:
+    graphs:
+      - cpuPercent
+      - heapUsed
+      - minorGcInMs
+      - altNonHeapMemory
+      - altNewGcRunPercent
+      - altPercentHeapAfterCollections
+      - altNewGcThreads
+
+    graphMerged:
+      heapUsed:
+        - heapMax
+      minorGcInMs:
+        - majorGcInMs
+      altNewGcRunPercent:
+        - altOldGcRunPercent
+      altNewGcThreads:
+        - altOldGcThreads
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 30%
+      heapUsed:
+        width: 100%
+        height: 35%
+      minorGcInMs:
+        width: 100%
+        height: 34%
+      altNonHeapMemory:
+        width: 100%
+        height: 34%
+      altNewGcRunPercent:
+        width: 33%
+        height: 30%
+      altPercentHeapAfterCollections:
+        width: 33%
+        height: 30%
+      altNewGcThreads:
+        width: 33%
+        height: 30%
+
+  Java Heap (Group):
+    stack: true
+
+    graphs:
+      - altNewGcRunPercent
+      - altOldGcRunPercent
+      - altNewGcThreads
+      - cpuPercent
+      - heapUsed
+      - minorGcInMs
+      - majorGcInMs
+      - heapMax
+      - altNonHeapMemory
+      - altOldGcThreads
+
+    graphSize:
+      altNewGcRunPercent:
+        width: 33%
+        height: 20%
+      altOldGcRunPercent:
+        width: 33%
+        height: 20%
+      altNewGcThreads:
+        width: 33%
+        height: 20%
+      cpuPercent:
+        width: 100%
+        height: 20%
+      heapUsed:
+        width: 100%
+        height: 35%
+      minorGcInMs:
+        width: 100%
+        height: 30%
+      majorGcInMs:
+        width: 100%
+        height: 30%
+      heapMax:
+        width: 100%
+        height: 35%
+      altNonHeapMemory:
+        width: 100%
+        height: 35%
+      altOldGcThreads:
+        width: 100%
+        height: 20%
+
+  Http GC Objects (Group):
+    stack: true
+
+    graphs:
+      - cpuPercent
+      - httpRequestCount
+      - jvmClassLoaded
+      - minorGcInMs
+      - majorGcInMs
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 20%
+      httpRequestCount:
+        width: 100%
+        height: 35%
+      minorGcInMs:
+        width: 100%
+        height: 30%
+      majorGcInMs:
+        width: 100%
+        height: 30%
+      jvmClassLoaded:
+        width: 100%
+        height: 35%
+
+  Zing GC Allocation:
+    stack: true
+    graphs:
+      - cpuPercent
+      - altObjectAllocation
+      - altNewGcAllocRate
+      - altOldGcCollected
+      - altPercentHeapAfterCollections
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 43%
+      altObjectAllocation:
+        width: 100%
+        height: 43%
+      altNewGcAllocRate:
+        width: 100%
+        height: 30%
+      altOldGcCollected:
+        width: 100%
+        height: 25%
+      altPercentHeapAfterCollections:
+        width: 100%
+        height: 30%
+
+  Metaspace GC Objects (Group):
+    stack: true
+
+    graphs:
+      - cpuPercent
+      - jvmClassLoaded
+      - jvmTotalClassLoaded
+      - jvmClassUnLoaded
+      - minorGcInMs
+      - majorGcInMs
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 20%
+      jvmClassLoaded:
+        width: 100%
+        height: 35%
+      jvmTotalClassLoaded:
+        width: 100%
+        height: 35%
+      jvmClassUnLoaded:
+        width: 100%
+        height: 35%
+      minorGcInMs:
+        width: 100%
+        height: 30%
+      majorGcInMs:
+        width: 100%
+        height: 30%
+  Tomcat Http:
+
+    graphs:
+      - cpuPercent
+      - sessionsCount
+      - httpRequestCount
+      - httpKbytesReceived
+      - httpProcessingTime
+
+    graphMerged:
+      httpKbytesReceived:
+        - httpKbytesSent
+      sessionsCount:
+        - sessionsActive
+      httpRequestCount:
+        - tomcatConnections
+
+  Tomcat Http (Group):
+
+    stack: true
+
+    graphs:
+      - sessionsCount
+      - sessionsActive
+      - tomcatConnections
+      - cpuPercent
+      - httpRequestCount
+      - httpProcessingTime
+      - httpKbytesReceived
+      - httpKbytesSent
+
+    graphSize:
+      sessionsCount:
+        width: 33%
+        height: 20%
+      sessionsActive:
+        width: 33%
+        height: 20%
+      tomcatConnections:
+        width: 33%
+        height: 20%
+
+
+  Threads Jvm:
+    graphs:
+      - cpuPercent
+      - jvmThreadCount
+      - altNewGcThreads
+      - altNewGcRunPercent
+
+    graphMerged:
+      jvmThreadCount:
+        - jvmThreadsMax
+      altNewGcThreads:
+        - altOldGcThreads
+      altNewGcRunPercent:
+        - altOldGcRunPercent
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 30%
+      jvmThreadCount:
+        width: 100%
+        height: 65%
+
+      altNewGcRunPercent:
+        width: 49%
+        height: 30%
+      altNewGcThreads:
+        width: 49%
+        height: 30%
+
+  Threads Tomcat:
+    graphs:
+      - cpuPercent
+      - jvmThreadCount
+      - tomcatThreadsBusy
+
+    graphMerged:
+      jvmThreadCount:
+        - jvmThreadsMax
+      tomcatThreadsBusy:
+        - tomcatThreadCount
+
+    graphSize:
+      cpuPercent:
+        width: 100%
+        height: 30%
+      jvmThreadCount:
+        width: 100%
+        height: 35%
+      tomcatThreadsBusy:
+        width: 100%
+        height: 30%
+
+#
+# Application graphs
+#
+application:
+
+  #
+  # perf-java-1
+  #
+  perf-java-1:
+    App Http:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HostCpuLoad
+        - ProcessCpu
+        - HttpRequests
+        - LandingCount
+        - LandingCountMs
+
+      graphSize:
+        HostCpuUse:
+          width: 60%
+          height: 20%
+        HostCpuLoad:
+          width: 39%
+          height: 20%
+        ProcessCpu:
+          width: 100%
+          height: 20%
+        HttpRequests:
+          width: 100%
+          height: 30%
+        LandingCount:
+          width: 100%
+          height: 30%
+        LandingCountMs:
+          width: 100%
+          height: 30%
+
+
+    App Objects Summary:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HttpRequests
+        - ConsumeHeapCount
+        - JvmClassesLoadedDelta
+
+      graphSize:
+        HostCpuUse:
+          width: 100%
+          height: 20%
+        HttpRequests:
+          width: 100%
+          height: 30%
+        ConsumeHeapCount:
+          width: 100%
+          height: 30%
+        JvmClassesLoadedDelta:
+          width: 100%
+          height: 30%
+
+    App Objects Full:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HostCpuLoad
+        - ConsumeHeapCount
+        - ConsumeHeapMs
+        - ConsumeHeapShortLived
+        - ConsumeHeapLongLived
+        - ShortLivedTrees
+        - LongLivedTrees
+        - JvmClassesLoadedDelta
+        - JvmClassesLoaded
+        - JvmClassesUnLoaded
+
+      graphSize:
+        HostCpuUse:
+          width: 60%
+          height: 20%
+        HostCpuLoad:
+          width: 39%
+          height: 20%
+        ConsumeHeapCount:
+          width: 100%
+          height: 30%
+        ConsumeHeapMs:
+          width: 100%
+          height: 30%
+        ConsumeHeapShortLived:
+          width: 100%
+          height: 30%
+        ConsumeHeapLongLived:
+          width: 100%
+          height: 30%
+        ShortLivedTrees:
+          width: 100%
+          height: 30%
+        LongLivedTrees:
+          width: 100%
+          height: 30%
+        JvmClassesLoadedDelta:
+          width: 100%
+          height: 30%
+        JvmClassesLoaded:
+          width: 100%
+          height: 30%
+        JvmClassesUnLoaded:
+          width: 100%
+          height: 30%
+
+
+
+    App JMS:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HostCpuLoad
+        - ProcessCpu
+        - JmsRate
+        - JmsMs
+        - JmsCount
+
+      graphSize:
+        HostCpuUse:
+          width: 60%
+          height: 20%
+        HostCpuLoad:
+          width: 39%
+          height: 20%
+        ProcessCpu:
+          width: 100%
+          height: 20%
+        JmsRate:
+          width: 100%
+          height: 30%
+        JmsMs:
+          width: 100%
+          height: 30%
+        JmsCount:
+          width: 100%
+          height: 30%
+
+    App DB:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HostCpuLoad
+        - ProcessCpu
+        - DbQuery
+        - DbInsert
+        - DbInsertMs
+        - DbInsertMaxMs
+
+      graphSize:
+        HostCpuUse:
+          width: 60%
+          height: 20%
+        HostCpuLoad:
+          width: 39%
+          height: 20%
+        ProcessCpu:
+          width: 100%
+          height: 20%
+        DbQuery:
+          width: 100%
+          height: 30%
+        DbInsert:
+          width: 100%
+          height: 30%
+        DbInsertMaxMs:
+          width: 100%
+          height: 30%
+
+    App DB Connection:
+      stack: true
+      graphs:
+        - HostCpuUse
+        - HostCpuLoad
+        - ProcessCpu
+        - DbConnection
+        - DbQuery
+        - DbInsert
+
+      graphSize:
+        HostCpuUse:
+          width: 60%
+          height: 20%
+        HostCpuLoad:
+          width: 39%
+          height: 20%
+        ProcessCpu:
+          width: 100%
+          height: 20%
+        DbConnection:
+          width: 100%
+          height: 50%
+        DbQuery:
+          width: 100%
+          height: 100%
+        DbInsert:
+          width: 100%
+          height: 30%
+
+  jref-1: perf-java-1
+  jref-2: perf-java-1
+  jref-3: perf-java-1
+  jref-4: perf-java-1
+  jref-5: perf-java-1
+  jref-6: perf-java-1
+
+  # fio
+  fio:
+
+    Read Report:
+      stack: false
+      graphs:
+        - threads
+        - totalTimeSeconds
+        - readBwPerSecond
+        - readIoOps
+        - readMeanMs
+        - diskReadIos
+
+      graphMerged:
+        threads:
+          - blockSizeInKb
+          - diskPerIterationGb
+        readMeanMs:
+          - writeMeanMs
+
+      graphSize:
+        threads:
+          width: 100%
+          height: 20%
+        totalTimeSeconds:
+          width: 100%
+          height: 20%
+        readBwPerSecond:
+          width: 100%
+          height: 30%
+        readIoOps:
+          width: 100%
+          height: 30%
+        readMeanMs:
+          width: 100%
+          height: 30%
+        diskReadIos:
+          width: 100%
+          height: 30%
+
+    Write Report:
+      stack: false
+      graphs:
+        - threads
+        - totalTimeSeconds
+        - writeBwPerSecond
+        - writeIoOps
+        - readMeanMs
+        - diskWriteIos
+
+      graphMerged:
+        threads:
+          - blockSizeInKb
+          - diskPerIterationGb
+        readMeanMs:
+          - writeMeanMs
+
+      graphSize:
+        threads:
+          width: 100%
+          height: 20%
+        totalTimeSeconds:
+          width: 100%
+          height: 20%
+        writeBwPerSecond:
+          width: 100%
+          height: 30%
+        writeIoOps:
+          width: 100%
+          height: 30%
+        readMeanMs:
+          width: 100%
+          height: 30%
+        diskWriteIos:
+          width: 100%
+          height: 30%
+
+
+  #
+  # sysbench-cpu
+  #
+  sysbench-cpu:
+
+    Performance Summary:
+      stack: true
+      graphs:
+        - threads
+        - eventsPerSecond
+        - percentileMs
+        - eventsTotal
+        - maxPrime
+        - totalTime
+
+      graphSize:
+        threads:
+          width: 49%
+          height: 45%
+        eventsPerSecond:
+          width: 49%
+          height: 45%
+        percentileMs:
+          width: 100%
+          height: 20%
+        eventsTotal:
+          width: 33%
+          height: 30%
+        maxPrime:
+          width: 33%
+          height: 30%
+        totalTime:
+          width: 33%
+          height: 30%
+
+    Events To Threads:
+      graphs:
+        - eventsPerSecond
+
+      graphMerged:
+        eventsPerSecond:
+          - threads
+
+      graphSize:
+        eventsPerSecond:
+          width: 100%
+          height: 100%
+
+  sysbench-memory:
+
+    Performance Summary:
+      stack: true
+      graphs:
+        - threads
+        - mbPerSecond
+        - percentileMs
+        - totalMemoryMb
+        - eventsTotal
+        - blockSizeInKb
+        - totalTimeSeconds
+
+      graphSize:
+        threads:
+          width: 49%
+          height: 45%
+        mbPerSecond:
+          width: 49%
+          height: 45%
+        percentileMs:
+          width: 49%
+          height: 20%
+        totalMemoryMb:
+          width: 49%
+          height: 20%
+        eventsTotal:
+          width: 33%
+          height: 30%
+        blockSizeInKb:
+          width: 33%
+          height: 30%
+        totalTimeSeconds:
+          width: 33%
+          height: 30%
+
+    Events To Threads:
+      graphs:
+        - eventsPerSecond
+
+      graphMerged:
+        eventsPerSecond:
+          - threads
+
+      graphSize:
+        eventsPerSecond:
+          width: 100%
+          height: 100%
+  #
+  # csap-agent
+  #
+  csap-agent:
+
+    Agent Latency:
+      graphs:
+        - AdminPingsMeanMs
+        - linuxPsAndMatchMeanMs
+        - CollectionServiceResourceMs
+
+
+      graphMerged:
+        CollectionServiceResourceMs:
+          - CollectionHttpMs
+
+        linuxPsAndMatchMeanMs:
+          - publishEventsMs
+
+    OS Commands:
+      graphs:
+        - OsCommandsCounter
+        - OsCommandsMeanMs
+        - TotalMsOsCommands
+
+
+      graphMerged:
+        OsCommandsMeanMs:
+          - OsCommandsMaxTimeMs
+
+    Collection:
+      graphs:
+        - CollectionServiceResourceMs
+        - CollectionHttpCount
+        - CollectionHttpTotalMs
+
+
+      graphMerged:
+        CollectionHttpCount:
+          - CollectionJmxCount
+        CollectionHttpTotalMs:
+          - CollectionJmxTotalMs
+
+
+
+  #
+  mysql:
+
+    Query Report:
+      stack: true
+      graphs:
+        - comSelects
+        - comInsert
+        - comUpdates
+
+
+      graphMerged:
+        comUpdates:
+          - comDelete
+
+
+      graphSize:
+        comSelects:
+          width: 100%
+          height: 42%
+
+        comInsert:
+          width: 100%
+          height: 30%
+
+        comUpdates:
+          width: 100%
+          height: 25%
+
+    IO Report:
+      stack: true
+      graphs:
+        - innoDbDataWritten
+        - innoDbDataRead
+        - bytesSent
+
+
+      graphMerged:
+        bytesSent:
+          - bytesReceived
+
+
+      graphSize:
+        innoDbDataRead:
+          width: 100%
+          height: 30%
+
+        innoDbDataWritten:
+          width: 100%
+          height: 42%
+
+        bytesSent:
+          width: 100%
+          height: 25%
+
+    Row Report:
+      stack: true
+      graphs:
+        - rowsRead
+        - rowsInserted
+        - rowsUpdated
+
+
+      graphMerged:
+        rowsUpdated:
+          - rowsDeleted
+
+
+      graphSize:
+        rowsRead:
+          width: 100%
+          height: 40%
+
+        rowsInserted:
+          width: 100%
+          height: 30%
+
+        rowsUpdated:
+          width: 100%
+          height: 27%
+
+    Queries and Questions:
+      graphs:
+        - queries
+
+
+      graphMerged:
+        queries:
+          - questions
+
+      graphSize:
+        queries:
+          width: 100%
+          height: 100%
+
+
+  oss-mysql-db: mysql

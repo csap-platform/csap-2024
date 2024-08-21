@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "numberOfSamples": 2100,
+      "countCsapMean": 1,
+      "topCpu": 610,
+      "threadCount": 170069,
+      "fileCount": 545808,
+      "socketCount": 47312,
+      "rssMemory": 1870232,
+      "pssMemory": 0,
+      "diskUtil": 795531,
+      "diskReadKb": 0,
+      "diskWriteKb": 0,
+      "appId": "csap-dcib",
+      "lifecycle": "dcib-installer",
+      "project": "workday-csap-at-amazon",
+      "serviceName": "csap-agent"
+    }
+  ],
+  "numDaysAvailable": 4
+}

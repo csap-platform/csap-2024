@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="includeSection"
+	  th:remove="tag">
+	<script th:inline="javaScript">
+
+		//
+		//  csap-constants-include
+		//
+		
+		window.CSAP_INSTALL_FOLDER= /*[[ ${ csapInstallFolder } ]]*/ null;
+
+
+		window.CSAP_USER = /*[[ ${ csapUser } ]]*/ null;
+		window.CSAP_SCM_USER = /*[[ ${ scmUser } ]]*/ null;
+
+		window.AGENT_ID =  /*[[@{ ${ viewConstants.get("AGENT_ID") }}]]*/ null;
+		window.AGENT_NAME = /*[[@{ ${ viewConstants.get("AGENT_NAME") }}]]*/ null;
+		window.AGENT_ENDPOINT = /*[[ ${ @application.getAgentEndpoint() } ]]*/ null;
+		window.AGENT_URL_PATTERN = /*[[ ${ csapHostAgentPattern } ]]*/ null;
+
+		window.AGENT_MODE = /*[[ ${ agentProfile } ]]*/ null;
+
+
+		window.CSAP_HOST_NAME = /*[[ ${csapHostName} ]]*/ null;
+
+		window.addHostUrl = /*[[ ${ addHostUrl  }]]*/ null;
+
+		window.BASE_URL = /*[[@{ / }]]*/ null;
+		window.IMAGES_URL = /*[[@{ /images }]]*/ null;
+		window.JS_URL = /*[[@{ /js }]]*/ null;
+		window.WEBJARS_URL = /*[[@{ /webjars }]]*/ null;
+		window.APP_BROWSER_URL = /*[[@{ ${"/app-browser"} }]]*/ null;
+		window.API_URL = /*[[@{ ${"/api"} }]]*/ null;
+		window.HEALTH_REPORT_URL = /*[[@{ ${"/health/alerts"} }]]*/ null;
+
+
+		window.DEFINITION_URL = /*[[ @{ ${ csapApp.getResourcePath("DEFINITION_URL") } } ]]*/ null;
+
+		window.EXPLORER_URL = /*[[ @{ ${ csapApp.getResourcePath("EXPLORER_URL") } }  ]]*/ null;
+
+		window.FILE_URL = /*[[ @{ ${ csapApp.getResourcePath("FILE_URL") } } ]]*/ null
+		window.OS_URL = /*[[ @{ ${ csapApp.getResourcePath("OS_URL") } } ]]*/ null
+
+		// overloaded
+		window.IS_ADMIN = /*[[ ${ adminRole } ]]*/ null;
+		window.isAdmin = /*[[ ${ adminRole } ]]*/ null;
+
+		window.GET_FILES_URL = /*[[ @{/file/getFilesJson} ]]*/ null;
+		window.MANAGER_URL = /*[[ @{/file/FileManager} ]]*/ null;
+
+		window.ANALYTICS_URL = /*[[${ analyticsUrl }]]*/ null;
+
+		window.APP_ID = /*[[ ${ applicationId } ]]*/ null;
+
+
+
+		window.HOST_ENVIRONMENT_NAME = /*[[ ${ csapHostEnvironmentName } ]]*/ null;
+		window.LIFECYCLE = /*[[${lifecycle}]]*/ null;
+
+		window.SERVICE_URL = /*[[@{ ${ viewConstants.get("SERVICE_URL") }}]]*/ null;
+
+		window.ENV_REPORT_URL = SERVICE_URL + "/environmentReport";
+
+		window.EDIT_URL = /*[[@{ ${ viewConstants.get("EDIT_URL") }}]]*/ null;
+		window.SERVICE_DEF_URL = DEFINITION_URL+ '/service';
+		window.fileManagerUrl = /*[[@{ ${ viewConstants.get("FILE_MANAGER_URL") }}]]*/ null;
+
+
+		window.HISTORY_URL = /*[[ ${ HISTORY_URL } ]]*/ null;
+		window.METRICS_URL = /*[[ ${ METRICS_URL } ]]*/ null;
+		window.TREND_URL = SERVICE_URL + "/trend";
+
+		window.DEPLOY_PROGRESS = "service/query/deployProgress";
+
+		//
+		//  Collection keys for metrics data
+		//
+		window.METRICS_HOST = /*[[ ${ collectionHost } ]]*/ null;
+		window.METRICS_OS_PROCESS = /*[[ ${ collectionOsProcess } ]]*/ null;
+		window.METRICS_JAVA = /*[[ ${ collectionJava } ]]*/ null;
+		window.METRICS_APPLICATION = /*[[ ${ collectionApplication } ]]*/ null;
+
+
+		// agent urls for dashboard // OSEXPLORER versus kubernetes explorer
+		window.OS_EXPLORER_URL = /*[[ @{ ${explorerUrl} }  ]]*/ null;
+		window.explorerUrl = /*[[ @{ ${explorerUrl} }  ]]*/ null;
+		window.vsphereEnabled = /*[[ ${vsphereEnabled }  ]]*/ null;
+		window.containerUrl = /*[[ @{ ${ containerUrl} }  ]]*/ null;
+		window.kubernetesApiUrl = /*[[ ${ kubernetesApiUrl }  ]]*/ null;
+
+		//
+		// legacy edit urls
+		//
+
+		window.reportUrl = SERVICE_URL + "/report";
+		window.trendUrl = SERVICE_URL + "/trend";
+
+
+		window.baseUrl = /*[[ @{ ${ viewConstants.get("BASE_URL") }} ]]*/ null;
+
+		window.analyticsUrl = /*[[${analyticsUrl}]]*/ null;
+		window.lifeEditUrl = EDIT_URL + '/lifecycle';
+		window.serviceEditUrl = EDIT_URL + '/serviceDialog';
+		window.settingsEditUrl = EDIT_URL + '/settingsDialog';
+		window.clusterEditUrl = EDIT_URL + '/clusterDialog';
+
+		window.lifeUpdateUrl = DEFINITION_URL  + "/lifecycle" ;
+		window.settingsDefUrl = DEFINITION_URL  +  '/settings';
+		window.clusterDefUrl = DEFINITION_URL  +  '/cluster';
+
+		
+
+
+		window.commandScreen = /*[[@{ ${ viewConstants.get("COMMAND_SCREEN_URL") }}]]*/ null;
+
+	</script>
+</head>
+
+</html>

@@ -1,0 +1,37 @@
+{
+	"project": {
+		"api-version": 2.1,
+		"project-version": 1.0,
+		"name": "default"
+	},
+	"environments": {
+
+		"dev": {
+			"settings": {
+				"application": {
+					"name": "basic-definition-application"
+				}
+			},
+			"simple-cluster": {
+				"type": "simple",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"cat",
+					"dog"
+				]
+			}
+		}
+	},
+	"service-templates": {
+		"cat": {
+			"server": "docker",
+			"port": 7078
+		},
+		"dog": {
+			"server": "docker",
+			"port": 7078
+		}
+	}
+}

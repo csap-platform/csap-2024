@@ -1,0 +1,33 @@
+{
+	"project": {
+		"api-version": 2.1,
+		"project-version": 1.0,
+		"name": "default"
+	},
+	"environments": {
+
+		"dev": {
+			"settings": {
+				"application": {
+					"name": "basic-definition-application",
+					"host-settings": {
+						"private-to-public": {
+							"localhost": "simple.public.com"
+						}
+					}
+				}
+			},
+			"simple-cluster": {
+				"type": "simple",
+				"hosts": [
+					"localhost"
+				],
+				"template-references": [
+					"csap-verify-service"
+				]
+			}
+		}
+	},
+	"service-templates": {
+	}
+}

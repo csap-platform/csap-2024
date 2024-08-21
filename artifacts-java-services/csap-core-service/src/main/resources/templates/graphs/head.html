@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:fragment="pageContent"
+      th:remove="tag">
+
+    <script th:replace="~{ csap/fragments/csap-module-includes :: pageContent }"></script>
+
+    <script th:replace="~{ csap-constants-include :: includeSection }"></script>
+
+
+</head>
+
+</html>

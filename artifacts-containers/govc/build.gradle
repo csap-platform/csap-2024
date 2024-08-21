@@ -1,0 +1,32 @@
+plugins {
+    id 'csap-bin-conventions'
+//    id 'maven-publish'
+//    id 'base'
+}
+
+
+publishing {
+
+    publications {
+        maven(MavenPublication) {
+
+            version = '0.21.0'
+
+            artifact( file( "$csap_third_party/csap-package-linux.secondary/govc-0.21.0.gz" ) ){
+                extension "gz"
+            }
+
+        }
+    }
+//    repositories {
+//        maven {
+//            url "https://artifactory.yourcompany.com/artifactory/virttrunk"
+//            credentials {
+//                username "$artifactory_user"
+//                password "$artifactory_password"
+//            }
+//        }
+//    }
+
+}
+

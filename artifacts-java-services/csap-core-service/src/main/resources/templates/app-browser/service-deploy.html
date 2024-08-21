@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
+
+
+<body
+        th:fragment="pageContent"
+        th:remove="tag">
+
+
+<div
+        id="deployDialog"
+        style="display: none">
+
+    <div class="adminNote is-files-only">Note: This is a CSAP package service. CSAP Package services need to be
+        manually kill/cleaned prior to upgrading to a new version.
+    </div>
+
+    <div class="is-datastore warning">Warning - This service is a data-store. Refer to help for appropriate deploy
+        processes.
+    </div>
+
+
+    <div
+            id=deployOptions
+            class=csap-white>
+
+        <div style="margin-bottom: 2em; margin-top: 1em">
+            <label class="optionLabel">
+                Currently Deployed:
+                <span id="serviceVersion"></span>
+            </label>
+        </div>
+
+
+        <div id="dockerDeployOptions">
+            <label class=csap-form>
+                <span>Docker Image:</span>
+                <input
+                        id="dockerImageVersion"
+                        title="The docker Image to deploy">
+
+            </label>
+            <br/>
+            <span id="docker-repo-pass"></span>
+            <span id="docker-repo-user"></span>
+            <br/>
+
+        </div>
+
+
+        <div id="kubernetesDeployOptions">
+            <div
+                    class="heading"
+                    style="padding-top: 0; margin-top: 0">
+                CSAP Kubernetes Definition
+                <span
+                        class="adminNote"
+                        title="spec files must be using templates eg. $$service-image"> Note: for spec files, only image and
+						replica count may be updated</span>
+            </div>
+            <div class="hquote deployment-notes"></div>
+            <pre
+                    id="kubernetes-definition-text"
+                    spellcheck="false"></pre>
+
+        </div>
+        <div id="osDeployOptions">
+
+            <section id=deploy-from>
+                <label class="optionLabel"> Deploy From: </label>
+                <label
+                        class="optionLabel"
+                        title="Use the repository coordinates with maven dependency plugin to copy to csap-platform/packages folder">
+                    <input
+                            type="radio"
+                            name="deployRadio"
+                            value="repo"
+                            checked="checked"/>
+                    Repository
+                </label>
+                <label
+                        class="optionLabel"
+                        title="Use configured source location to git checkout, and then runs gradle or maven to generate artifact and copy to csap-platform/packages folder">
+                    <input
+                            type="radio"
+                            name="deployRadio"
+                            value="source"/>
+                    Source Code
+                </label>
+                <label
+                        class="optionLabel"
+                        title="Uploads artifact and copies to csap-platform/packages folder">
+                    <input
+                            type="radio"
+                            name="deployRadio"
+                            value="upload"/>
+                    Upload
+                </label>
+
+            </section>
+
+
+            <div id=repoOptions>
+
+                <label class=csap-form>
+                    <span><a class=csap-link target=_blank href="https://maven.apache.org/pom.html#Maven_Coordinates"> Artifact Coordinates:</a></span>
+                    <input
+                            id="mavenArtifact"
+                            title="The version of the service to deploy. By default - it is the version defined by SCM team in the capability definition file."
+                            name="maven"
+                            value="serviceInstance.getMavenId()">
+                </label>
+
+                <br/>
+                <span id="repo-repo-pass"></span>
+                <span id="repo-repo-user"></span>
+                <br/>
+
+            </div>
+
+
+            <div id="sourceOptions">
+
+					<span id="source-repo-user">
+
+						<span id=template-repo-user>
+							<label class=csap-form
+                                   title='repository user
+- users and passwords are cached: enter "wipe" to remove
+- specify "no-auth" to bypass repo authentication'>
+								<span>userid:</span>
+								<input id=scmUserid class=words>
+							</label>
+						</span>
+					</span>
+
+
+                <label class=csap-form title="password for source repository">
+                    <span>password:</span>
+                    <input
+                            id="scmPass" class=words
+                            type="password">
+                </label>
+
+
+                <span id="source-repo-pass">
+						<span id=template-repo-pass>
+							<label class=csap-form
+                                   title='password (typically encrpted) for artifactory/maven repository (source user will be used).
+Password will be updated in .gradle/gradle.properties - only needed once per host'>
+								<span>repository password:</span>
+								<input
+                                        id="repoPass" class=words
+                                        placeholder="optional - specify only if required"
+                                        type="password">
+							</label>
+						</span>
+
+					</span>
+
+                <label
+                        class=csap-form
+                        title="Adds deploy target (maven)">
+                    <span>upload to repository:</span>
+                    <input
+                            class=words
+                            id=isScmUpload
+                            type="checkbox">
+                </label>
+
+                <label
+                        class=csap-form
+                        title="This value will be string substituted in URL below with trunk. If you change this you will need to run service clean. Branches are usually named /branches/branchname.">
+                    <span>branch/tag:</span>
+
+                    <input
+                            id="scmBranch"
+                            class=words>
+                </label>
+
+                <label class="csap-form iselect"
+                       title="gradle build will be done if build.gradle is found
+gradle: --exclude-task test. if gradle is not found in parameters, then a command will be prefixed gradlew build
+maven: -Dmaven.test.skip=true clean package"
+                >
+                    <span>
+                        Build Command:
+
+                        <select id="deploy-source-commands">
+                            <option value="none">...</option>
+                            <optgroup label="Gradle" title="If">
+                                <option>--refresh-dependencies --exclude-task test</option>
+                                <option>--exclude-task test</option>
+                                <option>--info</option>
+                                <option>--quiet </option>
+                                <option>../gradlew --console=plain --exclude-task test clean build</option>
+                            </optgroup>
+                            <optgroup label="Maven">
+                                <option>-Dmaven.test.skip=true clean package</option>
+                            </optgroup>
+                        </select>
+                    </span>
+
+                    <input
+                            id=scmCommand
+                            autocomplete="off"
+                            th:value="${ environmentSettings.getBuildCommand() }">
+                </label>
+
+                <div class=flex-container style="margin: 2em">
+
+
+                    <label
+                            class="csap comment"
+                            title="Click to browse source location">
+                        source:
+                        <a
+                                id="scmLocation"
+                                class="csap-link"
+                                target="_blank"
+                                href="#"></a>
+
+                    </label>
+
+                    <label class="csap flex-right-info">
+                        build folder:
+                        <span id="scmFolder"> [[ serviceInstance.getScmBuildLocation() </span>
+                    </label>
+
+                </div>
+
+
+            </div>
+
+            <div
+                    id="uploadOptions"
+                    style="margin-top: 2em;margin-bottom: 2em ">
+                <form
+                        id="uploadForm"
+                        action="service/uploadArtifact"
+                        enctype="multipart/form-data"
+                        method="post"
+                        style="">
+
+                    <label class=csap-form>
+                        <span>File:</span>
+                        <input
+                                id="uploadServiceFile"
+                                type="file"
+                                name="distFile"
+                                size="60"/>
+                    </label>
+
+                    <input
+                            id="upService"
+                            type="hidden"
+                            name="serviceName"
+                            value=""/>
+                    <div id="upHosts"></div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <label
+            class=csap
+            title="If checked, service will be started after deploying using default start parameters">
+        Deploy Autostart:
+        <input
+                id="deployStart"
+                name="deployStart"
+                type="checkbox"
+                checked="checked"/>
+    </label>
+
+    <span class="is-tomcat">
+			<label class=csap>
+				Hot Deploy:
+				<input
+                        id="isHotDeploy"
+                        name="isHotDeploy"
+                        type="checkbox"
+                        title="Deploys war into existing container. Refer to tomcat parallel deployment - this enables outage free migrations if war is compliant.">
+			</label>
+
+			<label class=csap>
+				Undeploy:
+				<select
+                        id="undeploySelect"
+                        name="undeploySelect"
+                        style="background-color: #DADAF5; font-weight: bold;">
+					<option value="select">Select</option>
+				</select>
+			</label>
+		</span>
+
+    <span
+            id="admin-deploy-note"
+            class="adminNote is-docker"> Deployment of docker image is done using the docker pull command. </span>
+
+    <span
+            style="display: inline-block; vertical-align: middle; margin-left: 2em;"
+            class="is-not-docker">
+			<a
+                    id="cleanServiceBuild"
+                    class="csap-link"
+                    href="#"
+                    style="font-size: 0.9em;"
+                    title="This will remove the source folder: CSAP_FOLDER/build/$service">
+				<img
+                        class="but"
+                        src="images/16x16/clean.png">
+				Clean Build
+			</a>
+			<a
+                    id="cleanGlobalBuild"
+                    class="csap-link"
+                    href="#"
+                    style="font-size: 0.9em; margin-left: 3em"
+                    title="This will completely purge the maven and build files for all services. Subsequent builds will need to repopulate maven cache and will take longer.">
+				<img
+                        class="but"
+                        src="images/16x16/warning.png">
+				Clean All
+			</a>
+		</span>
+
+
+</div>
+
+
+<div
+        id="startOptions"
+        style="display: none;">
+
+    <div class="csap-white quote ">
+
+        <div class="is-datastore warning">Warning - This service is a data-store. Refer to help for appropriate start
+        </div>
+
+        <span class="is-docker"> If container already exists, it will be stopped and deleted prior to new container
+				being created </span>
+        <span class="is-not-docker"> If service is already running or deployed, it will be stopped and
+				deployed prior to the new service being started. Select "skip extraction" to use the existing deployment. </span>
+    </div>
+
+
+    <div
+            id="startBlock"
+            style="padding: 1em;"
+            class="is-not-docker">
+
+        <label
+                class=csap
+                title="If checked, service will NOT be extracted from war/zip">
+            Skip Extraction:
+            <input
+                    id="noDeploy"
+                    name="noDeploy"
+                    type="checkbox">
+        </label>
+
+
+
+        <button id="isDebug" class="java-start-parameter csap-alt-colors csap-button-icon csap-edit"
+                title="Add -remote debug">
+            Add Remote Debug</button>
+
+        <button id="is-java-nmt" class="java-start-parameter csap-alt-colors csap-button-icon csap-edit"
+                title="Add -XX:NativeMemoryTracking=off|summary|detail">
+            Add Native Memory</button>
+
+        <button id="isJmc"  class="java-start-parameter csap-alt-colors csap-button-icon csap-edit"
+                title="Add java mission control parameters">
+            Add JMC </button>
+
+        <br/>
+
+
+
+    </div>
+
+
+    <div class="is-java-server" style="margin-top: 2em">
+
+        <div
+                class="heading"
+                style="padding-top: 0; margin-top: 0">
+
+            <a
+                    class="csap-link-icon csap-help"
+                    th:href="${@applicationConfiguration.getHelpUrl('application-deployment') }"
+                    target="_blank"
+                    title="Deployment Help">
+                Start parameters
+            </a>
+        </div>
+
+        <textarea
+                id="serviceParameters"
+                spellcheck="false"
+                title="Note these can be permanently updated by selecting Edit Configuration button">serviceParameters</textarea>
+    </div>
+
+    <div
+            id="dockerStartOptions"
+            class="is-docker">
+        <div
+                class="heading"
+                style="padding-top: 0; margin-top: 0">CSAP Docker Definition
+        </div>
+        <pre
+                id="docker-params-definition"
+                spellcheck="false"></pre>
+
+    </div>
+
+</div>
+
+<div
+        id="killOptions"
+        style="display: none">
+
+
+    <div>
+        <label
+                class=csap
+                title="">
+
+            <span class="clean-options">clean:</span>
+            <input
+                    id="isClean"
+                    name="clean"
+                    type="checkbox"/>
+
+            <span
+                    id="docker-clean-description"
+                    class="explain is-docker quote"> remove $$service-working and docker image from host </span>
+
+            <span
+                    id="docker-clean-description"
+                    class="explain is-not-docker quote"> remove $$service-working </span>
+
+        </label>
+    </div>
+
+    <div title="If checked, $$service-working/logs folder will be moved to $processing prior to deleting service folder">
+        <label class="csap is-not-docker">
+            <span class="clean-options">Preserve Log Folder:</span>
+            <input
+                    id="isSaveLogs"
+                    type="checkbox"
+                    th:checked="${csapHostEnvironmentName} == 'prod'">
+
+
+            <span class="quote is-csap-api"
+                  style="padding-left: 0; padding-right: 3em">csap-api package which use os packages
+					(docker, kublet,..) are unaffected (use journalctl)</span>
+
+            <span class="quote is-not-csap-api">log folder is copied to $processing</span>
+
+        </label>
+    </div>
+
+
+    <div
+            id="clean-docker-volumes-container"
+            title="If checked, docker volumes created using csap createPersistent enabled = true will be deleted">
+        <Label class=csap>
+            <span class="clean-options">Remove Docker Volume(s):</span>
+            <input
+                    id="clean-docker-volumes"
+                    type="checkbox">
+
+        </Label>
+
+    </div>
+
+    <div class="is-datastore warning">Warning - This service is a data-store. Refer to help for appropriate shutdown
+        processes.
+    </div>
+
+
+    <div style="margin-top: 2em">
+
+
+        <button
+                id="killButton"
+                class="csap-button-icon csap-trash"
+                title="Services will be stopped; optional deletion of OS files, packages, etc.">
+            <span> text-in-instance </span>
+
+        </button>
+
+
+        <button
+                id="stopButton"
+                class="csap-button-icon status-red"
+                title="Service will be stopped only - files and packages are preserved">
+            <span class="is-docker"> Stop (keep container)</span>
+            <span class="is-not-docker"> Stop (application)</span>
+        </button>
+
+        <div class="hquote deployment-notes"></div>
+    </div>
+
+    <div
+            class="quote is-docker"
+            style="margin: 2em">Note: volumes and networks created using autocreate or using explorer are NEVER removed.
+        Use the Host Explorer and CSAP shell commands if needed
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

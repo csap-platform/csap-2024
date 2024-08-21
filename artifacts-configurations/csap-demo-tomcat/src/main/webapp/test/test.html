@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title>HTML 5 Demo</title>
+	<script>
+		document.createElement('nav');
+		document.createElement('section');
+		document.createElement('article');
+		document.createElement('aside');
+		document.createElement('footer');
+	</script>
+	<style>
+		header,nav,section,article,aside,footer {display:block;border:1px solid #bbb;padding:1em;border-radius:10px}
+
+		header,nav,section,article,aside,footer {border:1px solid #bbb;padding:1em;}
+		header{background-color:#EFFBFF;}
+		h1,h2,nav li {font-family:helvetica,arial,sans-serif;}
+		nav{margin:1.5em 0;}
+		nav li {display: inline;list-style-type: none;padding-right:1em;}
+		article,aside{float:left;margin-bottom:1.5em;}
+		article {width:60%;}
+		aside {width:28%;margin-left:1em;}
+		footer {clear:both;}
+		.identifier {background-color:#FFF79F;font-style:italic;}
+	</style>
+    </head>
+    <body>
+        <header>
+		<p class="identifier">header</p>
+            	<h1>HTML 5 Demo</h1>
+        </header>
+        <nav>
+		<p class="identifier">nav</p>
+		<ul>
+			<li>Home</li>
+			<li>About</li>
+			<li>Contact</li>
+		</ul>
+        </nav>
+	<article>
+		<p class="identifier">article</p>
+		<h2>Terminology and Usage</h2>
+		<section>
+			<p class="identifier">section</p>
+			<ul>
+				<li>The header element represents a group of introductory or navigational aids.</li>
+				<li>The nav element represents a section of a page that links to other pages or to parts within the page: a section with navigation links.</li>
+				<li>An article element is "independent" in the sense that its contents could stand alone, for example in syndication.</li>
+				<li>The section element represents a generic document or application section...[it] is not a generic container element.</li>
+				<li>The aside element represents a section of a page that consists of content that is tangentially related to the content around the aside element, and which could be considered separate from that content.</li>
+				<li>The footer element represents a footer for its nearest ancestor sectioning content. </li>
+			</ul>
+		</section>
+	</article>
+	<aside>
+		<p class="identifier">aside</p>
+		<h2>Attribution</h2>
+		<section>
+			<p class="identifier">section</p>
+			<p>The main article on this page is comprised of excerpts from the HTML 5 draft.</p>
+		</section>
+	</aside>
+        <footer>
+		<p class="identifier">footer</p>
+		<p>By Dustin Boston</p>
+        </footer>
+    </body>
+</html>

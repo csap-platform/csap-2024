@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head><title></title></head>
+	<!-- 
+		- Service Summary Listing
+	-->
+
+	<body  th:fragment="pageContent" th:remove="tag" >
+		
+		<h1 id="service-manifests">Service Manifests
+		
+					<a
+						class="csap-link"
+						href="#app-attributes"
+						title="Navigate back to summary table">Application Attributes</a>
+		</h1>
+		
+		<table  class="csap" >
+			<thead>
+
+				<tr>
+					<th style="width: 12em">Service in Lifecycle: [[ ${ lifecycle } ]] </th>
+					<th style="width: 30em">Manifest Version</th>
+					<th style="width: 24em">Deployed Versions</th>
+					<th style="width: 5em">Support</th>
+				</tr>
+			</thead>
+
+
+
+            
+            <tbody>
+            
+            	<tr th:each="serviceManfestReport : ${ serviceManfestReports }">
+            		
+            		<td>
+            		 	<a class="csap-link-icon csap-go" title="View instance details"
+            		 		th:href="${ '#details-' + serviceManfestReport.get(0) }" >[[ ${  serviceManfestReport.get(0) } ]] </a> 
+            		</td>
+            		
+            		<td
+            			th:each="itemDetails,iterationStatus : ${ serviceManfestReport }"
+            			th:if="${ iterationStatus.index > 0 }" >
+            			
+            			<span th:if="${ itemDetails.startsWith('http') }">
+            				<a class="csap-link-icon csap-window" target="_blank" th:href="${itemDetails}" >link</a>
+            			</span>
+            			<span class=inspector-break-all th:unless="${ itemDetails.startsWith('http') }">
+            				[[ ${  itemDetails } ]] 
+            			</span>
+            		 	
+            		</td>
+            		
+            	</tr>
+            
+            </tbody>
+            
+
+		</table>
+
+	</body>
+</html>

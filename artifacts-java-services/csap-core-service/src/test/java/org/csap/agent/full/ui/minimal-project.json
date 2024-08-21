@@ -1,0 +1,139 @@
+{
+  "project": {
+    "api-version": 2.1,
+    "project-version": 1.0,
+    "name": "bare-project"
+  },
+  "environments": {
+    "defaults": {
+      "settings": {
+        "base-env-only": true,
+        "application": {
+          "name": "bare-application",
+          "file-manager-shortcuts": [
+            {
+              "label": "demo folder 1",
+              "value": "$$demo-folder-1"
+            },
+            {
+              "name": "demo folder 2",
+              "value": "$demo-folder-2"
+            }
+          ],
+          "custom-properties": [
+            {
+              "name": "demo-base-key",
+              "value": "demo-base-val"
+            },
+            {
+              "name": "universal-password",
+              "key": "properties.env.universalPassword",
+              "file": "$$demo-property-folder/$$service-name/demo-catalina.properties"
+            },
+            {
+              "name": "prometheus-port",
+              "key": "wd.metrics.prometheus.port",
+              "file": "$$demo-property-folder/$$service-name/demo-catalina.properties"
+            },
+            {
+              "name": "wd-tenant",
+              "value": "tenant-demo"
+            },
+            {
+              "name": "demo-over-key",
+              "value": "demo-base-val"
+            }
+          ],
+          "quick-launches": [
+            {
+              "label": "junit with host launcher",
+              "service": "simple-service",
+              "host": "junit-host-2"
+            },
+            {
+              "label": "$$wd-tenant",
+              "service": "csap-agent",
+              "location": "https://wd5-perf.megaleo.com/$$wd-tenant/d/home.htmld",
+              "password": "$$universal-password"
+            }
+          ]
+        }
+      }
+    },
+    "dev": {
+      "base-os": {
+        "type": "modjk",
+        "hosts": [
+          "localhost",
+          "junit-host-2"
+        ],
+        "notes": "enterpise cluster",
+        "template-references": [
+          "csap-agent",
+          "simple-service"
+        ]
+      },
+      "settings": {
+        "imports": [
+          "defaults"
+        ],
+        "configuration-maps": {
+          "global": {
+            "test-global-1": "test-global-value-1"
+          },
+          "map-for-testing": {
+            "test-map-name-1": "test-map-value-1",
+            "test-map-name-2": "test-map-value-2"
+          },
+          "map-for-testing-base-os": {
+            "test-map-name-2": "test-map-value-2-override"
+          }
+        },
+        "application": {
+          "custom-properties": [
+            {
+              "name": "demo-env-key",
+              "value": "demo-env-val"
+            },
+            {
+              "name": "demo-over-key",
+              "value": "demo-env-val"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "service-templates": {
+    "simple-service": {
+      "server": "SpringBoot",
+      "autoStart": 41,
+      "port": 8241,
+      "description": "Simple Spring Boot Jar",
+      "docUrl": "https://github.com/csap-platform/csap-starter",
+      "alerts": {
+        "max_diskUtil": "3000",
+        "max_threadCount": "300",
+        "max_fileCount": "489",
+        "max_rssMemory": "768000",
+        "max_tomcatConnections": "20",
+        "max_topCpu": "150"
+      },
+      "isTomcatAjp": "true",
+      "osProcessPriority": 0,
+      "parameters": "-DcsapJava8  -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
+      "environmentVariables": {
+        "csapExternalPropertyFolder": "$STAGING/conf/propertyOverride/shared"
+      },
+      "source": {
+        "scm": "git",
+        "path": "https://github.com/csap-platform/csap-starter.git",
+        "branch": "HEAD",
+        "buildLocation": "/csap-starter-simple"
+      },
+      "maven": {
+        "dependency": "org.csap:csap-starter-simple:1.0.0:jar"
+      }
+    }
+  }
+}

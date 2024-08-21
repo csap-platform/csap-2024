@@ -1,0 +1,1256 @@
+#
+# Full csap reference cluster, including csap-events, clustered kubernetes
+#
+# Update:
+#   $managerHost - k8s master, csap-admin
+#   $workerHosts - k8s master, csap-admin
+#   $hostDomain -  hostDomain
+#   $appName - name of application
+#   $apiToken - rest apis betweem csap-agents - csap-admin - csap events
+#   $appId - used for event and project ids (lowercase hyphenated)
+#
+#
+
+
+
+operator: modify
+target: default
+
+
+environments:
+
+  base: dev     # source: derived from "default" application, which defines a "dev" environment
+  name: $envId  # optional name of target env; defaults to the base env if not specified
+  
+  #
+  # Cluster host assignment:
+  #   - use host short name
+  #   - optional: specify short name everywhere; or use index of hostname from base-os cluster
+  #                
+  hosts: 
+
+    # first host MUST be explicitly defined when templates are being used
+    base-os: [ $managerHost ]
+    csap-management: [ $managerHost ]
+    perf-system: [ $managerHost ]
+    perf-java: [ $managerHost ]
+    perf-mysql: [ $managerHost ]
+  
+
+  application-name: "$appName"
+  project-name: "$appId"
+  project-contact: "xxx.xxx@$hostDomain"
+  
+  git: https://github.com/xxx/xxx-definition.git
+
+
+  #
+  # update target env
+  #
+  settings:
+
+    loadbalancer-url-orig: http://$managerHost.$hostDomain:8080
+    loadbalancer-url: http://$managerHost.$hostDomain:8021/csap-admin
+
+    application:
+      host-settings:
+
+        tags:
+          default: aws
+    
+    # Enable NFS Support using nfs container created below
+    configuration-maps:
+      docker:
+        allowRemote: false
+    
+  default-settings:  # defaults for ALL envs
+  
+    application:
+      
+      name: "$appName"
+      
+      quick-launches:
+        - service: csap-agent
+        - service: csap-events
+        - service: fio
+        - service: sysbench-cpu
+        - service: sysbench-memory
+
+      help-menu:
+        CompanyXXX CSAP: https://confluence.yourcompany.com/display/~peter.nightingale/WCSAP
+  
+    csap-data:
+      user: "$appId"    # events-disabled
+      # user: xxx-myapp
+      credential: "$apiToken"
+      service-url-orig: "http://$managerHost.$hostDomain:8080/events-service"
+      service-url: "http://$elasticIp:7021/events-service"
+      
+
+    configuration-maps:
+
+      csap-events-defaults: 
+        # mongoUserNeeded: ForImageAndBoot
+        mongoUser: dataBaseReadWriteUser
+        mongoPassword: "$apiToken"
+        mongoHosts: "$$csap-hosts:events-mongo"
+        $$mongo-storage: "/opt/csap/$$service-name-volume"
+        # $$mongo-storage: "$$nfs-mount/$$nfs-sub-folder/$$service-name-volume"
+        # dataServiceUrl "http://csap-dev01.$hostDomain:8080/events-service/api/event"
+        restToken: "$apiToken"
+        dataServiceUser: "$appId"
+        dataServicePass: "$apiToken"
+        metricDbSizeInGb: 5
+        eventDbSizeInGb: 1
+        MONGO_UTIL: "csapplatform/mongo:21.08"
+        MONGO_INITDB_ROOT_USERNAME: dataBaseReadWriteUser
+        MONGO_INITDB_ROOT_PASSWORD: "$apiToken"
+        #MONGO_INITDB_ROOT_PASSWORD: "doDecode:ikS+e8JgH07FPqGIprwwawHHId9i4+K2"
+
+
+  #
+  # adding in csap-management and kubernetes
+  #
+  clusters: 
+  
+    #
+    # csap-admin provide core cluster management
+    #
+    csap-management: 
+      notes: "For production clusters, 2 hosts are recommended. All others - a single host is sufficient"
+      type: modjk
+      hosts:
+        - updated-above-in-hosts
+      template-references: 
+        - csap-admin
+
+    #
+    # performance tests
+    #
+    perf-java:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - java-nft-1
+        - java-nft-jmeter
+
+    perf-mysql:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - oss-mysql-admin
+        - oss-mysql-db
+        - sysbench-mysql
+
+    perf-system:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - fio
+        - sysbench-cpu
+        - sysbench-memory
+
+operations: 
+  - inserts:
+    - path: /environments/defaults/base-os/template-references
+      value: docker
+
+service-templates:
+
+  csap-demo-nginx.docker.image: "nginx:latest"
+
+
+---
+#
+# Core csap settings: demo-xxx Morrisville Security(LDAP)
+#
+operator: create
+target: application-company.yml
+
+#
+# Global settings for applications - test
+#
+
+
+
+     
+csap-core:
+
+  kubernetes: 
+    enabled: true
+
+  docker: 
+    enabled: true
+    
+
+#
+# health and data services
+#
+#csap-events: 
+#
+#  health-monitoring: 
+#    appIds:
+#      - xxx
+#    lifes:
+#      - dev
+
+
+#spring: 
+#  mail: 
+#    host: "${mailServer:myrelay.demo-xxx.com}"
+#    port: "${mailPort:25}"
+
+csap.security: 
+    rest-api-filter.token: "$apiToken"
+    provider-not-used:
+            
+      type: memory
+      memory-users:
+      - admin,password,AUTHENTICATED,dummy1,dummy2
+      - user,password,AUTHENTICATED,dummy3,dummy4
+      
+      #
+      # LDAP: https://github.com/csap-platform/csap-core/wiki/Access-Control
+      #
+      
+        #
+        #  docker caspplatform/csap:ldap ,https://github.com/bitnami/bitnami-docker-openldap
+        #
+        #  test openldap: docker run --rm --detach --name=ldap-server --publish 389:1389 csapplatform/ldap-server
+        #  web user: admin/admin
+        #  
+        #  test ldap browser: docker run --rm --detach --name=ldap-ui --publish 8080:80 --env PHPLDAPADMIN_LDAP_HOSTS=$(hostname --long)  --env PHPLDAPADMIN_HTTPS=false osixia/phpldapadmin:latest
+        #  ldap admin: cn=admin,dc=example,dc=org, pass: admin
+        #
+
+    #
+    steps-to-enable:
+       - verifying ldap server is up using ldapui
+       - rename this to provider to provider-not-used
+       - rename  provider-not-used to provider
+       - save and activate the changes
+       - restart admin and verify new ldap is being used
+    
+    #
+    provider:
+       type: ldap
+       url: ldap://$elasticIp:7389
+       directory-dn: search:uid={0}
+       search-user: ou=people,dc=example,dc=org
+       search-groups: ou=groups,dc=example,dc=org
+       search-group-filter: "(uniquemember={0})"
+      
+      
+      #
+      # typical ldap
+      #
+#      type: ldap 
+#      url: ldap://ldap.yourcompany.lab:389
+#      directory-dn: search:uid={0} # search will be a search binding. If omitted - binds direct
+#      search-user: ou=People,dc=yourdc,dc=net
+#      search-groups: ou=Groups,dc=yourdc,dc=net
+#
+# Typically - LDAP/AD groups are used for group management
+# - alternately, roles can be explictly assigned 
+#
+#      additional-ldap-roles:
+#        pnightingale:
+#          - ${view_role:AUTHENTICATED}
+#          - ${admin_role:AUTHENTICATED}
+#          - ${build_role:AUTHENTICATED}
+#          - ${infra_role:AUTHENTICATED}
+
+
+---
+#
+#  sysbench-cpu api
+#
+operator: create
+target: resources/sysbench-cpu/csap-api.sh
+content: |
+  #!/bin/bash
+  
+  
+  
+  print_section "CSAP API: $csapName"
+  
+  # print_command "environment variables" "$(env)"
+  
+  
+  
+  function do_configuration() {
+  
+  
+    #
+    # Force a "short" run for demos and testing
+    #
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-60} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+  	export threadIterations=${threadIterations:-1 8} ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  
+  }
+  
+  do_configuration
+  
+  #
+  # Use this for any software "build" operations. Typically used for building c/c++ code
+  # -  eg. apache httpd, redis
+  # -  This method should also upload into a repository (usually maven)
+  # - Note: most software packages are available as prebuilt distributions, in which case no implementation is required
+  #
+  function api_package_build() { print_if_debug "api_package_build not used" ; }
+  
+  #
+  # Use this for getting binary packages - either prebuilt by distributions (tomcat, mongodb, cassandra,etc.)
+  #   or built using buildAdditionalPackages() above
+  #   Note that CSAP deploy will invoke this on the primary host selected during deployment, and then automatically
+  #   - synchronize the csapPackageDependencies to all the other hosts (via local network copy) for much faster distribution
+  #
+  function api_package_get() {
+    print_if_debug "api_package_build not used" ;
+  }
+  
+  #
+  # CSAP agent will always kill -9 after this command
+  #
+  #
+  function api_service_kill() { print_if_debug "api_service_kill not used" ; }
+  
+  #
+  # CSAP agent will always kill -9 after this command. For data sources - it is recommended to use the
+  # shutdown command provided by the stack to ensure caches, etc. are flushed to disk.
+  #
+  function api_service_stop() { print_if_debug "STOP not used" ; }
+  
+  
+  #
+  # Note: commands should be launched in the background
+  #
+  function api_service_start() {
+  
+  
+    if ! test -d "$csapLogDir" ; then
+    		print_two_columns "creating logs" "in $csapLogDir, and linking /var/log/messages"
+    		mkdir --parents $csapLogDir
+  	fi ;
+  
+  	local testScript="$csapResourceFolder/common/cpu-tester.sh"
+  	chmod 755 $testScript
+  	launch_background "$testScript" "" "$csapLogDir/_$csapName-output.log"
+  
+  	print_two_columns "Note" "Test will end automatically: creating csap stop file to prevent alerts: '$csapStopFile'";
+    touch $csapStopFile
+  }
+
+
+
+
+
+
+---
+#
+#  sysbench-cpu functions
+#
+operator: create
+target: resources/sysbench-cpu/common/cpu-tester.sh
+content: |
+  #!/bin/bash
+  
+  source $CSAP_FOLDER/bin/csap-environment.sh
+  
+  #
+  #   References:
+  #   - docker options: https://hub.docker.com/r/severalnines/sysbench/
+  #   - sysbench scenarios: https://github.com/centminmod/centminmod-sysbench
+  #
+  #   Invokation NOtes
+  #   if invoked from csap-job-run.sh will source csap-environment.sh, which includes all the helper functions and service variables
+  #   - ref: $CSAP_FOLDER/bin/csap-environment.sh
+  #   - ref: https://github.com/csap-platform/csap-core/wiki/Service-Definition#runtime-variables
+  #
+  
+  print_section "Service Runner: $csapName"
+  
+  
+  
+  function setup() {
+  
+    install_if_needed bc ;
+    # print_command "environment variables" "$(env)"
+  
+  	testProfile=${testProfile:-default} ;
+    print_two_columns "testProfile" "$testProfile"
+  
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-120} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+  
+  	maxPrime=${maxPrime:-100000} ;
+    print_two_columns "maxPrime" "$maxPrime"
+  
+  	threadIterations=${threadIterations:-1 2 4 8 16 32 64} ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  
+  
+    sysBenchImage=${sysBenchImage:-default} ;
+    if [[ "$sysBenchImage" == "default" ]] ; then
+      sysBenchImage="severalnines/sysbench:latest"
+      if [[ "$(hostname --long)" == *hostx.yourcompany ]] ; then sysBenchImage="docker-public-artifactory.yourcompany.com/severalnines/sysbench" ; fi
+    fi ;
+  
+    print_two_columns "sysBenchImage" "$sysBenchImage"
+  
+  
+    reportsFolder="$csapLogDir/reports" ;
+    if ! test -d reportsFolder ; then
+      print_two_columns "reportsFolder" "$(mkdir --verbose --parents $reportsFolder)"
+    fi ;
+    latestLogFile="$reportsFolder/sysbench-latest.log" ;
+    print_two_columns "latestLogFile" "$latestLogFile"
+  
+  
+    backup_file $latestLogFile
+  
+  
+    wordPadding=12 ;
+    printReportHeader "sysbench cpu tests"
+  
+  
+    local verbose=false ;
+  
+  }
+  
+  function printReportHeader() {
+  
+    local testLabel="$*"
+    local verbose="false"
+    append_file "# generated by cpu-tester.sh" $latestLogFile $verbose
+    append_line ""
+    append_line ""
+    append_line "#"
+    append_line "# test: $testLabel"
+    append_line "#"
+    local headerLine=$(formatLine $wordPadding "threads maxPrime eventsPerSec eventsTotal timeSeconds percentile")
+    append_line "$headerLine"
+  
+  }
+  
+  setup ;
+  
+  
+  
+  function run_sysbench() {
+  
+    local containerName="$1"
+    shift 1
+    local args="$*"
+    local dockerParameters="run --name=$containerName --rm=true" ;
+    # 
+  
+    print_command "docker command" "$(echo "docker $dockerParameters \\"; echo "  $sysBenchImage  \\"; echo "  $args" )"
+  
+    #print_separator "START: $args output"
+    print_two_columns "Starting" "output is being captured and will be printed after completion" ;
+    local cpuReport=$(docker $dockerParameters  \
+      $sysBenchImage $sysBenchCommand $sysBenchConnection \
+      $args)
+    # | tee $latestLogFile
+    print_command "report completed" "$cpuReport"
+    #print_separator "COMPLETED: $args output"
+  
+    local threads=$(find_word_after "threads:" $cpuReport) ;
+  
+    # remove seconds s
+    local totalTime=$(find_word_after "total time:" $cpuReport | sed 's/s//g') ;
+    totalTime=$(echo "scale=0;$totalTime/1" | bc --mathlib) ;
+    local maxPrime=$(find_word_after "Prime numbers limit:" $cpuReport) ;
+    local percentile=$(find_word_after "95th percentile:" $cpuReport) ;
+  
+    local eventsPerSecond=$(find_word_after "events per second:" $cpuReport) ;
+    local eventsTotal=$(find_word_after "total number of events:" $cpuReport) ;
+  
+    local reportLine=$(formatLine $wordPadding "$threads $maxPrime $eventsPerSecond $eventsTotal $totalTime $percentile")
+    print_two_columns "extracted data" "$reportLine"
+  
+    append_line "$reportLine"
+  
+  
+  
+  }
+  
+  #
+  # oltp scenario
+  #
+  function cpuTests() {
+  
+  	print_section "cpuTests"
+  
+  	testContainerName="$csapName" ;
+  
+  # 	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  
+    local threadCount
+    local sysBenchParams
+  
+    for threadCount in $threadIterations ; do
+  	  sysBenchParams="sysbench cpu --time=$timeToRunInSeconds --threads=$threadCount --cpu-max-prime=$maxPrime run" ;
+  
+  
+  	  run_sysbench "$testContainerName" $sysBenchParams ;
+  
+      delay_with_message 60 "Spacing reports to ensure collection result captured"
+  
+    done ;
+  
+    delay_with_message 60 "Run Completed - Final Spacing delay"
+  
+    print_with_date "Test Completed"
+  }
+  
+  # /usr/share/sysbench/tests/include/oltp_legacy/csap-oltp.lua
+  
+  function perform_operation() {
+  
+    local startSeconds=$(date +%s) ;
+  
+  	case "$testProfile" in
+  
+  		"cpuTests" | "default")
+  			cpuTests
+  			;;
+  
+  		 *)
+  	            echo "Command Not found"
+  	            exit 1
+  	esac
+  
+  
+    local endSeconds=$(date +%s) ;
+    print_with_date "Test Completed: $(( ( $endSeconds - $startSeconds) / 60   )) minutes"
+  
+  }
+  
+  perform_operation
+
+
+---
+#
+#  sysbench-memory api
+#
+operator: create
+target: resources/sysbench-memory/csap-api.sh
+content: |
+  #!/bin/bash
+  
+  
+  
+  print_section "CSAP API: $csapName"
+  
+  # print_command "environment variables" "$(env)"
+  
+  
+  
+  function do_configuration() {
+  
+  
+    #
+    # Force a "short" run for demos and testing
+    #
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-60} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+  	export threadIterations=${threadIterations:-1 8} ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  
+  }
+  
+  do_configuration
+  
+  #
+  # Use this for any software "build" operations. Typically used for building c/c++ code
+  # -  eg. apache httpd, redis
+  # -  This method should also upload into a repository (usually maven)
+  # - Note: most software packages are available as prebuilt distributions, in which case no implementation is required
+  #
+  function api_package_build() { print_if_debug "api_package_build not used" ; }
+  
+  #
+  # Use this for getting binary packages - either prebuilt by distributions (tomcat, mongodb, cassandra,etc.)
+  #   or built using buildAdditionalPackages() above
+  #   Note that CSAP deploy will invoke this on the primary host selected during deployment, and then automatically
+  #   - synchronize the csapPackageDependencies to all the other hosts (via local network copy) for much faster distribution
+  #
+  function api_package_get() {
+    print_if_debug "api_package_build not used" ;
+  }
+  
+  #
+  # CSAP agent will always kill -9 after this command
+  #
+  #
+  function api_service_kill() { print_if_debug "api_service_kill not used" ; }
+  
+  #
+  # CSAP agent will always kill -9 after this command. For data sources - it is recommended to use the
+  # shutdown command provided by the stack to ensure caches, etc. are flushed to disk.
+  #
+  function api_service_stop() { print_if_debug "STOP not used" ; }
+  
+  
+  #
+  # Note: commands should be launched in the background
+  #
+  function api_service_start() {
+  
+  
+    if ! test -d "$csapLogDir" ; then
+    		print_two_columns "creating logs" "in $csapLogDir, and linking /var/log/messages"
+    		mkdir --parents $csapLogDir
+  	fi ;
+  
+  	local testScript="$csapResourceFolder/common/memory-tester.sh"
+  	chmod 755 $testScript
+  	launch_background "$testScript" "" "$csapLogDir/_$csapName-output.log"
+  
+  	print_two_columns "Note" "Test will end automatically: creating csap stop file to prevent alerts: '$csapStopFile'";
+    touch $csapStopFile
+  }
+
+
+
+
+
+
+---
+#
+#  sysbench-memory functions
+#
+operator: create
+target: resources/sysbench-memory/common/memory-tester.sh
+content: |
+  #!/bin/bash
+  
+  source $CSAP_FOLDER/bin/csap-environment.sh
+  
+  #
+  #   References:
+  #   - docker options: https://hub.docker.com/r/severalnines/sysbench/
+  #   - sysbench scenarios: https://github.com/centminmod/centminmod-sysbench
+  #
+  #   Invokation NOtes
+  #   if invoked from csap-job-run.sh will source csap-environment.sh, which includes all the helper functions and service variables
+  #   - ref: $CSAP_FOLDER/bin/csap-environment.sh
+  #   - ref: https://github.com/csap-platform/csap-core/wiki/Service-Definition#runtime-variables
+  #
+  
+  print_section "Service Runner: $csapName"
+  
+  
+  
+  function setup() {
+  
+  
+    install_if_needed bc ; 
+    # print_command "environment variables" "$(env)"
+  
+  	testProfile=${testProfile:-default} ;
+    print_two_columns "testProfile" "$testProfile"
+  
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-120} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+    # 1K, 1M,...
+  	blockSize=${blockSize:-1M} ;
+    print_two_columns "blockSize" "$blockSize"
+  
+  	threadIterations=${threadIterations:-1 2 4 8 16 } ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  
+  
+    sysBenchImage=${sysBenchImage:-default} ;
+    if [[ "$sysBenchImage" == "default" ]] ; then
+      sysBenchImage="severalnines/sysbench:latest"
+      if [[ "$(hostname --long)" == *hostx.yourcompany ]] ; then sysBenchImage="docker-public-artifactory.yourcompany.com/severalnines/sysbench" ; fi
+    fi ;
+    print_two_columns "sysBenchImage" "$sysBenchImage"
+  
+  
+    reportsFolder="$csapLogDir/reports" ;
+    if ! test -d reportsFolder ; then
+      print_two_columns "reportsFolder" "$(mkdir --verbose --parents $reportsFolder)"
+    fi ;
+    latestLogFile="$reportsFolder/sysbench-latest.log" ;
+    print_two_columns "latestLogFile" "$latestLogFile"
+  
+    backup_file $latestLogFile
+  
+    wordPadding=12 ;
+    printReportHeader "sysbench memory tests"
+  
+  }
+  
+  function printReportHeader() {
+  
+    local testLabel="$*"
+    local verbose="false"
+    append_file "# generated by memory-tester.sh" $latestLogFile $verbose
+    append_line ""
+    append_line ""
+    append_line "#"
+    append_line "# test: $testLabel"
+    append_line "#"
+    local headerLine=$(formatLine $wordPadding "threads blockSizeKb mbPerSecond eventsPerSec eventsTotal totalTime totalMemMb percent95")
+    append_line "$headerLine"
+  
+  }
+  
+  setup ;
+  
+  
+  
+  function run_sysbench() {
+  
+    local containerName="$1"
+    shift 1
+    local args="$*"
+    local dockerParameters="run --name=$containerName --rm=true" ;
+    # 
+  
+    print_command "docker command" "$(echo "docker $dockerParameters \\"; echo "  $sysBenchImage  \\"; echo "  $args" )"
+  
+    #print_separator "START: $args output"
+    print_two_columns "Starting" "output is being captured and will be printed after completion" ;
+    local memoryReport=$(docker $dockerParameters  \
+      $sysBenchImage $sysBenchCommand $sysBenchConnection \
+      $args)
+  
+    print_command "report completed" "$memoryReport"
+  
+    local threads=$(find_word_after "threads:" $memoryReport) ;
+  
+    # remove seconds s
+    local totalTime=$(find_word_after "total time:" $memoryReport | sed 's/s//g' ) ;
+    local blockSizeInKb=$(find_word_after "block size:" $memoryReport | sed 's/KiB//g' ) ;
+  
+  
+    local totalMemoryInMb=$(find_word_after "per second)" $memoryReport) ;
+  
+    # strip off the parenthesis at start of output
+    local mbPerSecond=$(find_word_after "transferred" $memoryReport | sed 's/(//g' ) ;
+  
+    local percentile=$(find_word_after "95th percentile:" $memoryReport) ;
+  
+    local eventsTotal=$(find_word_after "total number of events:" $memoryReport) ;
+  
+    # bc -l will include decimals, but rounding is close enough here
+    local eventsPerSecond=$(bc <<< $eventsTotal/$totalTime) ;
+  
+  
+    local reportLine=$(formatLine $wordPadding "$threads $blockSizeInKb $mbPerSecond $eventsPerSecond $eventsTotal $totalTime $totalMemoryInMb $percentile")
+    print_two_columns "extracted data" "$reportLine"
+  
+    append_line "$reportLine"
+  
+  
+  
+  }
+  
+  #
+  # oltp scenario
+  #
+  function memoryTests() {
+  
+  	print_section "memoryTests"
+  
+  	testContainerName="$csapName" ;
+  
+  # 	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  
+    local threadCount
+    local sysBenchParams
+  
+    for threadCount in $threadIterations ; do
+  	  sysBenchParams="sysbench memory --time=$timeToRunInSeconds --threads=$threadCount --memory-block-size=$blockSize --memory-scope=global --memory-access-mode=rnd  --report-interval=0 run" ;
+  
+  
+  	  run_sysbench "$testContainerName" $sysBenchParams ;
+  
+      delay_with_message 60 "Spacing reports to ensure collection result captured"
+  
+    done ;
+  
+    delay_with_message 60 "Run Completed - Final Spacing delay"
+  
+    print_with_date "Test Completed"
+  }
+  
+  # /usr/share/sysbench/tests/include/oltp_legacy/csap-oltp.lua
+  
+  function perform_operation() {
+  
+    local startSeconds=$(date +%s) ;
+  
+  	case "$testProfile" in
+  
+  		"memoryTests" | "default")
+  			memoryTests
+  			;;
+  
+  		 *)
+  	            echo "Command Not found"
+  	            exit 1
+  	esac
+  
+    local endSeconds=$(date +%s) ;
+  
+    print_with_date "Test Completed: $(( ( $endSeconds - $startSeconds) / 60   )) minutes"
+  }
+  
+  perform_operation
+
+---
+#
+#  fio api
+#
+operator: create
+target: resources/fio/csap-api.sh
+
+content: |
+  #!/bin/bash
+  
+  
+  
+  print_section "CSAP API: $csapName"
+  
+  # print_command "environment variables" "$(env)"
+  
+  
+  
+  function do_configuration() {
+  
+  
+    #
+    # Force a "short" run for demos and testing
+    #
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-10} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+  	export threadIterations=${threadIterations:-1 2} ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  	export blockSizesInKb=${blockSizesInKb:-4 8} ;
+    print_two_columns "blockSizesInKb" "$blockSizesInKb"
+  
+  
+  }
+  
+  do_configuration
+  
+  #
+  # Use this for any software "build" operations. Typically used for building c/c++ code
+  # -  eg. apache httpd, redis
+  # -  This method should also upload into a repository (usually maven)
+  # - Note: most software packages are available as prebuilt distributions, in which case no implementation is required
+  #
+  function api_package_build() { print_if_debug "api_package_build not used" ; }
+  
+  #
+  # Use this for getting binary packages - either prebuilt by distributions (tomcat, mongodb, cassandra,etc.)
+  #   or built using buildAdditionalPackages() above
+  #   Note that CSAP deploy will invoke this on the primary host selected during deployment, and then automatically
+  #   - synchronize the csapPackageDependencies to all the other hosts (via local network copy) for much faster distribution
+  #
+  function api_package_get() {
+    print_if_debug "api_package_build not used" ;
+  }
+  
+  #
+  # CSAP agent will always kill -9 after this command
+  #
+  #
+  function api_service_kill() { print_if_debug "api_service_kill not used" ; }
+  
+  #
+  # CSAP agent will always kill -9 after this command. For data sources - it is recommended to use the
+  # shutdown command provided by the stack to ensure caches, etc. are flushed to disk.
+  #
+  function api_service_stop() { print_if_debug "STOP not used" ; }
+  
+  
+  #
+  # Note: commands should be launched in the background
+  #
+  function api_service_start() {
+  
+  
+    if ! test -d "$csapLogDir" ; then
+    		print_two_columns "creating logs" "in $csapLogDir, and linking /var/log/messages"
+    		mkdir --parents $csapLogDir
+  	fi ;
+  
+  	local testScript="$csapResourceFolder/common/fio-tester.sh"
+  	chmod 755 $testScript
+  	launch_background "$testScript" "" "$csapLogDir/_$csapName-output.log"
+  
+  	print_two_columns "Note" "Test will end automatically: creating csap stop file to prevent alerts: '$csapStopFile'";
+    touch $csapStopFile
+  }
+
+
+
+
+---
+#
+# fio functions
+#
+operator: create
+target: resources/fio/common/fio-tester.sh
+
+content: |
+  #!/bin/bash
+  
+  source $CSAP_FOLDER/bin/csap-environment.sh
+  
+  #
+  #   References:
+  #   - docker options: docker-dev-artifactory.yourcompany.com/csapplatform/fio
+  #   - scenarios: https://fio.readthedocs.io/en/latest/fio_doc.html
+  #
+  #   Invokation NOtes
+  #   if invoked from csap-job-run.sh will source csap-environment.sh, which includes all the helper functions and service variables
+  #   - ref: $CSAP_FOLDER/bin/csap-environment.sh
+  #   - ref: https://github.com/csap-platform/csap-core/wiki/Service-Definition#runtime-variables
+  #
+  
+  print_section "Service Runner: $csapName"
+  
+  
+  
+  function setup() {
+  
+    # fio ouput parsed with jq
+    install_if_needed jq ; 
+    install_if_needed bc ; 
+  
+    # print_command "environment variables" "$(env)"
+  
+  	testProfile=${testProfile:-randomReadWrite} ;
+    print_two_columns "testProfile" "$testProfile"
+  
+  	readPercent=${readPercent:-70} ;
+    print_two_columns "readPercent" "$readPercent"
+  
+  	ioDepth=${ioDepth:-16} ;
+    print_two_columns "ioDepth" "$ioDepth"
+  
+  
+  	export timeToRunInSeconds=${timeToRunInSeconds:-120} ;
+    print_two_columns "timeToRunInSeconds" "$timeToRunInSeconds"
+  
+  
+  	blockSizesInKb=${blockSizesInKb:-4 8 16} ;
+    print_two_columns "blockSizesInKb" "$blockSizesInKb"
+  
+  	testSizeInG=${testSizeInG:-1} ;
+    print_two_columns "testSizeInG" "$testSizeInG"
+  
+  	threadIterations=${threadIterations:-1 2 4 } ;
+    print_two_columns "threadIterations" "$threadIterations"
+  
+  
+    fioImage=${fioImage:-default} ;
+    if [[ "$fioImage" == "default" ]] ; then
+      fioImage="csapplatform/fio:latest"
+      if [[ "$(hostname --long)" == *hostx.yourcompany ]] ; then fioImage="docker-dev-artifactory.yourcompany.com/csapplatform/fio:latest" ; fi
+    fi ;
+    print_two_columns "fioImage" "$fioImage"
+  
+  
+    reportsFolder="$csapLogDir/reports" ;
+    if ! test -d reportsFolder ; then
+      print_two_columns "reportsFolder" "$(mkdir --verbose --parents $reportsFolder)"
+    fi ;
+  
+    latestLogFile="$reportsFolder/fio-latest.log" ;
+    print_two_columns "latestLogFile" "$latestLogFile"
+    backup_file $latestLogFile
+  
+  
+    wordPadding=12 ;
+  
+    local verbose=false ;
+    append_file "# generated by fio-tester.sh" $latestLogFile $verbose
+  
+  
+  }
+  
+  
+  setup ;
+  
+  
+  
+  function run_fio() {
+  
+    local containerName="$1"
+    local blockSizeInKb="$2"
+    local fioParameters="$3"
+  
+    local startSeconds=$(date +%s) ;
+  
+    local dockerParameters="run --name=$containerName --rm=true" ;
+  
+    run_using_root "echo -e '\nMemory Before:' && free -h && sync && echo 3 > /proc/sys/vm/drop_caches && echo -e '\n\nMemory After:' && free -h "
+  
+    print_command "docker command" "$(echo "docker $dockerParameters \\"; echo "  $fioImage  \\"; echo "  $fioParameters" )"
+  
+    #print_separator "START: $args output"
+    print_two_columns "fioParameters" "$fioParameters" ;
+    print_two_columns "Starting fio" "output is being captured and will be printed after completion" ;
+    local fioReport=$(docker $dockerParameters --env parameters="$fioParameters" $fioImage)
+  
+    print_command "report completed" "$fioReport"
+  
+    local fioJsonOutput=$(trimmed_text "$fioReport") ;
+    # print_command "fioJsonOutput" "$fioJsonOutput"
+  
+    local ms=$(echo $fioJsonOutput | jq '.jobs[0].job_runtime')
+    local timeInSeconds=$(echo "scale=1;$ms/1000" | bc --mathlib) ; # $(bc <<< $ms/1000) ;
+  
+  
+    local totalDiskInGb=$testSizeInG ;
+  
+    local jobCount=$(echo $fioJsonOutput | jq '.jobs[0]."job options".numjobs | tonumber') ;
+    local threads=$jobCount ;
+  
+  
+    local diskReadIos=$(echo $fioJsonOutput | jq '.disk_util[0].read_ios') ;
+    local diskWriteIos=$(echo $fioJsonOutput | jq '.disk_util[0].write_ios') ;
+  
+  
+  
+    local jobId=".jobs[]" ;
+  
+    local readIops=$(echo $fioJsonOutput | jq "[ $jobId.read.iops ] | add") ;
+    readIops=$(echo "scale=0;$readIops/1" | bc --mathlib) ;
+    local readBw=$(echo $fioJsonOutput | jq "[ $jobId.read.bw ] | add") ;
+    local readLatencyMs=$(echo $fioJsonOutput | jq "[ $jobId.read.lat_ns.mean ] | add / length / 1000000 | round") ;
+  
+    local writeIops=$(echo $fioJsonOutput | jq "[ $jobId.write.iops ] | add") ;
+    writeIops=$(echo "scale=0;$writeIops/1" | bc --mathlib) ;
+    local writeBw=$(echo $fioJsonOutput | jq "[ $jobId.write.bw ] | add") ;
+    local writeLatencyMs=$(echo $fioJsonOutput | jq "[ $jobId.write.lat_ns.mean ] | add / length / 1000000 | round") ;
+  
+    # local readIops=$(echo $fioJsonOutput | jq "$jobId.read.iops") ;
+    # local readBw=$(echo $fioJsonOutput | jq "$jobId.read.bw") ;
+  
+    # local writeIops=$(echo $fioJsonOutput | jq "$jobId.write.iops") ;
+    # local writeBw=$(echo $fioJsonOutput | jq "$jobId.write.bw") ;
+  
+    local endSeconds=$(date +%s) ;
+    local osTimeInSeconds=$(( $endSeconds - $startSeconds ));
+  
+    local reportLine=$(formatLine $wordPadding "$threads $blockSizeInKb $readIops $readBw $readLatencyMs $writeIops $writeBw $writeLatencyMs $diskReadIos $diskWriteIos $osTimeInSeconds $totalDiskInGb") 
+    print_two_columns "extracted data" "$reportLine"
+  
+    print_two_columns "time taken" "real $osTimeInSeconds seconds, fio $timeInSeconds seconds"
+  
+    append_line "$reportLine"
+  
+  
+  }
+  
+  function printReportHeader() {
+  
+    local testLabel="$*"
+  
+    append_line ""
+    append_line ""
+    append_line "#"
+    append_line "# test: $testLabel"
+    append_line "#"
+    local headerLine=$(formatLine $wordPadding "threads blockSizeKb readIops readBwMbPerS readMs writeIops writeBwMbPs writeMs diskReadIos diskWriteIos timeInSec totalDiskGb")
+    append_line "$headerLine"
+  
+  }
+  
+  #
+  # randrw, readwrite(sequential), read, write, randread, randwrite
+  #
+  function randomReadWrite() {
+  
+  	print_section "randomReadWrite"
+  
+  	printReportHeader "randomReadWrite"
+  
+  	testContainerName="$csapName" ;
+  
+  # 	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  
+    local threadCount
+    local fioParameters
+  
+  
+  
+    for threadCount in $threadIterations ; do
+  
+      for blockSize in $blockSizesInKb ; do
+    	  fioParameters="--name=random-read-write --time_based --runtime=$timeToRunInSeconds"
+    	  fioParameters="$fioParameters --bs=${blockSize}k --size=${testSizeInG}g  --rw=randrw --rwmixread=$readPercent"
+    	  fioParameters="$fioParameters --ioengine=posixaio  --numjobs=$threadCount  --iodepth=$ioDepth  --end_fsync=1" ;
+    	  fioParameters="$fioParameters --output-format=json" ;
+  
+  
+    	  run_fio "$testContainerName" "$blockSize" "$fioParameters" ;
+  
+        delay_with_message 60 "Spacing reports to ensure collection result captured"
+  
+      done ;
+    done ;
+  
+    delay_with_message 120 "Run Completed - Final Spacing delay"
+  
+  
+  
+  
+    print_with_date "Test Completed"
+  }
+  
+  function perfSuite() {
+  
+    local fio_test_types="read randread write randwrite randrw"
+    local fio_max_time_limit=300
+  
+  	# Set to 1 to use non-buffered IO, 0 to use buffered IO
+  	# Default: 1
+  	fio_direct_io=1
+  
+  	print_section "perf Test Suite"
+  
+  	testContainerName="$csapName" ;
+  
+  # 	local sysBenchOltp="/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run" ;
+  
+    local threadCount
+    local fioParameters
+  
+  
+    for blockSize in $blockSizesInKb ; do
+  
+      for fioTest in $fio_test_types ; do
+  
+        printReportHeader "fio mode: $fioTest  blockSize: ${blockSize}k"
+  
+        for threadCount in $threadIterations ; do
+  
+      	  fioParameters="--name=random-read-write --runtime=$(( $timeToRunInSeconds*1  ))"
+      	  fioParameters="$fioParameters --bs=${blockSize}k --size=$(( $testSizeInG*1  ))g --rw=$fioTest --direct=$fio_direct_io"
+  
+      	  if [[ "$fioTest" == "randrw" ]] ; then
+      	    fioParameters="$fioParameters --rwmixread=$readPercent"
+      	  fi
+  
+      	  fioParameters="$fioParameters --ioengine=posixaio  --numjobs=$threadCount  --iodepth=$ioDepth  --end_fsync=1" ;
+      	  fioParameters="$fioParameters --output-format=json" ;
+  
+  
+      	  run_fio "$testContainerName" "$blockSize" "$fioParameters" ;
+  
+          delay_with_message $(( $timeToRunInSeconds/2  )) "Spacing reports to ensure collection result captured"
+  
+        done ;
+      done ;
+    done ;
+  
+    delay_with_message $(( $timeToRunInSeconds/2  )) "Run Completed - Final Spacing delay"
+  
+  
+  
+  
+  }
+  
+  # /usr/share/sysbench/tests/include/oltp_legacy/csap-oltp.lua
+  
+  function perform_operation() {
+  
+  
+    local startSeconds=$(date +%s) ;
+  
+  	case "$testProfile" in
+  
+  		"randomReadWrite" | "default")
+  			randomReadWrite
+  			perfSuite
+  			;;
+  
+  		 *)
+  	            echo "Command Not found"
+  	            exit 1
+  	esac
+  
+  
+    latestCsvFile="$reportsFolder/fio-latest.csv" ;
+    print_two_columns "latestCsvFile" "$latestCsvFile"
+    backup_file $latestCsvFile
+  
+    cat $latestLogFile | awk '{$1=$1};1' | sed 's/  */,/g' > $latestCsvFile
+  
+  
+    local endSeconds=$(date +%s) ;
+  
+    print_with_date "Test Completed: $(( ( $endSeconds - $startSeconds) / 60   )) minutes"
+  
+  }
+  
+  perform_operation
+
+
+
+#---
+#
+# Sample: Creating a file, path is relative to csap-platfrom/definition
+#
+#operator: create
+#target: scripts/hi.sh
+#
+#content: |
+#  #!/bin/bash
+#  echo "hi"
+
+
+#---
+##
+##  Docker Repository
+##
+#operator: create
+#
+#target: resources/docker/common/configuration/daemon.json
+#
+#exec-opts: ["native.cgroupdriver=systemd"]
+#  
+#registry-mirrors: ["http://docker.$hostDomain"]
+#insecure-registries: [ "demo-xxx-docker.$hostDomain", "docker.$hostDomain" ]
+#storage-driver: "overlay2"
+#data-root: "/var/lib/docker"
+#hosts: [ "unix:///var/run/docker.sock" ]
+#log-driver: "json-file"
+#log-opts: 
+#  max-size: "44m"
+#  max-file: "1"
+

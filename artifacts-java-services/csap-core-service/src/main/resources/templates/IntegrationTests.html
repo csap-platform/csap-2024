@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head>
+
+	<title th:inline="text">[[ ${ pageName } ]]</title>
+
+	<script th:replace="~{ csap/fragments/csap-module-includes :: pageContent }"></script>
+
+
+
+	<script th:src="@{/js/modules/utils/table-test-page.js}"
+			type="module"></script>
+
+	<script th:replace="~{ csap-constants-include :: includeSection }"></script>
+
+
+</head>
+
+
+<body th:inline="text"
+	  class="csap-scrollable theme-dark theme-metal test-page">
+
+	<header th:replace="~{ csap/fragments/page :: header }"></header>
+
+
+	<article class=content>
+
+		<div class=csap-white
+			 id=index></div>
+
+		<div th:replace="~{ tests/agent :: pageContent }"></div>
+
+		<div th:replace="~{ tests/technology }"></div>
+
+
+	</article>
+
+
+	<footer th:replace="~{ csap/fragments/page :: footer }"></footer>
+</body>
+
+</html>

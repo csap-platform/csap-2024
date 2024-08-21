@@ -1,0 +1,5 @@
+template dockerPoms: 'mongo/pom.xml', 
+    enableParentVersion: true,
+    enableVersion: true,
+    enableTag: true,
+    defaultTag: 'csap-images-mongo'

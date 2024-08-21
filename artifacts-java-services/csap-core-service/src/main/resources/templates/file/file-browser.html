@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<title th:inline="text">[[ ${ host } ]] Files</title>
+
+	<script th:replace="~{ csap-constants-include :: includeSection }"></script>
+
+	<script th:replace="~{ csap/fragments/csap-module-includes :: pageContent }"></script>
+
+	<script th:inline="javascript"
+			type="module">
+
+
+				window.FM_SETTINGS = {
+					container: /*[[ ${ containerName } ]]*/ null,
+					docker: /*[[ ${ dockerBase } ]]*/ null,
+					user: /*[[ ${ user } ]]*/ null,
+					folder: /*[[ ${ fromFolder }  ]]*/ null
+				}
+
+			</script>
+
+
+	<link th:href="@{ ${csapApp.versionedUrl('/js/file/file-browser.css')} }"
+		  rel="stylesheet"
+		  type="text/css"
+		  media="screen" />
+
+
+	<script type="module"
+			th:src=" @{ ${ @mvcResourceUrlProvider.getForLookupPath('/js/modules/browser/file/host-file-manager.js')} }"></script>
+
+	<!-- <script
+	th:attr="data-main=@{ ${csapApp.requiresUrl('/js/modules/file/host-file-manager.js')}   }"
+	th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script> -->
+
+</head>
+
+
+
+<body class="stand-alone csap-scrollable theme-dark agent">
+
+	<article id="loading-project-message">
+		<div class=loading-message-large>Loading Application</div>
+	</article>
+
+
+	<div class="csap-scrollable csap-file-browser">
+
+		<header class=related>
+			<span>
+				<span class=fb-title></span>
+				<button title="toggle display of editor"
+						class="csap-button-icon toggle-editor">&nbsp;</button>
+			</span>
+
+
+			<span class="resourceConfig browser-mode">
+
+				<label>Sort: </label>
+
+				<label class="radio"
+					   title="Sort using file name">
+					<input class="file-sort-type"
+						   type="radio"
+						   name="sortRadio"
+						   value="sort-by-name"
+						   checked="checked" />
+					Name
+				</label>
+
+				<label class="radio"
+					   title="Sort using file size">
+					<input class="file-sort-type"
+						   type="radio"
+						   name="sortRadio"
+						   value="sort-by-size" />
+					Size
+				</label>
+
+				<label style="margin-left: 2em"
+					   title="issue linux du command to calculate disk usage for folders. Very large folders may time out - use CSAP shell to run command.">
+					Folder Size:
+					<input class="showDu"
+						   type="checkbox" />
+				</label>
+
+
+
+				<!-- 	
+				<label title="Show file size and date. Open and close folder to update">
+					Details:
+					<input
+						class="showMeta"
+						type="checkbox"
+						checked="checked" />
+				</label>
+			<label
+					class="radio"
+					title="folders are lazy loaded and results saved. Uncheck to hit server every time.">
+					Cache:
+					<input
+						class="cacheResults"
+						type="checkbox" />
+				</label> -->
+			</span>
+
+			<span class="browser-mode flex-right">
+				<label
+					   title="Use host ls command to view extended output. If permitted, root privilege to browse file system">
+					OS list:
+					<input class="useRoot"
+						   type="checkbox" />
+				</label>
+
+
+			</span>
+
+			<div class="csap-white usage-note browser-mode">
+
+				<button class="csap-icon csap-remove"></button>
+				<span>Usage:</span>
+				<ul>
+					<li>After selecting a file or folder, select the menu icon to view commands</li>
+					<li>Double clicking on a file will open it in the editor</li>
+					<li>items not accessable using csap user permissions will be updated using <a class="csap-link"
+						   target="_blank"
+						   href="https://www.computerhope.com/unix/usetfacl.htm">linux setfacl</a> .
+						restore_filesystem_acls can be run
+						using the csap script runner to remove if desired
+					</li>
+				</ul>
+
+			</div>
+
+
+			<span class=file-operations>
+
+				<button class="csap-button-icon csap-download save-file-button file-mode csap-alt-colors"
+						title="(ctrl-s) save changes to file - enabled after changes are made">Save</button>
+
+				<button class="csap-button autoplay-file-button file-mode"
+						title="autoplay preview">&nbsp;</button>
+
+				<label class="file-mode csap-form-inline"
+					   title="Select file to be edited">
+					<span>File:</span>
+
+					<select id=files-in-editor
+							title="ctrl-r to reload, ctrl-e to open next file"
+							class=file-mode>
+					</select>
+					
+				</label>
+
+				<!--
+				<label class="file-mode" style="display: none">
+					User:
+					<select class="edit-as-user"
+							title="File will be chowned to the selected user">
+						<option th:each="osUser : ${osUsers}"
+								th:value="${ osUser }"
+								th:text="${ osUser }">will be replaced</option>
+
+					</select>
+				</label>
+				-->
+
+
+				<label class="file-mode csap-form-inline"
+					   title="Editor modes: select to override detected">
+					<select class="fb-editor-mode" style="max-width: 5em">
+						<option value="default">mode...</option>
+						<option value="ace/mode/sh">sh</option>
+						<option value="ace/mode/json">json</option>
+						<option value="ace/mode/properties">Properties</option>
+						<option value="ace/mode/yaml">YAML</option>
+						<option value="ace/mode/abap">ABAP</option>
+						<option value="ace/mode/abc">ABC</option>
+						<option value="ace/mode/actionscript">ActionScript</option>
+						<option value="ace/mode/ada">ADA</option>
+						<option value="ace/mode/alda">Alda</option>
+						<option value="ace/mode/apache_conf">Apache Conf</option>
+						<option value="ace/mode/apex">Apex</option>
+						<option value="ace/mode/aql">AQL</option>
+						<option value="ace/mode/asciidoc">AsciiDoc</option>
+						<option value="ace/mode/asl">ASL</option>
+						<option value="ace/mode/assembly_x86">Assembly x86</option>
+						<option value="ace/mode/autohotkey">AutoHotkey / AutoIt</option>
+						<option value="ace/mode/batchfile">BatchFile</option>
+						<option value="ace/mode/c_cpp">C and C++</option>
+						<option value="ace/mode/c9search">C9Search</option>
+						<option value="ace/mode/cirru">Cirru</option>
+						<option value="ace/mode/clojure">Clojure</option>
+						<option value="ace/mode/cobol">Cobol</option>
+						<option value="ace/mode/coffee">CoffeeScript</option>
+						<option value="ace/mode/coldfusion">ColdFusion</option>
+						<option value="ace/mode/crystal">Crystal</option>
+						<option value="ace/mode/csharp">C#</option>
+						<option value="ace/mode/csound_document">Csound Document</option>
+						<option value="ace/mode/csound_orchestra">Csound</option>
+						<option value="ace/mode/csound_score">Csound Score</option>
+						<option value="ace/mode/css">CSS</option>
+						<option value="ace/mode/curly">Curly</option>
+						<option value="ace/mode/d">D</option>
+						<option value="ace/mode/dart">Dart</option>
+						<option value="ace/mode/diff">Diff</option>
+						<option value="ace/mode/dockerfile">Dockerfile</option>
+						<option value="ace/mode/dot">Dot</option>
+						<option value="ace/mode/drools">Drools</option>
+						<option value="ace/mode/edifact">Edifact</option>
+						<option value="ace/mode/eiffel">Eiffel</option>
+						<option value="ace/mode/ejs">EJS</option>
+						<option value="ace/mode/elixir">Elixir</option>
+						<option value="ace/mode/elm">Elm</option>
+						<option value="ace/mode/erlang">Erlang</option>
+						<option value="ace/mode/forth">Forth</option>
+						<option value="ace/mode/fortran">Fortran</option>
+						<option value="ace/mode/fsharp">FSharp</option>
+						<option value="ace/mode/fsl">FSL</option>
+						<option value="ace/mode/ftl">FreeMarker</option>
+						<option value="ace/mode/gcode">Gcode</option>
+						<option value="ace/mode/gherkin">Gherkin</option>
+						<option value="ace/mode/gitignore">Gitignore</option>
+						<option value="ace/mode/glsl">Glsl</option>
+						<option value="ace/mode/gobstones">Gobstones</option>
+						<option value="ace/mode/golang">Go</option>
+						<option value="ace/mode/graphqlschema">GraphQLSchema</option>
+						<option value="ace/mode/groovy">Groovy</option>
+						<option value="ace/mode/haml">HAML</option>
+						<option value="ace/mode/handlebars">Handlebars</option>
+						<option value="ace/mode/haskell">Haskell</option>
+						<option value="ace/mode/haskell_cabal">Haskell Cabal</option>
+						<option value="ace/mode/haxe">haXe</option>
+						<option value="ace/mode/hjson">Hjson</option>
+						<option value="ace/mode/html">HTML</option>
+						<option value="ace/mode/html_elixir">HTML (Elixir)</option>
+						<option value="ace/mode/html_ruby">HTML (Ruby)</option>
+						<option value="ace/mode/ini">INI</option>
+						<option value="ace/mode/io">Io</option>
+						<option value="ace/mode/jack">Jack</option>
+						<option value="ace/mode/jade">Jade</option>
+						<option value="ace/mode/java">Java</option>
+						<option value="ace/mode/javascript">JavaScript</option>
+						<option value="ace/mode/json">JSON</option>
+						<option value="ace/mode/json5">JSON5</option>
+						<option value="ace/mode/jsoniq">JSONiq</option>
+						<option value="ace/mode/jsp">JSP</option>
+						<option value="ace/mode/jssm">JSSM</option>
+						<option value="ace/mode/jsx">JSX</option>
+						<option value="ace/mode/julia">Julia</option>
+						<option value="ace/mode/kotlin">Kotlin</option>
+						<option value="ace/mode/latex">LaTeX</option>
+						<option value="ace/mode/less">LESS</option>
+						<option value="ace/mode/liquid">Liquid</option>
+						<option value="ace/mode/lisp">Lisp</option>
+						<option value="ace/mode/livescript">LiveScript</option>
+						<option value="ace/mode/logiql">LogiQL</option>
+						<option value="ace/mode/lsl">LSL</option>
+						<option value="ace/mode/lua">Lua</option>
+						<option value="ace/mode/luapage">LuaPage</option>
+						<option value="ace/mode/lucene">Lucene</option>
+						<option value="ace/mode/makefile">Makefile</option>
+						<option value="ace/mode/markdown">Markdown</option>
+						<option value="ace/mode/mask">Mask</option>
+						<option value="ace/mode/matlab">MATLAB</option>
+						<option value="ace/mode/maze">Maze</option>
+						<option value="ace/mode/mediawiki">MediaWiki</option>
+						<option value="ace/mode/mel">MEL</option>
+						<option value="ace/mode/mixal">MIXAL</option>
+						<option value="ace/mode/mushcode">MUSHCode</option>
+						<option value="ace/mode/mysql">MySQL</option>
+						<option value="ace/mode/nginx">Nginx</option>
+						<option value="ace/mode/nim">Nim</option>
+						<option value="ace/mode/nix">Nix</option>
+						<option value="ace/mode/nsis">NSIS</option>
+						<option value="ace/mode/nunjucks">Nunjucks</option>
+						<option value="ace/mode/objectivec">Objective-C</option>
+						<option value="ace/mode/ocaml">OCaml</option>
+						<option value="ace/mode/pascal">Pascal</option>
+						<option value="ace/mode/perl">Perl</option>
+						<option value="ace/mode/perl6">Perl 6</option>
+						<option value="ace/mode/pgsql">pgSQL</option>
+						<option value="ace/mode/php">PHP</option>
+						<option value="ace/mode/php_laravel_blade">PHP (Blade Template)</option>
+						<option value="ace/mode/pig">Pig</option>
+						<option value="ace/mode/powershell">Powershell</option>
+						<option value="ace/mode/praat">Praat</option>
+						<option value="ace/mode/prisma">Prisma</option>
+						<option value="ace/mode/prolog">Prolog</option>
+						<option value="ace/mode/properties">Properties</option>
+						<option value="ace/mode/protobuf">Protobuf</option>
+						<option value="ace/mode/puppet">Puppet</option>
+						<option value="ace/mode/python">Python</option>
+						<option value="ace/mode/qml">QML</option>
+						<option value="ace/mode/r">R</option>
+						<option value="ace/mode/razor">Razor</option>
+						<option value="ace/mode/rdoc">RDoc</option>
+						<option value="ace/mode/red">Red</option>
+						<option value="ace/mode/rhtml">RHTML</option>
+						<option value="ace/mode/rst">RST</option>
+						<option value="ace/mode/ruby">Ruby</option>
+						<option value="ace/mode/rust">Rust</option>
+						<option value="ace/mode/sass">SASS</option>
+						<option value="ace/mode/scad">SCAD</option>
+						<option value="ace/mode/scala">Scala</option>
+						<option value="ace/mode/scheme">Scheme</option>
+						<option value="ace/mode/scss">SCSS</option>
+						<option value="ace/mode/sh">SH</option>
+						<option value="ace/mode/sjs">SJS</option>
+						<option value="ace/mode/slim">Slim</option>
+						<option value="ace/mode/smarty">Smarty</option>
+						<option value="ace/mode/snippets">snippets</option>
+						<option value="ace/mode/soy_template">Soy Template</option>
+						<option value="ace/mode/space">Space</option>
+						<option value="ace/mode/sql">SQL</option>
+						<option value="ace/mode/sqlserver">SQLServer</option>
+						<option value="ace/mode/stylus">Stylus</option>
+						<option value="ace/mode/svg">SVG</option>
+						<option value="ace/mode/swift">Swift</option>
+						<option value="ace/mode/tcl">Tcl</option>
+						<option value="ace/mode/terraform">Terraform</option>
+						<option value="ace/mode/tex">Tex</option>
+						<option value="ace/mode/text">Text</option>
+						<option value="ace/mode/textile">Textile</option>
+						<option value="ace/mode/toml">Toml</option>
+						<option value="ace/mode/tsx">TSX</option>
+						<option value="ace/mode/twig">Twig</option>
+						<option value="ace/mode/typescript">Typescript</option>
+						<option value="ace/mode/vala">Vala</option>
+						<option value="ace/mode/vbscript">VBScript</option>
+						<option value="ace/mode/velocity">Velocity</option>
+						<option value="ace/mode/verilog">Verilog</option>
+						<option value="ace/mode/vhdl">VHDL</option>
+						<option value="ace/mode/visualforce">Visualforce</option>
+						<option value="ace/mode/wollok">Wollok</option>
+						<option value="ace/mode/xml">XML</option>
+						<option value="ace/mode/xquery">XQuery</option>
+						<option value="ace/mode/yaml">YAML</option>
+						<option value="ace/mode/zeek">Zeek</option>
+						<option value="ace/mode/django">Django</option>
+					</select>
+				</label>
+
+				<button title="Preview MarkDown" class="file-mode preview-file-button csap-button-icon csap-play csap-alt-colors">Preview</button>
+
+
+				<label class="file-mode csap-form-inline"
+					   title="Skip backups: content will be cat direct into existing file">
+					<span>Skip:</span>
+					<input class="preserve-permissions"
+						   type="checkbox" />
+				</label>
+			</span>
+
+			<span class="file-mode">
+				<span th:replace="~{ /file/ace-settings :: pageContent }"></span>
+			</span>
+
+			<span class="flex-right file-mode">
+				<span id=file-size></span>
+				<button class="csap-button-icon launch-window edit-in-new-window "
+						title="Edit in a new window">&nbsp;</button>
+			</span>
+
+
+			<input class="copy-buffer browser-mode"
+				   title="last opened item (click to copy to clipboard" />
+
+			<span class="copy-buffer-message">Copied path to clip board</span>
+
+
+		</header>
+
+
+		<section>
+			<article class="content">
+
+
+				<button title="Add filesystem links to explore more of filesystem"
+						class="browser-mode csap-button-small-icon csap-list show-csap-shortcuts">add default
+					shortcuts</button>
+
+				<div class="file-browser"
+					 title="After selecting a file or folder, right mouse click on text to view command menu"></div>
+
+				<pre class="file-viewer-text">loading</pre>
+
+			</article>
+		</section>
+
+		<div class="csap-button-menu file-menu">
+
+			<button class="close-menu csap-icon csap-remove"
+					data-command="close"></button>
+
+			<span class=auto-play>
+				<a class="csap-link"
+				   target="_blank"
+				   th:href="${@applicationConfiguration.getHelpUrl('autoplay-help') }">CSAP Autoplay</a>
+			</span>
+			<button class="csap-button preview auto-play auto-preview"
+					title="creates a preview folder containing results of autoplay"
+					data-command="auto-play-preview">Preview</button>
+			<button class="csap-button preview auto-play"
+					title="creates a preview folder containing results of autoplay"
+					data-command="auto-play-apply">Apply</button>
+
+			<span>File Options</span>
+			<button class="csap-button edit"
+					data-command="edit">Edit</button>
+			<button class="csap-button download"
+					data-command="download">Download</button>
+			<button class="csap-button monitor"
+					data-command="monitor">Monitor (tail -f)</button>
+			<button class="csap-button browser"
+					data-command="browser">Open In Browser</button>
+			<span>Commands</span>
+			<button class="csap-button copy"
+					data-command="copy">Copy/Move/Rename ...</button>
+			<button class="csap-button delete"
+					data-command="delete">Delete ...</button>
+			<button class="csap-button run"
+					data-command="run">Run ...</button>
+			<button class="csap-button search" title="advanced search with lots of options"
+					data-command="search">Search</button>
+			<button class="csap-button grep"
+					data-command="grep">grep</button>
+
+			<button class="csap-button upload"
+					data-command="sync">Sync to hosts</button>
+
+		</div>
+
+
+
+
+		<div class="csap-button-menu folder-menu">
+
+			<button class="close-menu csap-icon csap-remove"
+					data-command="close"></button>
+
+
+			<span>Folder Options</span>
+			<button class="csap-button collapse"
+					title="selected folder will be moved to top level"
+					data-command="collapse">Collapse to folder</button>
+			<button class="csap-button browser"
+					data-command="new-browser">Open new file browser</button>
+
+
+			<span>Commands</span>
+			<button class="csap-button new"
+					data-command="new-item">New File/Folder ...</button>
+			<button class="csap-button copy"
+					data-command="copy">Copy/Move/Rename ...</button>
+			<button class="csap-button delete"
+					data-command="delete">Delete ...</button>
+			<button class="csap-button run"
+					data-command="run">Run ...</button>
+			<button class="csap-button search" title="advanced search with lots of options"
+					data-command="search">Search</button>
+			<button class="csap-button grep"
+					data-command="grep">grep</button>
+			<button class="csap-button upload"
+					data-command="upload">Upload</button>
+
+			<button class="csap-button upload"
+					data-command="sync">Sync to hosts</button>
+
+		</div>
+
+
+
+		<aside>
+
+			<div class=disk-paths>
+				<input th:each="pathEntry : ${ diskPathsForTips }"
+					   th:class="${ pathEntry.key}"
+					   th:value="${ pathEntry.value}" />
+			</div>
+
+			<div id=auto-play-confirmation>
+				<div class=auto-play-header>
+					Applying autoplay can leave system in a unmanaged state. Verify configuration prior to applying.
+
+					<div class=quote>Autoplay configuration will be processed on the primary host, then editor apply
+						will be done
+						to sync across all application hosts</div>
+
+				</div>
+			</div>
+
+			<div id=auto-play-pass>
+				<div class=auto-play-header>No errors or warnings found - review output to ensure desired application
+					was
+					created.</div>
+			</div>
+
+			<div id=auto-play-fail>
+				<div class=auto-play-header>Errors and/or warnings were found after applying autoplay file.</div>
+			</div>
+
+			<div class="jsTemplates">
+
+				<div class="filterControls"
+					 title='one or more comma separated patterns to filter files(Logical OR).
+								&#013; Optional: prefix with "dir:" or "file:"
+								&#013; Optional: "not:" pattern may be used to negate match'>
+					<input class="listing-filter"
+						   placeholder="comma separated filter(s)" />
+				</div>
+
+				<button class="csap-icon tool-menu csap-menu"
+						title="show operation menu: operations will be performed on selected items"></button>
+
+				<button title="simple delete using default user"
+						class="csap-icon delete-items"></button>
+
+
+
+				<div class="file-system-dialog fb-dialog">
+
+					<label class="csap-form">
+						<span> Working Folder: </span>
+						<div class="file-system-working-folder noteAlt"></div>
+
+					</label>
+
+
+					<label class="csap-form">
+						<span> Use root: </span>
+						<input class="show-root-warning file-system-use-root"
+							   type="checkbox" />
+					</label>
+
+					<div class="file-system-operations">
+						<div class="file-system-rename-items">
+							<label class="csap-form">
+
+								<span> Target: </span>
+								<input class="file-system-new-name"
+									   placeholder="/path/to/folder-or-file" />
+
+							</label>
+							<label class="csap-form-inline">
+								<span>Rename:</span>
+								<input class="file-system-use-rename"
+									   type="checkbox" />
+								<span class="comment">Unless rename is checked - item will be copied</span>
+							</label>
+
+
+						</div>
+
+						<div class="file-system-delete-items">
+							<label class="csap-form">
+
+								<span> Recursive: </span>
+								<input class="file-system-delete-recursive"
+									   type="checkbox" />
+
+							</label>
+							<div class="csap-grey" style="margin-top: 2em">
+								<button class="csap-button csap-alt-colors"
+										title="Advanced Window">Advanced</button>
+								enables item(s) to be deleted on one or more hosts in a single request
+							</div>
+						</div>
+
+						<div class="file-system-new-items">
+								<label class="csap-form">
+
+									<span> Folder(s): </span>
+									<input class="file-system-new-folder"
+										   placeholder="path/from/parent/folder" />
+
+								</label>
+								<label class="csap-form">
+
+									<span> File: </span>
+									<input class="file-system-new-file"
+										   placeholder="file-name.yml" />
+
+								</label>
+						</div>
+
+					</div>
+				</div>
+
+
+
+
+			</div>
+
+
+
+			<div class=dnd-upload>
+				<div class="title">
+					<label>
+						Upload to:
+						<span class="uploadToSpan"></span>
+					</label>
+					<label>
+						<input class="custom overWriteFile"
+							   type="checkbox"
+							   title="Enable to overwrite existing file" />
+						Overwrite
+					</label>
+
+					<button class="csap-button upload-advanced"
+							title="upload to one or more hosts, option to unzip">advanced</button>
+					<button class="csap-icon csap-remove hideUpload"
+							title="Close upload dialog"></button>
+				</div>
+				<div class="dropzone"></div>
+			</div>
+
+			<div class="preview-template">
+				<div class="dz-preview dz-file-preview">
+					<div class="dz-details">
+						<div class="dz-filename">
+							<span data-dz-name></span>
+						</div>
+						<div class="dz-size"
+							 data-dz-size></div>
+						<img data-dz-thumbnail />
+					</div>
+					<div class="dz-progress">
+						<span class="dz-upload"
+							  data-dz-uploadprogress></span>
+					</div>
+					<div class="dz-success-mark">
+						<span>
+							<img class="but"
+								 th:src="@{/images/16x16/internet-web-browser.png}">
+						</span>
+					</div>
+					<div class="dz-error-mark">
+						<span>
+							<img class="but"
+								 th:src="@{/images/16x16/internet-web-browser.png}">
+						</span>
+					</div>
+					<div class="dz-error-message">
+						<span data-dz-errormessage></span>
+					</div>
+				</div>
+			</div>
+
+
+		</aside>
+
+	</div>
+
+
+
+
+</body>
+
+</html>

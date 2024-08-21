@@ -1,0 +1,25 @@
+plugins {
+    id 'package-conventions'
+}
+
+distributions {
+    main {
+
+        contents {
+
+
+            into('/kubernetes-performance') {  // Contents of this directory are copied by default
+                from 'kubernetes-performance'
+                dirMode = 0755
+                fileMode = 0755
+            }
+            into('/docker-performance') {  // Contents of this directory are copied by default
+                from 'docker-performance'
+                dirMode = 0755
+                fileMode = 0755
+            }
+
+        }
+    }
+}
+

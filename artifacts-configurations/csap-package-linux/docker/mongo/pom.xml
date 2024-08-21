@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- -->
+	<!-- https://dmp.fabric8.io/#docker:push -->
+	<!-- -->
+	<parent>
+		<groupId>org.csap</groupId>
+		<artifactId>csap-images-parent</artifactId>
+		<version>2-SNAPSHOT</version>
+	</parent>
+
+	<packaging>pom</packaging>
+	<artifactId>csap-mongo</artifactId>
+	<version>latest</version>
+
+	<properties>
+		<mongo-name>csap/csap-mongo:${project.version}</mongo-name>
+		<mongo-filename>mongo-${project.version}.tar.gz</mongo-filename>
+
+		<docker.save.name>${mongo-name}</docker.save.name>
+		<docker.save.file>${basedir}/target/${mongo-filename}</docker.save.file>
+		<docker.run.log>${project.basedir}/target/run.log</docker.run.log>
+
+		<TEST_METRICS_DB_SIZE>2</TEST_METRICS_DB_SIZE>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+
+				<configuration>
+
+					<verbose>true</verbose>
+					
+					<dockerHost>${docker.host}</dockerHost>
+					<pushRegistry>${docker.push}</pushRegistry>
+					<pullRegistry>${docker.pull}</pullRegistry>
+
+					<images>
+						<image>
+							<name>${mongo-name}</name>
+							<alias>mongo</alias>
+							<build>
+								<contextDir>${project.basedir}/docker</contextDir>
+<!-- 								<dockerFile>${project.basedir}/docker/Dockerfile</dockerFile> -->
+								<cleanup>true</cleanup>
+							</build>
+							<run>
+								<env>
+									<MONGO_INITDB_ROOT_USERNAME>dataBaseReadWriteUser</MONGO_INITDB_ROOT_USERNAME>
+									<MONGO_INITDB_ROOT_PASSWORD>password</MONGO_INITDB_ROOT_PASSWORD>
+									<metricDbSizeInGb>${TEST_METRICS_DB_SIZE}</metricDbSizeInGb>
+								</env>
+								<wait>
+									<!--exit>0</exit -->
+									<!-- have to wait a while or image will time out after 60 seconds -->
+									<time>60000</time>
+									<log>MONGO CSAP COMPLETE</log>
+									<shutdown>5000</shutdown>
+								</wait>
+								<log>
+									<enabled>true</enabled>
+									<color>cyan</color>
+									<file>${docker.run.log}</file>
+								</log>
+							</run>
+						</image>
+					</images>
+					
+				</configuration>
+				
+			</plugin>
+			
+			
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<executable>${project.basedir}/tests/test_runner.sh</executable>
+					<arguments>
+						<argument>${docker.run.log}</argument>
+						<argument>${TEST_METRICS_DB_SIZE}</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

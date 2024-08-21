@@ -1,0 +1,79 @@
+
+
+about-csap-service.yaml: \
+  Any field in service definition can be selectively overridden
+  Copy desired item(s) from the specification tab
+  Alternately - the csap-auto-play can be used selectively to customize environments
+
+
+parameters: >-
+  -DzuluJava8  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=30 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms100G -Xmx100G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+
+
+#
+#  openjdk 17  -  Z Garbage Collector
+#
+parameters-open-z-12g: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true  
+  -XX:+UseZGC -Xms12G -Xmx12G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+  
+parameters-open-z-190g: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=100 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -XX:+UseZGC -Xms190G -Xmx190G -XX:MaxMetaspaceSize=192M 
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+
+
+#
+#  openjdk 17  -  G1 Garbage Collector
+#
+parameters-open-g1-8g: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -Xms8G -Xmx8G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+  
+parameters-open-g1-170g: >-
+  -DcsapJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=100 -DcsapTestInitThreadCount=10 -DcsapTestAllocJsonObjects=true
+  -Xms170G -Xmx170G -XX:MaxMetaspaceSize=192M
+  -DcsapNoSecurity -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+#
+#  ZING 8
+#
+parameters-zing8-10g: >-
+  -DzingJava8  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms10G -Xmx10G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+  
+parameters-zing-8-200gb: >-
+  -DzingJava8  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=120 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms200G -Xmx200G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company  
+
+
+
+
+#
+#  ZING 17
+#
+parameters-zing17-5g: >-
+  -DzingJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=1 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms10G -Xmx10G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company
+  
+parameters-zing-17-200gb: >-
+  -DzingJava17  -DcsapTestAllocKb=3 -DcsapTestAllocCountK=10
+  -DcsapTestInitAllocGb=120 -DcsapTestInitThreadCount=1 -DcsapTestAllocJsonObjects=true   -Xms200G -Xmx200G
+  -XX:MaxMetaspaceSize=192M -DcsapNoSecurity
+  -Dspring.profiles.active=CSAP_LIFE,services-embedded,company  
+
+

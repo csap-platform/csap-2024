@@ -1,0 +1,788 @@
+/*
+*
+*     graph layout
+*	
+*/
+
+
+body#graph-local article.content {
+	padding: 0;
+	margin: 0;
+	padding-top:15px
+}
+
+#graph-local div.scrolling-graphs {
+	height: 100%;
+	padding: 0;
+	overflow: hidden;
+}
+
+#graph-local div.scrolling-graphs>div {
+	padding: 0;
+	height: 100%;
+	margin: 0;
+	display: grid;
+	grid-template-rows: 2.5em auto;
+}
+
+#graph-local .hostContainer {
+	overflow: auto;
+}
+
+
+/*
+*
+*     graph options
+*	
+*/
+
+
+.graphOptions.flex-container {
+	align-items: flex-start;
+	column-gap: 3em;
+}
+
+.graphOptions.flex-container .flex-right-info select {
+	margin-right: 1em;
+}
+
+.graphOptions .graph-filter-label {
+	display: inline-flex;
+	align-items: center ;
+	column-gap: 5px;
+}
+.graphOptions input.graph-filter {
+	width: 7em;
+	text-align: center;
+}
+
+.graphOptions .graph-filter-label button.csap-icon {
+	visibility: hidden;
+	background-size: 22px 22px;
+	margin-right: 5px; 
+}
+
+.graphOptions select.layout-top {
+	width: 1em;
+	padding-left: 2.6em;
+	margin-right: 2em; 
+	background-size: 16px 16px;
+	background-repeat: no-repeat;
+	background-position: 5px center;
+}
+
+.graphOptions select.layout-top optgroup.report-views {
+	display: none;
+}
+
+.graphOptions .numDaysSelect {
+	height: 1.5em;
+}
+
+.graphOptions button.csap-icon {
+	background-size: 18px 18px;
+	min-width: 20px;
+	min-height: 20px;
+	padding-left: 22px;
+	font-style: italic;
+}
+.graphOptions button.csap-button-icon {
+	background-size: 18px 18px;
+	color: var(--icon-header-fg-color);
+	background-color: var(--icon-header-bg-color);
+	min-width: 20px;
+	min-height: 20px;
+	padding-left: 2em;
+	padding-right: 1em;
+}
+
+.graphOptions .close-menu {
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+}
+
+div.graph-display-options {
+	display: none;
+	position: absolute;
+	padding: 1em;
+	z-index: 92;
+	width: 60%;
+	top: 6em;
+	overflow: auto;
+	max-height: 90%;
+}
+
+div.graph-display-options .comment {
+	font-weight: normal;
+	font-style: italic;
+	color: grey;
+	font-size: 0.8em;
+	padding-left: 2em;
+}
+
+
+
+div.graph-display-options div.grid,
+div.graph-more-options div.grid {
+	display: grid;
+	grid-template-columns: 9em 12em minmax(15em, 1fr);
+	padding: 5px;
+	grid-column-gap: 2em;				
+	grid-row-gap: 2em;
+	margin-bottom: 2em;
+	align-items: baseline;
+	justify-items: left;
+}
+
+div.graph-display-options div.grid label,
+div.graph-more-options div.grid label {
+	justify-self: right;
+}
+
+div.graph-display-options .usage-notes,
+div.graph-more-options div.grid .usage-notes {
+	margin-top: 2em;
+}
+
+div.graphOptions button.csap-icon.tool-menu {
+	background-size: 16px 16px;
+	height: 20px;
+	width: 20px;
+}
+
+div.graphOptions button#show-mismatch-data {
+	margin-left: 2em;
+	background-size: 20px 20px;
+	background-color: var(--nav-active-background) ;
+	height: 20px;
+	width: 20px;
+	visibility: hidden;
+}
+
+
+.sliderContainer {
+	font-size: 10pt;
+	margin: 1em;
+	display: flex;
+	justify-content: space-between;
+}
+
+.sliderContainer button {
+	background-color: white;
+	line-height: 0.8em;
+	vertical-align: bottom;
+}
+
+.playTimelineButton img,
+.playTimelineBackButton img {
+	width: 16px;
+	height: 16px;
+}
+
+.playTimelineBackButton img {
+	transform: scaleX(-1);
+}
+
+label.slider,
+.desc {
+	font-weight: bold;
+	font-size: 0.7em;
+	font-style: italic;
+	margin: 0;
+}
+
+input.sliderTimeCurrent,
+input.sliderTimeStart {
+	border: 0;
+	color: var(--nav-link-color);
+	background-color: var(--nav-hover-background);
+	text-align: center;
+	font-style: italic;
+	width: 7em;
+	margin-right: 0em;
+	margin-left: 3px;
+	padding: 0;
+}
+
+.sliderContainer span.ui-slider-handle {
+	border-radius: 15px;
+	width: 1em;
+	height: 1em;
+	top: -.2em;
+	background-color: var(--nav-hover-background);
+	cursor: move;
+}
+
+.sliderContainer span.ui-slider-handle:hover {
+	background-color: var(--nav-active-color);
+}
+
+.refresh {
+	padding: 0;
+	margin: 0;
+	padding-left: 20px;
+	font-weight: normal;
+}
+
+
+
+a.showSettingsDialogButton,
+a.showSettingsDialogButton:hover {
+	display: inline;
+}
+
+a.showSettingsDialogButton img {
+	padding-right: 0;
+	vertical-align: middle;
+}
+
+
+.graphOptions img {
+	max-height: 14px;
+	vertical-align: middle;
+	padding: 3px;
+}
+
+img.graphHelp {
+	height: 18px;
+	vertical-align: middle;
+}
+
+.graphOptions a {
+	padding: 0;
+	margin: 0;
+}
+
+/*
+*
+*     graphs
+*	
+*/
+
+div.graph-error-messages {
+	font-size: 10pt;
+	max-height: 3em;
+	overflow-y: auto;
+	font-style: italic;
+	background-color: lightyellow;
+	display: none;
+}
+
+div.graph-info-messages {
+	display: none;
+}
+
+div.graph-info-messages .csap-button {
+	margin: 5px;
+	width: 10em;
+}
+
+div.graph-info-messages div.settings {
+	font-size: 10pt;
+	font-style: italic;
+	display: none;
+	position: absolute;
+	z-index: 91
+}
+
+div.graph-info-messages ul {
+	list-style-type: disc;
+	padding-left: 2em;
+}
+
+div.graph-info-messages ul li label {
+	font-weight: bold;
+}
+
+div.graph-info-messages ul li span {
+	margin-left: 2em;
+}
+
+/*.graphLegend .legendColorBox, .graphLegend .legendLabel {
+	padding-left: 1em;
+	vertical-align: top;
+}
+
+.graphLegend .legendLabel {
+	padding-left: 3px;
+}*/
+
+div.hostContainer .autohide div.graphBottomPanel {
+	height: 25px;
+	overflow: hidden;
+}
+
+div.hostContainer .autohide div.graphBottomPanel .legend {
+	font-size: 0.9em;
+	padding: 0;
+	padding-left: 2px;
+	margin-top: -2px;
+	overflow: hidden;
+	height: 2em;
+	max-height: 2em;
+}
+
+div.hostContainer .autohide div.graphBottomPanel .legend:hover {
+	max-height: 20em;
+	overflow: auto;
+	padding-bottom: 2em;
+	position: absolute;
+	background-color: #EDF1F5;
+	z-index: 1;
+	border-radius: var(--border-radius-small);
+	border: var(--theme-border);
+}
+
+
+
+
+
+div.hostContainer svg.legendLayer .background,
+div.qtip-content svg.legendLayer .background {
+	fill: rgba(255, 255, 255, 0.05);
+	/*     stroke: rgba(0, 0, 0, 0.85);
+    stroke-width: 1; */
+}
+
+
+.tipInfo {
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+div.hostContainer div.graph-hover-container {
+	color: var(--nav-link-color);
+	background-color: var(--nav-item-bg);
+	border: var(--theme-border);
+	border-radius: var(--border-radius-small);
+	position: absolute;
+	z-index: 100;
+	display: none;
+	font-size: 1.2em;
+	padding: 10px;
+	min-width: 140px;
+}
+
+div.tipValue {
+	margin: 0.15em;
+	padding: 0.15em;
+	font-size: 1.1em;
+	color: var(--nav-active-color)
+}
+
+/*  flot axis padding: limited options due to svg rendering */
+div.hostContainer text.y1Label,
+div.hostContainer text.x1Label {
+	visibility: hidden;
+	font-size: 5pt;
+}
+
+div.hostContainer div.graphTitle {
+	color: var(--icon-header-fg-color);
+	background: var(--icon-header-bg-color);
+	margin-bottom: 5px;
+	border-radius: 4px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+
+	padding: 2px;
+	padding-left: 5px;
+	display: grid;
+	grid-template-columns: auto 1fr 3.2em;
+	column-gap: 1em;
+	align-items: baseline;
+	white-space: nowrap;
+}
+
+div.hostContainer div.graphTitle span.name {
+	font-weight: bold;
+	cursor: move;
+}
+
+div.hostContainer div.graphTitle .stackLabel {
+	color: black;
+	font-size: 10pt;
+	margin-left: 1em;
+	white-space: nowrap;
+}
+
+div.hostContainer div.graphTitle span.panel-controls button {
+	margin: 2px;
+	margin-left: 5px;
+	background-color: var(--icon-header-bg-color);
+	visibility: hidden;
+}
+
+div.hostContainer div.plotPanel:hover div.graphTitle span.panel-controls button {
+	visibility: visible;
+}
+
+div.hostContainer div.graphTitle label {
+	margin-bottom: 0;
+}
+
+div.hostContainer div.graphTitle .highlight {
+	color: red;
+}
+
+div.hostContainer div.graphTitle:hover {
+	opacity: 0.8;
+}
+
+div.hostContainer div.graphTitle img {
+	margin-left: 2em;
+	vertical-align: middle;
+	width: 15px;
+}
+
+.graphInlineTitle {
+	display: none;
+	border: 1px solid #0C8EF7;
+	padding: 0;
+	margin-left: 1em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	font-weight: bold;
+	border-radius: 10px;
+	color: red;
+}
+
+.graphNotes {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 0.8em;
+	overflow: hidden;
+	text-align: right;
+}
+
+
+.plotContainer .news {
+	font-size: 2em;
+	cursor: wait;
+}
+
+.plotContainer textarea {
+	margin: 10px;
+}
+
+div.stats-dialog {
+	padding: 2em;
+	overflow-y: auto;
+	margin-top: 30px;
+}
+
+div.stats-dialog span.baseline-label {
+	color: #fff77b;
+	display: block;
+	max-width: 8em;
+}
+div.stats-dialog span.current-label {
+	color: #00ff10 ;
+	display: block;
+	max-width: 8em;
+}
+
+
+div.stats-dialog .stats-title .stats-labels {
+	margin-left: 2em;
+	visibility: hidden;
+}
+div.stats-dialog .stats-title .stats-labels input {
+	margin-left: 1em;
+}
+
+div.stats-dialog .stats-title:hover .stats-labels {
+	margin-left: 2em;
+	visibility: visible;
+}
+
+div.stats-dialog div.stats-panels {
+	/* display: grid;
+	grid-template-columns: repeat(auto-fit, 29em);
+	column-gap: 1em;
+	row-gap: 1em;
+	align-items: baseline; */
+	overflow-y: visible;
+	background-color: #9dacbb;
+	margin-bottom: 1em;
+	border: var(--theme-border);
+	border-radius: var(--border-radius-small);
+	padding: 10px ;
+}
+
+div.stats-dialog div.stats-panels span.munits {
+	padding-left: 6px;
+}
+
+div.stats-dialog div.stats-panels label.csap-form span.current {
+	text-align: left;
+	color: #c5f7bb
+}
+
+div.stats-dialog .flex-container {
+	font-size: 16pt;
+	margin-bottom: 10px;
+	position:absolute ;
+	top: 1px;
+	width: 90% ;
+	justify-content: space-between;
+	margin-right: 3em;
+}
+
+div.stats-dialog .flex-container button {
+	vertical-align: middle;
+	margin-left: 2em;
+	background-size: 20px 20px;
+}
+
+div.stats-dialog header {
+	font-size: 14pt;
+	font-weight: bold;
+	margin-bottom: 5px;
+	max-width: 25em;
+}
+
+div.stats-dialog table button {
+	margin-left: 1em;
+	vertical-align: text-top;
+
+	float: right;
+}
+
+div.stats-dialog table {
+	margin-bottom: 10px;
+}
+
+/* div.stats-dialog table tr.copy-only {
+	display: none;
+} */
+div.stats-dialog table tr.high-row td {
+	border-top: 3px solid;
+	border-bottom: 3px solid;
+}
+
+div.stats-dialog .csap-blue {
+	padding: 10px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 10px;
+}
+
+
+div.stats-dialog table .big-diff {
+	font-style: bold;
+	color: #f7b6b6;
+	background-color: black;
+	padding: 2px;
+	padding-left: 2px;
+	border-radius: 4px;
+	padding-left: 5px;
+}
+
+
+
+.plotPanel {
+	/* float: left   breaks graph sorting, but fills area */
+	display: inline-block;
+	border: var(--theme-border);
+	border-radius: var(--border-radius-small);
+	margin-right: 10px;
+	margin-bottom: 10px;
+	background-color: white;
+	color: black;
+	padding: 0px;
+	padding-right: 0px;
+	vertical-align: top;
+}
+
+.hostPerf {
+	padding-top: 0em;
+	padding-left: 0px;
+	/* clear: both; */
+}
+
+.spacerForFloat {
+	clear: both;
+}
+
+.graphPlot,
+.resource,
+.load {
+	display: inline-block;
+	margin: 0px;
+	background-color: white;
+}
+
+.choices {
+	display: inline-block;
+	margin-right: 2em;
+}
+
+.hostName {
+	color: var(--nav-hover-color);
+	padding-right: 2em;
+}
+
+div.hostContainer .resourceGraphTitle {
+	display: flex;
+	gap: 2em;
+	align-items: baseline;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 10px;
+	padding-left: 0px;
+	padding-right: 20px;
+	font-weight: bold;
+}
+
+div.hostContainer .resourceGraphTitle .flex-right-info flex-container {
+	column-gap: 1em;
+}
+
+div.hostContainer .resourceGraphTitle button.resetInterZoom {
+	width: auto;
+	padding-left: 1.2em;
+	padding-right: 1em;
+	font-weight: bold;
+}
+
+.customSelection {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+td.legendLabel {
+	word-break: normal;
+	word-wrap: break-word;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+/*
+
+.legend {
+        font-size: 1.0em;
+}
+
+
+.legendLeft {
+        left: 40px;
+}
+
+
+
+*/
+.resourceConfigDialog {
+	padding-bottom: 2em;
+}
+
+.resourceConfigDialog div.csap-white {
+	overflow: hidden;
+}
+
+.resourceConfigDialog div.title {
+	font-weight: bold;
+	margin: 1em;
+}
+
+.resourceSlider {
+	width: 400px;
+	margin-right: 0.5em;
+	margin-left: 0em;
+	display: inline-block;
+	padding: 0;
+}
+
+
+input.customCheck {
+	margin-right: 0.25em;
+	margin-left: 0.5em;
+	vertical-align: middle;
+}
+
+#graphSettingsDialog .resourceConfigDialog header {
+	font-size: 14pt;
+	font-weight: bold;
+	margin-left: 1em;
+	position: absolute;
+	top: -1px;
+}
+
+#graphSettingsDialog .resourceConfigDialog {
+	overflow-y: auto;
+	margin-top: 20px;
+}
+
+#graphSettingsDialog .resourceConfigDialog>div {
+	margin: 1em;
+}
+
+#graphSettingsDialog label.csap-form-inline {
+	margin-left: 3em;
+}
+
+#graphSettingsDialog .sampleIntervals label.csap input {
+	margin-left: 1em;
+	margin-right: 5px;
+	width: auto;
+}
+
+.graphCheckboxes,
+.serviceCheckboxes {
+	display: block;
+	columns: 20em 8;
+}
+
+#graphSettingsDialog .serviceCheckboxes label,
+#graphSettingsDialog .graphCheckboxes label {
+	display: grid;
+	grid-template-columns: 2.5em auto;
+	vertical-align: text-top;
+	margin-bottom: 0.8em;
+	align-items: start;
+
+	break-inside: avoid;
+}
+
+#graphSettingsDialog .serviceCheckboxes label input,
+#graphSettingsDialog .graphCheckboxes label input {
+	margin: 0;
+}
+
+div.floatRight {
+	display: inline-block;
+	float: right;
+	font-size: 0.8em;
+}
+
+.bucketSize,
+.bucketSkip {
+	width: 3em;
+}
+
+.settingsText {
+	font-size: 0.7em;
+	padding: 0;
+}
+
+.graphTimeZone,
+.datepicker {
+	padding: 0;
+	font-size: 0.9em;
+}
+
+#showResourceConfig {
+	padding: 0;
+}
+
+.datepicker,
+.useBuckets {
+	margin-left: 0;
+}
+
+.autoRefresh input {
+	display: inline;
+	vertical-align: middle;
+}

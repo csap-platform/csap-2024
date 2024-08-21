@@ -1,0 +1,31 @@
+
+#
+# Loads default settings for spring services and csap
+#
+#  Intellij or commandline:
+#   cd $ProjectFileDir$/csap-core-service
+#   ../gradlew bootRun
+#   admin:
+#   ../gradlew bootRun --args="--spring.profiles.active=admin,desktop,localhost  --server.port=8022"
+
+#
+# Profiles:
+#   - desktop: configure with stubbed linux
+#   - agent: run as management agent
+#   - admin: run as manager of agents and analytics
+#    # for gradle bootRun: --args='--spring.profiles.active=admin,desktop,localhost'
+spring:
+
+  profiles:
+
+    active: agent,desktop,localhost
+#    active: agent,mac-os,localhost
+    
+    
+  config:
+    import:
+      - boot-csap-defaults.yml
+      - boot-app-defaults.yml
+      - boot-os-commands.yml
+      
+      

@@ -1,0 +1,602 @@
+#
+# for this demo - a singe csap mgmt admin and single kubernetes master are used. Both can be multiple bosts for ha.
+#
+# Update:
+#   $managerHost - k8s master, csap-admin
+#   $hostDomain -  hostDomain
+#   $appName - name of application
+#   $apiToken - rest apis betweem csap-agents - csap-admin - csap events
+#   $appId - used for event and project ids (lowercase hyphenated)
+#
+#
+
+operator: modify
+target: default
+
+
+environments:
+
+  base: dev     # source: derived from "default" application, which defines a "dev" environment
+  name: $envId  # optional name of target env; defaults to the base env if not specified
+
+  #
+  # Cluster host assignment:
+  #   - use host short name
+  #   - optional: specify short name everywhere; or use index of hostname from base-os cluster
+  #
+  hosts:
+    base-os: [ $managerHost  ]
+    csap-management: [ 1 ]
+    dcib-services: [ 1 ]
+    csap-events: [ 1 ]
+    perf-system: [ $managerHost ]
+    perf-java: [ $managerHost ]
+    perf-mysql: [ $managerHost ]
+
+
+  application-name: "$appName"
+  project-name: "$appId"
+  project-contact: "xxx.xxx@$hostDomain"
+
+  git: https://github.com/xxx/xxx-definition.git
+
+
+  #
+  # update target env
+  #
+  settings:
+
+    loadbalancer-url-original: "http://$managerHost.$hostDomain:8080"
+    loadbalancer-url-admin: "http://$managerHost.$hostDomain:8021"
+    loadbalancer-url: "http://$managerHost.$hostDomain:8011"
+    application:
+      host-settings:
+        tags:
+          default: x86
+          ip-10-0-1-26: inst
+          ip-10-0-1-103: master
+          ip-10-0-1-218: arm
+          ip-172-31-60-242: arm
+          ip-172-31-49-202: r5a
+          ip-172-31-8-222: r5b
+          ip-172-31-48-212: r5
+
+    configuration-maps:
+
+      docker:
+        allowRemote: true
+
+      csap-events-defaults:
+        # mongoUserNeeded: ForImageAndBoot
+        mongoUser: dataBaseReadWriteUser
+        mongoPassword: "$apiToken"
+        mongoHosts: "$$csap-hosts:events-mongo"
+        $$mongo-storage-orig: "/data/csap/$$service-name-volume"
+        $$mongo-storage: "/data/dcib-csap-volume/csap-mongo-storage"
+        # $$mongo-storage: "$$nfs-mount/$$nfs-sub-folder/$$service-name-volume"
+        # dataServiceUrl "http://csap-dev01.csap.org:8080/events-service/api/event"
+        restToken: "$apiToken"
+        dataServiceUser: dataUser
+        dataServicePass: "$apiToken"
+        metricDbSizeInGb: 50
+        eventDbSizeInGb: 10
+        MONGO_UTIL: "csapplatform/mongo:21.08"
+        MONGO_INITDB_ROOT_USERNAME: dataBaseReadWriteUser
+        MONGO_INITDB_ROOT_PASSWORD: "$apiToken"
+
+
+      perf-java-settings:
+        reportName: java-defaults-2users-5min
+        testToRun: default
+        testToRunMaxUsers: default
+        testToRunMinUsers: 6jvm-port
+        warmUpMinutes: 0
+        runMinutes: 5
+        rampSeconds: 120
+        queryThreads: 2
+        queryThreadsAbout: "2 thread and 5ms delay for 4 core k8 host. 4 thread and 0ms delay for 8 core host. 12 threads with 0ms delay can busy out 100+ core hosts"
+        queryDelayMs: 5
+        purgeDbThreads: 1
+        purgeDbThreadsAbout: "Use 6 for big hosts"
+        purgeDelayMs: 100
+        purgeDelayMs-fast: 100
+        purgeDelayMs-heap: 60000
+        burnThreads: 1
+        burnThreads-about: "Use 12 for big hosts"
+        burnDelayMs: 10000
+
+      mysql-nft-settings:
+        $$db-host: oss-mysql-db
+        $$db-pass: nyw
+        about-test: Settings for sysbench
+        xminutesToRun: 1
+        xtestProfile: default
+        xtestProfile-options: default, oltp, csapOltp
+
+  default-settings:  # defaults for ALL envs
+
+    application:
+      name: "$appName"
+
+      quick-launches:
+        - label: 'CSAP: Installer'
+          service: csap-agent
+          path: /app-browser#agent-tab,script
+          url: $$csap-agent-url
+        - label: 'PERF: sysbench cpu'
+          service: sysbench-cpu
+        - label: 'PERF: sysbench memory'
+          service: sysbench-memory
+        - label: 'PERF: sysbench mysql'
+          service: sysbench-mysql
+        - label: 'PERF: mysql db'
+          service: oss-mysql-db
+        - label: 'PERF: mysql admin'
+          service: oss-mysql-admin
+        - label: 'PERF: fio tests'
+          service: fio
+        - label: 'PERF: Tomcat tests'
+          service: perf-java-1
+
+      help-menu:
+        CompanyXXX CSAP: https://confluence.yourcompany.com/display/~peter.nightingale/WCSAP
+
+    csap-data:
+      user-disabled: events-disabled
+      user: "$apiToken"
+      credential: "$apiToken"
+      service-url-original: "http://$managerHost.$hostDomain:8080/events-service"
+      #service-url: "http://$managerHost.$hostDomain:7021/events-service"
+      service-url: "http://ec2-11-22-33-44.us-west-2.compute.amazonaws.com:7021/events-service"
+
+
+        #    configuration-maps:
+        #
+        #      docker:
+        #        dockerRepo: http://media.$hostDomain/media/third_party/linux/CentOS/docker-ce.repo
+        #
+        #      kubelet:
+        #        kubernetesRepo: http://media.$hostDomain/media/third_party/kubernetes/kubernetes-el7.repo
+
+
+
+  #
+  # adding in csap-management and kubernetes
+  #
+  clusters:
+
+    #
+    # csap-admin provide core cluster management
+    #
+    csap-management:
+      notes: "For production clusters, 2 hosts are recommended. All others - a single host is sufficient"
+      enabled: true
+      type: simple
+
+      hosts:
+        - updated-in-hosts
+
+      template-references:
+        - csap-admin
+
+
+    csap-events:
+
+      type: simple
+      hosts:
+        - updated-in-hosts
+      template-references:
+        - events-mongo
+        - events-service
+
+    dcib-services:
+      type: simple
+      hosts:
+        - updated-in-hosts
+
+      template-references:
+        - nfs-server
+        - ldap-server
+        - ldap-ui
+        - csap-screen-caster
+    #
+    # performance tests
+    #
+    perf-java:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - perf-java-1
+        - perf-java-jmeter
+
+    perf-mysql:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - oss-mysql-admin
+        - oss-mysql-db
+        - sysbench-mysql
+
+    perf-system:
+      type: simple
+      enabled: true
+      hosts:
+        - updated-above-in-hosts
+      template-references:
+        - fio
+        - sysbench-cpu
+        - sysbench-memory
+
+
+
+service-templates:
+  csap-demo-nginx.docker.image: "nginx:latest"
+  #
+  #  SAMPLE: data center services; temp
+  #
+  nfs-server:
+    server: docker
+    autoStart: 80
+    description: demo of docker run command and others
+
+    url: $$csap-agent-url
+    docUrl: https://hub.docker.com/r/itsthenetwork/nfs-server-alpine/
+
+    scheduledJobs:
+      scripts:
+        - description: run script on demand
+          frequency: event-pre-start
+          script: mkdir --verbose $HOME/docker-nfs-export;
+
+    docker:
+      image: 'itsthenetwork/nfs-server-alpine:12'
+      run: >-
+        -d --name $$service-name --restart unless-stopped --publish 2049:2049 --privileged -v $HOME/docker-nfs-export:/nfsshare
+        -e SHARED_DIRECTORY=/nfsshare $$service-image
+
+  ldap-server:
+
+    server: docker
+    autoStart: 81
+    description: open ldap sample with test users
+
+    url: $$csap-agent-url
+    docUrl: https://github.com/csap-platform/csap-core/wiki/Docker-Images
+
+    docker:
+      image: 'csapplatform/ldap-server:latest'
+      restartPolicy: unless-stopped
+      portMappings:
+        - PrivatePort: 1389
+          PublicPort: 7389
+
+      volumes:
+        - about: requires custom file added to hostpath - remove for default set
+          containerMount: /csap-init
+          readOnly: false
+          sharedUser: false
+          hostPath: /data/dcib-csap-volume/csap-ldap-init
+          createPersistent:
+            enabled: true
+            driver: local
+
+
+  ldap-ui:
+    server: docker
+    port: 8090
+
+    autoStart: 82
+    description: open ldap sample with test users
+
+    url: "http://$$service-fqdn-host:$$service-primary-port"
+    docUrl: https://github.com/csap-platform/csap-core/wiki/Docker-Images
+
+    alerts:
+      max_threadCount: 200
+
+    docker:
+
+      image: osixia/phpldapadmin:latest
+      restartPolicy: unless-stopped
+      environmentVariables:
+        - PHPLDAPADMIN_HTTPS=false
+        - PHPLDAPADMIN_LDAP_HOSTS_orig=$managerHost
+        - "PHPLDAPADMIN_LDAP_HOSTS=#PYTHON2BASH:[{'ec2-11-22-33-44.us-west-2.compute.amazonaws.com': [{'server': [{'tls': False},{'port': 7389} ]}]} ]"
+
+      portMappings:
+        - PrivatePort: 80
+          PublicPort: $$service-primary-port
+
+  csap-screen-caster:
+    server: docker
+    autoStart: 400
+    port: 80
+    description: provide csap screencasts
+    url: >-
+      http://$$service-fqdn-host:$$service-primary-port,http://$$service-fqdn-host:$$service-primary-port/status,http://$elasticIp:$$service-primary-port
+    alerts:
+      max_diskUtil: 2g
+      max_threadCount: '200'
+      max_socketCount: '15'
+    environmentVariables:
+      configuration-maps:
+        - storage-settings
+    docker:
+      image: nginx:1.16.1
+      volumes:
+        - about: configuration folder
+          containerMount: /etc/nginx/nginx.conf
+          readOnly: true
+          sharedUser: false
+          hostPath: $$service-working/resources/common/nginx.conf
+        - about: Screencasts
+          containerMount: /usr/share/nginx/html
+          readOnly: true
+          sharedUser: false
+          local-not-usedhostPath: /opt/csap/screencasts
+          hostPath: /data/dcib-csap-volume/csap-web-server
+      portMappings:
+        - about: screencast port
+          PrivatePort: '80'
+          PublicPort: $$service-primary-port
+    scheduledJobs:
+      scripts:
+        - description: Copy resource files to working directory for container mounting
+          frequency: event-pre-start
+          script: >-
+            rm -rf $csapWorkingDir/resources; cp --recursive --verbose
+            $csapResourceFolder $csapWorkingDir/resources
+        - description: test and reload configuration
+          frequency: on-demand
+          script: >-
+            docker container exec  csap-screen-caster nginx -t && docker container
+            exec  csap-screen-caster nginx -s reload
+        - description: Show configuration
+          frequency: on-demand
+          script: docker container exec  csap-screen-caster nginx -V 2>&1
+    performance:
+      config:
+        httpCollectionUrl: http://localhost:$$service-primary-port/status
+        patternMatch: byWordIndex
+      activeConnections:
+        title: Active Connections
+        attribute: 3
+      serverAccepts:
+        title: Server Accepts
+        attribute: 8
+        delta: true
+      serverHandled:
+        title: Server Handled
+        attribute: 9
+        delta: true
+      serverRequests:
+        title: Server Requests
+        attribute: 10
+        delta: true
+      Reading:
+        title: Reading
+        attribute: 12
+      Writing:
+        title: Writing
+        attribute: 14
+      Waiting:
+        title: Waiting
+        attribute: 16
+
+
+operations:
+  - inserts:
+      - path: /environments/defaults/base-os/template-references
+        value: docker
+
+
+
+---
+#
+# Core csap settings: demo-xxx  Security(LDAP)
+#
+operator: create
+target: application-company.yml
+
+#
+# csap-agent
+#
+csap-core:
+  kubernetes:
+    enabled: false
+  docker:
+    enabled: true
+
+
+#
+# health and data services
+#
+csap-events:
+  health-monitoring:
+    appIds:
+      - $appId
+    lifes:
+      - dev
+
+
+#spring:
+#  mail:
+#    host: "${mailServer:myrelay.demo-xxx.com}"
+#    port: "${mailPort:25}"
+
+csap.security:
+  rest-api-filter.token: "$apiToken"
+
+  provider:
+    type: ldap
+    url: ldap://$elasticIp:7389
+    directory-dn: search:uid={0}
+    search-user: ou=people,dc=example,dc=org
+    search-groups: ou=groups,dc=example,dc=org
+    search-group-filter: "(uniquemember={0})"
+
+  provider-backup:
+
+    type: memory
+    memory-users:
+      - admin,csapPass,AUTHENTICATED,dummy1,dummy2
+      - user,csapPass,AUTHENTICATED,dummy3,dummy4
+
+
+
+---
+#
+# custom csapEvents
+#
+
+
+operator: create
+
+target: resources/events-mongo/common/csap-service.yaml
+
+about-csap-service.yaml: "Any field in service definition can be selectively overridden"
+
+# double slash to escape docker container, single for root of container
+propDirectory: /
+
+autoStart: 70
+
+---
+
+# screencast configuration
+
+operator: create
+target: resources/csap-screen-caster/common/nginx.conf
+
+#
+# Note: yaml | respects newlines
+#
+content: |
+  user  nginx;
+  worker_processes  4;
+  
+  error_log  /var/log/nginx/error.log warn;
+  pid        /var/run/nginx.pid;
+  
+  
+  events {
+      worker_connections  1024;
+  }
+  
+  
+  http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+  
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+  
+      access_log  /var/log/nginx/access.log  main;
+  
+      sendfile        on;
+      #tcp_nopush     on;
+  
+      keepalive_timeout  65;
+  
+      #gzip  on;
+  
+      # include /etc/nginx/conf.d/*.conf;
+  
+      proxy_cache_path /tmp/mycache keys_zone=mycache:700m;
+  
+      server {
+          listen 80 ;
+          #server_name  localhost;
+  
+          location / {
+              root   /usr/share/nginx/html;
+              autoindex on;
+          }
+  
+          location /status {
+            stub_status on;
+            allow all;
+          }
+  
+          location ~ .txt$ {
+            root   /usr/share/nginx/html;
+            #deny all;
+          }
+  
+  
+          location ~ .mp4$ {
+  
+              root   /usr/share/nginx/html;
+  
+              default_type video/mp4;
+              gzip off;
+              gzip_static off;
+  
+              mp4;
+  
+              mp4_buffer_size     5M;
+              mp4_max_buffer_size 50M;
+  
+              # enable thread bool
+              aio threads=default;
+  
+              proxy_force_ranges on;
+  
+              # enable caching for mp4 videos
+              proxy_cache mycache;
+              proxy_cache_valid 200 300s;
+              proxy_cache_lock on;
+  
+              # enable nginx slicing
+              slice              1m;
+              proxy_cache_key    $host$uri$is_args$args$slice_range;
+              proxy_set_header   Range $slice_range;
+              proxy_http_version 1.1;
+  
+              # Immediately forward requests to the origin if we are filling the cache
+              proxy_cache_lock_timeout 0s;
+  
+              # Set the 'age' to a value larger than the expected fill time
+              proxy_cache_lock_age 200s;
+  
+              proxy_cache_use_stale updating;
+  
+          }
+      }
+  }
+
+
+
+
+#---
+#
+# custom Docker Repository
+#
+
+
+#operator: create
+#
+#target: resources/docker/common/configuration/daemon.json
+#
+#exec-opts: ["native.cgroupdriver=systemd"]
+#
+#registry-mirrors: ["http://docker.csap.org"]
+#insecure-registries: [ "demo-xxx-docker.$hostDomain", "docker.$hostDomain" ]
+#storage-driver: "overlay2"
+#data-root: "/var/lib/docker"
+#hosts: [ "unix:///var/run/docker.sock" ]
+#log-driver: "json-file"
+#log-opts:
+#  max-size: "44m"
+#  max-file: "1"
+#
+#
+#
+
+
+

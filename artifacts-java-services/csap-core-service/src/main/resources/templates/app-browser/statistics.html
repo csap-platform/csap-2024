@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<body th:fragment="pageContent"
+      th:remove="tag">
+
+    <div class="stats-container">
+
+        <div class="options">
+
+            <label class="page-title">Statistics Viewer
+                <button title="copy table to clipboard"
+                        id="copy-stats-table"
+                        class="csap-icon csap-copy"></button>
+            </label>
+
+            <label>
+
+                <select id="statistics-service">
+
+                </select>
+            </label>
+
+            <label id="stats-folder-label" class="csap csap-alt-colors">
+
+                Statistics Selection:
+                <select id="statistics-folder">
+
+                </select>
+            </label>
+
+
+            <select title="Discovered stats folders (logs.orig, logs-previous,...)" style="width: 6em;margin-right: 2em" class="discovered-stat-folders" ></select>
+
+            <label class="csap">
+
+                View:
+                <select id="statistics-files">
+
+                    <optgroup id="report-group"
+                              class="env-spacer-label"
+                              label="Reports">
+                        <option data-report="true"
+                                title="removes any column with id in the name"
+                                value="default">Default Report</option>
+                        <option data-report="true"
+                                title="includes every column"
+                                value="full">Full Report</option>
+                    </optgroup>
+                    <optgroup id="file-group"
+                              class="env-spacer-label"
+                              label="Files">
+                    </optgroup>
+
+                </select>
+            </label>
+
+            <label class="csap">
+                Limit:
+                <select id="statistics-limit">
+
+                    <optgroup label="Lines">
+                        <option data-type="lines">20</option>
+                        <option data-type="lines">50</option>
+                        <option data-type="lines">500</option>
+                        <option data-type="lines">5000</option>
+                    </optgroup>
+
+                    <optgroup label="Size">
+                        <option value=100
+                                data-type="kb">100 kb</option>
+                        <option value=500
+                                data-type="kb">500 kb</option>
+                        <option value=1
+                                data-type="mb">1 mb</option>
+                        <option value=2
+                                data-type="mb">2 mb</option>
+                        <option value=5
+                                data-type="mb">5 mb</option>
+                        <option value=10
+                                data-type="mb">10 mb</option>
+                    </optgroup>
+                </select>
+            </label>
+
+            <button id="stats-customize" style="margin-left: 3em"
+                    class="csap-button-icon csap-tools csap-alt-colors"
+                    title="customize statistics viewer">Configure</button>
+
+            <div style="display: none">
+                <div id="stats-dialog"
+                     class="csap-blue">
+
+                    <header><button class="close-menu csap-button-icon csap-remove">Apply/Close</button></header>
+
+                    <article>
+
+                        <label>Stats Folder</label>
+                        <span></span>
+                        <span>
+                            <input style="width: 100%" class="alternate-stats-location"
+                                   type="text" value="default">
+                            If logs have been backed up to a different folder, use this to specify the location
+                        </span>
+
+                        <label>Append data</label>
+                        <input class="merge-stats-view"
+                               type="checkbox" checked>
+                        <span>
+                            Merge Results for Viewing multiple folders. Selecting a different folder will add to the current display
+                        </span>
+
+                        <label>Fixed Columns</label>
+                        <input class="fixed-column"
+                               type="checkbox">
+                        <span>First column will stay in visible area</span>
+
+                        <label>Convert Units</label>
+                        <input class="convert-unit-columns"
+                               type="checkbox"
+                               checked>
+                        <span>millisecond and (MB) columns will be converted to human readable units</span>
+
+                        <label>Trim Empty Columns</label>
+                        <input class="prune-empty-columns"
+                               type="checkbox"
+                               checked>
+                        <span>If all columns are either empty or contain 0, the column will be removed</span>
+
+                        <label>Trim Id Columns</label>
+                        <input class="prune-id-columns"
+                               type="checkbox"
+                               checked>
+                        <span>if a column title includes "id" - column will be ignored</span>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+            <span class="flex-right-info">
+                <span id="statistics-lines-loaded"></span>
+
+                <a class="csap-link-icon csap-help"
+                   style="margin-left: 2em"
+                   title="Filters can use &lt;, &gt;, ||, ..."
+                   target="_blank"
+                   href="https://mottie.github.io/tablesorter/docs/example-widget-filter.html"></a>
+
+
+            </span>
+
+
+        </div>
+        <div id=statistics-viewer>
+
+            <div id="statistics-browser"></div>
+            <pre id="statistics-editor"></pre>
+
+        </div>
+
+
+    </div>
+
+</body>

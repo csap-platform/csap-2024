@@ -1,0 +1,100 @@
+#
+#  ================ profile: junit
+#
+#   - Note: references used in code base
+#
+
+spring: 
+  cache: 
+#    type: none    
+    jcache:
+      config: "classpath:ehcache3-junit.xml" 
+      
+#logging:
+#  config: "classpath:a_setup/log4j2-junit.yml"
+  
+csap-core:
+
+  custom-properties:
+    - 
+      name: demo-folder-1
+      value: /demo/junit/app/folder-1
+      
+    - 
+      name: demo-folder-2
+      value: /demo/junit/app/folder-2
+    - 
+      name: demo-property-folder
+      value: src/test/resources
+     
+
+  installation-folder: build/csap-platform
+  definition-folder: "src/test/resources/definitions"
+  
+  docker:
+    enabled: false 
+    url: "tcp://csap-01.csap.org:4243"
+#    url: "tcp://csap-01.csap.org:4243"
+    connection-pool: 5
+    template-repository: "${csapDockerRepository:demo-xxx-docker.somecompany4.demo-xxx.lab}"
+    
+  kubernetes:
+      enabled: false
+      dns-lookup: false # long timeouts on windows
+      config-file: "~/agent-desktop-kubernetes-folder/config"
+      connection-time-out-in-ms: 3000
+      connection-pool-idle-minutes: 5
+      connection-pool-idle-connections: 10
+      max-session-seconds: 15
+      event-max-backlog: 900 
+      
+      test-credential-url: "http://csap-01.csap.org:8011/os/folderZip?path=.kube/config&token=584t76.b0b7c7r75rbc0ml0&service=kubelet"
+    
+    
+csap:
+
+  web-server:
+    enabled: true
+
+  performance.enabled: false
+  security: 
+    enabled: true # several test cases require security
+
+
+test:
+  junit:
+    kubernetes:
+    #     Note: must delete both entries in home dir 
+      config-url: "http://csap-01.csap.org:8011/os/folderZip?path=.kube/config&token=584t76.b0b7c7r75rbc0ml0&service=kubelet_8014"
+#      config-url: "http://csap-dev20.csap.org:8011/os/folderZip?path=.kube/config&token=584t76.b0b7c7r75rbc0ml0&service=kubelet_8014"
+#      config-url: "http://csap-dev07.csap.org:8011/os/folderZip?path=.kube/config&token=584t76.b0b7c7r75rbc0ml0&service=kubelet-ha_8014"
+      
+    docker:
+      enabled: true
+      url: "unix:///var/run/docker.sock"
+#      url: "tcp://csap-01.csap.org:4243"
+#      url: "tcp://scs-dev01.csap.org:4243"
+#      url: "tcp://csap-01.csap.org:4243"
+      connection-pool: 5
+      template-repository: "${csapDockerRepository:demo-xxx-docker.somecompany4.demo-xxx.lab}"
+      
+test.variables:
+  test-service: test-docker-csap-reference_8261
+  verify-service: csap-verify-service_7011
+  test-db-service: test-docker-csap-reference_8261
+  test-admin-host1: "csap-01.csap.org"
+  test-admin-host2: "csap-02.csap.org"
+  test-db-host: "csap-01.csap.org"
+  
+  user: "junit"
+  pass: "_demo-xxxIntegration"
+  
+  # analytics server
+  testAppId: "demo-xxxCsap"
+  
+  eventServiceUrl: "http://csap-dev01.csap.org:8080/events-service"
+#  eventUrl: "http://csap-dev01.csap.org:8080/events-service/api/event"
+#  eventApiUrl: "http://csap-dev01.csap.org:8080/events-service/api/event"
+#  historyUiUrl: "http://csap-dev01.csap.org:8080/events-service?appId={appId}&life={life}&category={category}&"
+#  eventMetricsUrl: "http://csap-dev01.csap.org:8080/events-service/api/metrics/"
+#  analyticsUiUrl: "http://csap-dev01.csap.org:8080/admin/os/performance"

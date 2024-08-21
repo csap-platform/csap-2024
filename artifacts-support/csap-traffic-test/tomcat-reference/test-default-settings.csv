@@ -1,0 +1,7 @@
+host,context,port,user,pass
+s-1fpnqp2.some.host.pattern,,9210,admin,password
+s-1fpnqp2.some.host.pattern,,9220,admin,password
+s-1fpnqp2.some.host.pattern,,9230,admin,password
+s-1fpnqp2.some.host.pattern,,9240,admin,password
+s-1fpnqp2.some.host.pattern,,9250,admin,password
+s-1fpnqp2.some.host.pattern,,9260,admin,password

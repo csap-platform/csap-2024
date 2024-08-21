@@ -1,0 +1,9 @@
+
+
+-----    run_using_root: 'nmap -oG nmap-output.txt --open  -p 8011 10.0.1.0/24 &>/dev/null; cat nmap-output.txt'    -----
+# Nmap 7.70 scan initiated Thu Oct 27 13:06:51 2022 as: nmap -oG nmap-output.txt --open -p 8011 10.0.1.0/24
+Host: 10.0.1.120 (ip-10-0-1-120.us-west-2.compute.internal)	Status: Up
+Host: 10.0.1.120 (ip-10-0-1-120.us-west-2.compute.internal)	Ports: 8011/open/tcp//unknown///
+Host: 10.0.1.61 (ip-10-0-1-61.us-west-2.compute.internal)	Status: Up
+Host: 10.0.1.61 (ip-10-0-1-61.us-west-2.compute.internal)	Ports: 8011/open/tcp//unknown///
+# Nmap done at Thu Oct 27 13:06:56 2022 -- 2

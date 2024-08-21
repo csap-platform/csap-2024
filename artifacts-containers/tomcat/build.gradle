@@ -1,0 +1,32 @@
+plugins {
+    id 'csap-bin-conventions'
+//    id 'maven-publish'
+//    id 'base'
+}
+
+
+publishing {
+
+    publications {
+        maven(MavenPublication) {
+
+            version = '9.0.20'
+
+            artifact( file( "$csap_third_party/csap-package-tomcat.secondary/tom9/apache-tomcat-9.0.20.tar.gz" ) ){
+                extension "tar.gz"
+            }
+
+        }
+    }
+//    repositories {
+//        maven {
+//            url "https://artifactory.yourcompany.com/artifactory/virttrunk"
+//            credentials {
+//                username "$artifactory_user"
+//                password "$artifactory_password"
+//            }
+//        }
+//    }
+
+}
+

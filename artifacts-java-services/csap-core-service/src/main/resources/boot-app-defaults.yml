@@ -1,0 +1,134 @@
+
+spring:
+
+  servlet:
+  
+  #
+  # used with file upload and service upload optins
+  # 
+  
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+      
+  cache:
+    jcache:
+      config: "classpath:ehcache3.xml"  
+     
+
+# NOTE: must match agent endpoint when used by csap-admin
+# overridden by application-admin.yaml when used by admin
+server:
+  
+  port: 8011
+  servlet:
+    context-path: /
+    
+  tomcat:
+    # Note: FileRequests.getMaxEdit subtracts 500 for other parameters
+    max-http-form-post-size: 8MB
+    
+    
+    threads:
+      max: 300
+#  error:
+#    include-message: always
+      
+# Common configuration for agent and admin
+csap-core:
+
+  #    definition-strict-mode: true
+  # Note: on agent only - this is ignored in favor of server.port and server.context
+  agent-port: 8011
+  agent-context-path: "/"
+  
+
+  #
+  # This is lazily constructed - via AgentApi
+  #
+  db-performance-collector:
+    url: jdbc:mysql://localhost:3306
+    driver: com.mysql.cj.jdbc.Driver
+    username: ${dbUser:perfdev}
+    password: ${dbPass:notSet}
+    query: show global status
+    max-connections: 2
+
+  min-version-kubelet: "1.16."
+  min-version-docker: "19.03."
+  min-version-csap: "2.1.1"
+
+  screen-cast-server-url: "http://csap-dev01.csap.org:7080/"
+
+  # http://CSAP_HOST.yourcompany.com:8011
+#  host-url-pattern: "${hostUrlPattern:auto}"
+  host-url-pattern: auto
+
+  disable-ssl-validation: false
+  
+  installation-folder: ${CSAP_FOLDER}
+#  staging: ${STAGING:} 
+#  processing: ${PROCESSING:}
+ 
+  docker-ui-default-images:
+    - docker.io/hello-world
+    - ${csapDockerRepository:docker.io}/stress
+    - ${csapDockerRepository:docker.io}/csap-activemq
+    - ${csapDockerRepository:docker.io}/csap-base
+    - ${csapDockerRepository:docker.io}/csap-test-app
+    - ${csapDockerRepository:docker.io}/csap-tomcat
+    - docker.io/nginx
+    - docker.io/postgres:12.1
+    - docker.io/webcenter/activemq
+    - docker.io/httpd
+    - docker.io/jenkins/jenkins
+    - docker.bintray.io/jfrog/artifactory-oss:latest
+    
+  help-urls: 
+    release-notes: https://github.com/csap-platform/csap-core/wiki/Release-Notes
+    installation: https://github.com/csap-platform/csap-core/wiki/Install-Notes
+    reference-guide: https://github.com/csap-platform/csap-core/wiki
+    training: https://github.com/csap-platform/csap-core/wiki/Training
+    service-templates: https://github.com/csap-platform/csap-core/wiki/Service-Definition
+    service-variables: https://github.com/csap-platform/csap-core/wiki/Service-Definition#runtime-variables
+    service-jobs: https://github.com/csap-platform/csap-core/wiki/Service-Definition#service-jobs
+    service-live: https://github.com/csap-platform/csap-core/wiki/CsapMicroMeter
+    os-process-mapping: https://github.com/csap-platform/csap-core/wiki/Application-Model#os-process-mapping
+    service-clusters: https://github.com/csap-platform/csap-core/wiki/Application-Model
+    service-environments: https://github.com/csap-platform/csap-core/wiki/Environment-Definition
+    configuration-maps: https://github.com/csap-platform/csap-core/wiki/Environment-Definition#configuration-maps
+    application-definition:  https://github.com/csap-platform/csap-core/wiki/Application-Definition
+    application-editor:  https://github.com/csap-platform/csap-core/wiki/Application-Portal#application-editor
+    application-deployment:  https://github.com/csap-platform/csap-core/wiki/Application-Portal#service-deployment
+    application-health: https://github.com/csap-platform/csap-core/wiki/Application-Health
+    application-performance: https://github.com/csap-platform/csap-core/wiki/Performance
+    application-projects: https://github.com/csap-platform/csap-core/wiki/Application-Packages
+    autoplay-help: https://github.com/csap-platform/csap-core/wiki/Csap-Autoplay
+    command-runner: https://github.com/csap-platform/csap-core/wiki/Host-Portal#command-runner
+    
+  
+    
+csap:
+  web-server:
+  
+    ssl:
+      # trigger rest templates and UI
+      self-signed: true
+#      client: false     # disable server side ssl client
+#      keystore-file: "" # disable embedded ssl server
+
+
+  security:
+
+    rest-api-filter:
+      enabled: true
+      urls:
+        - /api/*
+      group: "$CSAP_ADMIN_GROUP"
+      cache-seconds: 300
+      
+  locator:
+    enabled: true
+    active-urls-locator: "${csapLbUrl:https://csap-secure.yourcompany.com}/admin/api/service/urls/active/"
+    low-resources-url-locator: "${csapLbUrl:https://csap-secure.yourcompany.com}/admin/api/service/url/low/"
+    low-resource: "lowCpu"  #lowLoad, lowCpu, ...

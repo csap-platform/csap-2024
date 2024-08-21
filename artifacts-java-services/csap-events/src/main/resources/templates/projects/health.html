@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Analytics Service</title>
+
+
+
+	<script th:replace="~{ csap/fragments/csap-module-includes :: pageContent }"></script>
+
+
+	<script type="module"
+			th:src=" @{ ${ @mvcResourceUrlProvider.getForLookupPath('/js/modules/projects/_project-health-main.js')} }"></script>
+
+
+
+	<style type="text/css">
+		.linkField {
+			width: 25em;
+		}
+
+		.descField {
+			width: 10em;
+		}
+	</style>
+
+</head>
+
+<body class="csap-full csap-scrollable theme-dark theme-deep-blue">
+	<header>
+		<a th:href="@{/analytics}"
+		   class="csap-link-button">Csap Activity And Adoption Portal</a>
+		<div class="lifecycle"></div>
+
+	</header>
+
+	<article class=content>
+		<table class="csap sticky-header"
+			   id="healthTable">
+			<thead>
+				<tr>
+					<th style="">Host</th>
+					<th style="">Lifecycle</th>
+					<th style="">Error Message</th>
+				</tr>
+			</thead>
+			<tbody id="healthBody">
+			</tbody>
+		</table>
+	</article>
+</body>
+
+</html>

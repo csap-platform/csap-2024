@@ -1,0 +1,23 @@
+#
+#  ================ profile: junit
+#
+#   - Note: references used in code base
+#
+
+spring: 
+  cache: 
+    type: none
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+ 
+csap-core:
+  db-performance-collector:
+    url: jdbc:mysql://localhost:3306
+    driver: com.mysql.cj.jdbc.Driver
+    username: perfdev
+    password: CoEC1xlqWtRb
+    query: show global status
+    max-connections: 2
+ 
