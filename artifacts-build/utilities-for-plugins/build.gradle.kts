@@ -12,6 +12,10 @@ if ( project.hasProperty("blog") )
 
 
 
+repositories {
+    mavenCentral()
+}
+
 gradlePlugin {
     plugins {
         create("petersPlugin") {

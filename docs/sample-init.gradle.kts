@@ -1,5 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
+//
+// copy to $HOME/.gradle/init.gradle.kts
+//
+
+
 // initscript {
 //     repositories {
 //         maven { url "https://plugins.gradle.org/m2" }
