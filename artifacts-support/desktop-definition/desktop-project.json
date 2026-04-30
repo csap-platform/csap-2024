@@ -410,7 +410,7 @@
 				"application": {
 					"host-settings": {
 						"commands": {
-							"findt $$my-demo-1: "run_using_root su - $$wd-user -c \"findt.sh $$wd-tenant\""
+							"findt $$my-demo-1": "run_using_root su - $$wd-user -c \"findt.sh $$wd-tenant\""
 						},
 						"tags": {
 							"localhost": "desk",
